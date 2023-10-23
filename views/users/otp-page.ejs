@@ -1,0 +1,71 @@
+<%- include('../layouts/header') %>
+
+<h3></h3>
+
+
+
+
+
+
+
+
+<div class="row " style="margin-left: 100px;">
+  <div class="col-lg-7 deal-col ">
+      <div class="deal" style="border: solid rgba(97, 97, 97, 0.555) 1px;  background-color: white;">
+          <div class="deal-top">
+              <h2>Enter OTP</h2>
+              <p>We have sent a verification code to your Given email</p>
+              <small>OTP will expire in 5 minutes</small>
+          </div><!-- End .deal-top -->
+
+     
+             
+            <form action="/otpVerification" method="post">
+              <div id='inputs'>
+                <input name="otp" id='input1' type='text' maxLength="1" />
+                <input name="otp" id='input2' type='text' maxLength="1" />
+                <input name="otp" id='input3' type='text' maxLength="1" />
+                <input name="otp" id='input4' type='text' maxLength="1" />
+              </div>
+              <input type="hidden" name="fullOTP" id="fullOTP" />
+        
+              <input class="btn btn-primary mt-3" value="Submit" type="submit">
+            
+            
+              <a href="/" class="btn btn-dark mt-3">Resend OTP</a>
+            </form>
+
+            <% if (typeof errorMessage !== 'undefined') { %>
+              <p style="color: rgb(200, 3, 3);">
+                  <%= errorMessage %>
+              </p>
+            <% } %>
+
+
+
+          <div class="deal-bottom">
+              <div class="deal-countdown daily-deal-countdown" data-until="+5m"></div><!-- End .deal-countdown -->
+          </div><!-- End .deal-bottom -->
+      </div><!-- End .deal -->
+  </div><!-- End .col-lg-6 -->
+
+</div><!-- End .row -->
+
+<script>
+    // Get references to the OTP input fields and the hidden field
+    const inputFields = document.querySelectorAll('input[name="otp"]');
+    const fullOTPField = document.getElementById('fullOTP');
+  
+    // Add an event listener to each OTP input field
+    inputFields.forEach((input, index) => {
+      input.addEventListener('input', (event) => {
+        // Update the hidden field with the combined value of all OTP input fields
+        let fullOTP = '';
+        inputFields.forEach((field) => {
+          fullOTP += field.value;
+        });
+        fullOTPField.value = fullOTP;
+      });
+    });
+  </script>
+  <%- include('../layouts/footer.ejs') %>

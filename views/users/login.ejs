@@ -1,0 +1,223 @@
+<%- include('../layouts/header') %>
+
+    <div class="page-wrapper">
+        <header class="header">
+            <div class="header-top">
+                <div class="container">
+                    <div class="header-left">
+                        
+
+
+              
+                </div><!-- End .container -->
+            </div>
+            <div class="header-middle sticky-header">
+                <div class="container">
+                    <div class="header-left">
+                        <button class="mobile-menu-toggler">
+                            <span class="sr-only">Toggle mobile menu</span>
+                            <i class="icon-bars"></i>
+                        </button>
+
+                        <a href="/" class="logo">
+                            <img src="assets/images/logo.png" alt="applestore Logo" width="105" height="25">
+                        </a>
+
+                        <nav class="main-nav" >
+                            <ul class="menu sf-arrows">
+                                
+                                <li >
+                                    <a style="text-transform: none; font-weight: 300;" href="index.html" >Home</a>
+
+                       
+                                </li>
+                              
+                                <li>
+                                    <a style="text-transform: none; font-weight: 300;" href="product.html" >Categories</a>
+
+                              
+                                </li>
+                                <li>
+                                    <a style="text-transform: none; font-weight: 300;"  href="#" >Blog</a>
+
+                                 
+                                </li>
+                                <li>
+                                    <a  style="text-transform: none; font-weight: 300;" href="blog.html" >Contact</a>
+
+                               
+                                </li>
+                              
+                            </ul><!-- End .menu -->
+                        </nav><!-- End .main-nav -->
+                    </div><!-- End .header-left -->
+
+                    <div class="header-right">
+                        <div class="header-search">
+                            <a href="#" class="search-toggle" role="button" title="Search"><i class="icon-search"></i></a>
+                            <form action="#" method="get">
+                                <div class="header-search-wrapper">
+                                    <label for="q" class="sr-only">Search</label>
+                                    <input type="search" class="form-control" name="q" id="q" placeholder="Search in..." required>
+                                </div><!-- End .header-search-wrapper -->
+                            </form>
+                        </div><!-- End .header-search -->
+                 
+                   
+                    </div><!-- End .header-right -->
+                </div><!-- End .container -->
+            </div><!-- End .header-middle -->
+        </header><!-- End .header -->
+
+        <main class="main">
+            <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
+                <div class="container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                       
+                        <li class="breadcrumb-item active" aria-current="page">Login</li>
+                    </ol>
+                </div><!-- End .container -->
+            </nav><!-- End .breadcrumb-nav -->
+
+            <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17" style="background-color: rgb(255, 255, 255); background-image: url(https://i.postimg.cc/L6GZB0yJ/iphone-asdasd.png);background-size:cover; background-position: top;" >
+            	<div class="container">
+            		<div class="form-box">
+            			<div class="form-tab">
+	            			<ul class="nav nav-pills nav-fill" role="tablist">
+							    <li class="nav-item">
+							        
+                                    <h3>Log In</h3>
+							    </li>
+							
+							</ul>
+							<div class="tab-content mt-3">
+							    <div aria-labelledby="signin-tab-2">
+							    	<form action="/login" method="post">
+							    		<div class="form-group">
+							    			<label for="singin-email-2">Email address *</label>
+							    			<input type="text" class="form-control" name="email" required>
+							    		</div><!-- End .form-group -->
+
+							    		<div class="form-group">
+							    			<label for="singin-password-2">Password *</label>
+							    			<input type="password" class="form-control"  name="password" required>
+							    		</div><!-- End .form-group -->
+                                        <div id="invalid" style="height: 30px;">
+                                            <% if (typeof message !== 'undefined' && message) { %>
+                                                <p style="color: red;" id="message"><%= message %></p>
+                                            <% } %>
+                                                    </div>
+
+							    		<div class="form-footer">
+							    			<button type="submit" class="btn btn-outline-primary-2">
+			                					<span>LOG IN</span>
+			            						<i class="icon-long-arrow-right"></i>
+			                				</button>
+
+			                				<div class="custom-control custom-checkbox">
+												<input type="checkbox" class="custom-control-input" id="signin-remember-2">
+												<label class="custom-control-label" for="signin-remember-2">Remember Me</label>
+											</div><!-- End .custom-checkbox -->
+
+											<a href="#" class="forgot-link">Forgot Your Password?</a>
+							    		</div><!-- End .form-footer -->
+							    	</form>
+							    	<div class="form-choice">
+								    	<p class="text-center">or sign in with</p>
+								    	<div class="row">
+								    		<div class="col-sm-6">
+								    			<a href="#" class="btn btn-login btn-g">
+								    				<i class="icon-google"></i>
+								    				Login With Google
+								    			</a>
+								    		</div><!-- End .col-6 -->
+								    		<div class="col-sm-6">
+								    			<a href="#" class="btn btn-login btn-f">
+								    				<i class="icon-facebook-f"></i>
+								    				Login With Facebook
+								    			</a>
+                                                
+								    		</div><!-- End .col-6 -->
+								    	</div><!-- End .row -->
+							    	</div><!-- End .form-choice -->
+							    </div><!-- .End .tab-pane -->
+                                <p  class="text-center mt-3">Dont have an account? <a href="/register">signUp here</a></p>
+							</div><!-- End .tab-content -->
+						</div><!-- End .form-tab -->
+            		</div><!-- End .form-box -->
+            	</div><!-- End .container -->
+            </div><!-- End .login-page section-bg -->
+        </main><!-- End .main -->
+
+  
+    </div><!-- End .page-wrapper -->
+    <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->
+
+    <div class="mobile-menu-container">
+        <div class="mobile-menu-wrapper">
+            <span class="mobile-menu-close"><i class="icon-close"></i></span>
+
+            <form action="#" method="get" class="mobile-search">
+                <label for="mobile-search" class="sr-only">Search</label>
+                <input type="search" class="form-control" name="mobile-search" id="mobile-search" placeholder="Search in..." required>
+                <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+            </form>
+            
+            <nav class="mobile-nav">
+                <ul class="mobile-menu">
+                    <li class="active">
+                        <a href="index.html" >Home</a>
+
+                    
+                    </li>
+                  
+                    <li>
+                        <a href="product.html" >Categories</a>
+                    </li>
+                    <li>
+                        <a href="#" >Blog</a>
+
+           
+                    </li>
+                    <li>
+                        <a href="blog.html" >Contact</a>
+                 
+                    </li>
+                </ul>
+            </nav><!-- End .mobile-nav -->
+
+            <div class="social-icons">
+                <a href="#" class="social-icon" target="_blank" title="Facebook"><i class="icon-facebook-f"></i></a>
+                <a href="#" class="social-icon" target="_blank" title="Twitter"><i class="icon-twitter"></i></a>
+                <a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
+                <a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
+            </div><!-- End .social-icons -->
+        </div><!-- End .mobile-menu-wrapper -->
+    </div><!-- End .mobile-menu-container -->
+
+
+
+    <style>
+        
+input::file-selector-button {
+
+  color: rgb(37, 139, 255);
+  border: solid rgb(37, 139, 255) 1px;
+  background-color: white;
+ 
+
+
+}
+
+    </style>
+  
+
+
+
+
+
+<%- include('../layouts/footer.ejs') %>
