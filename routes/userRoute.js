@@ -45,7 +45,8 @@ const storage =multer.diskStorage({
 const upload =multer({storage:storage});
 
 user_route.get('/register',userController.loadRegister);
-user_route.get('/',userController.loadHome)
+user_route.get('/',auth.isLogout,userController.loadHome)
+user_route.get('/home',userController.loadUserHome)
 user_route.post('/register',upload.single('image'),userController.insertUser)
 user_route.get('/otp-page',userController.loadOTPpage)
 user_route.post('/otpVerification',userController.OTPVerification)
@@ -54,6 +55,11 @@ user_route.post('/login',userController.verifyLogin)
 user_route.get('/userProfile',userController.loadUserProfile)
 user_route.get('/logout',userController.userLogout)
 user_route.get('/productlist',userController.productList)
+user_route.get('/cart',userController.loadCart)
+user_route.get('/wishlist',userController.loadWishlist)
+user_route.get('/checkout',userController.loadCheckout)
+
+
 
 
 

@@ -100,6 +100,18 @@ const loadHome = async(req,res)=>{
  
  }
 
+ //load logined home page
+ const loadUserHome = async(req,res)=>{
+    try{
+         const userData = await User.findById({_id:req.session.user_id})
+         res.render('home',{user:userData})
+    }catch(error){
+        console.log(error.message);
+    }
+  }
+
+
+
  const loadOTPpage = async (req, res) => {
     const errorMessage = req.query.error;
     const user = req.user;
@@ -242,7 +254,7 @@ const verifyLogin = async (req, res) => {
                     req.session.user = userData;
                     req.session.user_id = userData._id;
 
-                    return res.render('home', { user: userData });
+                    res.redirect('/home');
                 }
             } else {
                 return res.render('login', { message: "Email and password are incorrect." });
@@ -290,6 +302,7 @@ const verifyLogin = async (req, res) => {
 //     }
 //  }
 
+//load productList
 
  const productList = async (req, res) => {
     try {
@@ -309,10 +322,49 @@ const verifyLogin = async (req, res) => {
     }
 }
 
+//load Cart page
+
+  const    loadCart= async(req,res)=>{
+    try {
+        const userData = await User.findById({_id:req.session.user_id})
+        res.render('cart',{user:userData})
+    } catch (error) {
+        console.log(error.message)
+        
+    }
+ }
+
+ 
+//load Cart page
+
+const loadWishlist= async(req,res)=>{
+    try {
+        const userData = await User.findById({_id:req.session.user_id})
+        res.render('wishlist',{user:userData})
+    } catch (error) {
+        console.log(error.message)
+        
+    }
+ }
+
+ //load checkOut page
+
+const loadCheckout= async(req,res)=>{
+    try {
+        const userData = await User.findById({_id:req.session.user_id})
+        res.render('checkout',{user:userData})
+    } catch (error) {
+        console.log(error.message)
+        
+    }
+ }
+
+
 
 module.exports={
     loadRegister,
     loadHome,
+    loadUserHome ,
     insertUser,
     OTPVerification,
     loadOTPpage,
@@ -321,5 +373,8 @@ module.exports={
     loadUserProfile,
     userLogout,
     productList,
+    loadCart,
+    loadWishlist,
+    loadCheckout
    
 }
