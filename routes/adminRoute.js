@@ -66,14 +66,6 @@ const storage = multer.diskStorage({
   },
 });
 
-
-
-
-
-
-
-
-
 // Create the Multer instance
 const upload = multer({
   storage: storage,

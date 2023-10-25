@@ -23,8 +23,8 @@ const transporter =  nodemailer.createTransport({
     secure:false,
     requireTLS:true,
     auth:{
-        user:'thomasjohn6667@gmail.com',
-        pass:'rxhw khxo lghb kwrx'
+        user:'mindspacesongs@gmail.com',
+        pass:'esdp lsnv xtfw fcwt'
     }
 
 });
@@ -125,16 +125,16 @@ const loadHome = async(req,res)=>{
 };
 
  
-const sentOTPVerificationEmail = async (req, res, name, email, _id) => {
+const sentOTPVerificationEmail = async (req, res, email, _id) => {
     try {
         const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
-        req.session.otp = otp;
+        req.session.forgortotp = otp;
         
         console.log(req.session.otp);
        
 
         const mailOptions = {
-            from: "thomasjohn6667@gmial.com",
+            from: "mindspacesongs@gmail.com",
             to: email,
             subject: "Verify your email",
             html: `<p>Enter <b>${otp}</b> in the app to verify your email</p>`,
@@ -203,6 +203,7 @@ const OTPVerification = async (req, res) => {
                         const errorMessage = "Invalid code passed. Check your inbox";
                         return res.redirect(`/otp-page?error=${errorMessage}`);
                     } else {
+                        delete req.session.otp
                         await User.updateOne({ _id: userId }, { is_verified: 1 });
                         await UserOTPVerification.deleteMany({ userId });
                        res.render("otp-sucssespage")
@@ -293,19 +294,12 @@ const verifyLogin = async (req, res) => {
 
 
 
-//   const = async(req,res)=>{
-//     try {
-//         res.render('productlist',{user:null})
-//     } catch (error) {
-//         console.log(error.message)
-        
-//     }
-//  }
 
-//load productList
 
- const productList = async (req, res) => {
+const productList = async (req, res) => {
     try {
+        const userData = await User.findById({ _id: req.session.user_id });
+     
         const search = req.query.search || '';
 
         const productsData = await Product.find({
@@ -314,9 +308,8 @@ const verifyLogin = async (req, res) => {
                 { category: { $regex: new RegExp(search, 'i') } },
             ]
         });
-        console.log(productsData);
-
-        res.render('productlist', { products: productsData});
+        
+        res.render('productlist', { products: productsData, user: userData });
     } catch (error) {
         console.log(error.message);
     }
@@ -326,6 +319,7 @@ const verifyLogin = async (req, res) => {
 
   const    loadCart= async(req,res)=>{
     try {
+
         const userData = await User.findById({_id:req.session.user_id})
         res.render('cart',{user:userData})
     } catch (error) {
@@ -360,6 +354,205 @@ const loadCheckout= async(req,res)=>{
  }
 
 
+ const forgotPassword = async(req,res)=>{
+
+    try {
+        
+      
+     res.render('forgetpassword')
+     
+    } catch (error) {
+ 
+     console.log(error.message);
+     
+    }
+ 
+ 
+ 
+ }
+
+
+ const forgotOTPVerification = async (req, res) => {
+    try {
+        const userId = req.session.id2;
+        const otp = req.body.fullOTP;
+
+        if (!otp) {
+            const errorMessage = "Empty OTP details are not allowed";
+            return res.redirect(`/otp-page?error=${errorMessage}`);
+        } else {
+            const userOTPVerificationRecords = await UserOTPVerification.find({
+                userId
+            });
+
+            if (userOTPVerificationRecords.length <= 0) {
+                const errorMessage = "Account record doesn't exist or has been verified already. Please sign up or...";
+                return res.redirect(`/otp-page?error=${errorMessage}`);
+            } else {
+                const { expiresAt } = userOTPVerificationRecords[0];
+                const hashedOTP = userOTPVerificationRecords[0].otp;
+
+                if (expiresAt < Date.now()) {
+                    await UserOTPVerification.deleteMany({ userId });
+                    const errorMessage = "Code has expired. Please request again.";
+                    return res.redirect(`/otp-page?error=${errorMessage}`);
+                } else {
+                    const validOTP = await bcrypt.compare(otp, hashedOTP);
+
+                    if (!validOTP) {
+                        const errorMessage = "Invalid code passed. Check your inbox";
+                        return res.redirect(`/otp-page?error=${errorMessage}`);
+                    } else {
+                        await User.updateOne({ _id: userId }, { is_verified: 1 });
+                        await UserOTPVerification.deleteMany({ userId });
+                       res.render("otp-sucssespage")
+                    }
+                }
+            }
+        }
+    } catch (error) {
+        const errorMessage = "An error occurred during OTP verification";
+        return res.redirect(`/otp-page?error=${errorMessage}`);
+    }
+};
+
+//function for senting otp verification mail
+ 
+const sentPasswordOTPVerificationEmail = async (req, res) => {
+    try {
+        const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
+        req.session.otp2 = otp;
+        
+        console.log(req.session.otp2);
+       
+
+        const mailOptions = {
+            from: "mindspacesongs@gmail.com",
+            to: email,
+            subject: "Verify your email",
+            html: `<p>Enter <b>${otp}</b> in the app to reset your password</p>`,
+        };
+       
+
+        // Hash password
+        const hashedOTP = await bcrypt.hash(otp, 10);
+
+        const newOTPVerification = new forgotOTPVerification({
+            userId: _id,
+            otp: hashedOTP,
+            createdAt: Date.now(),
+            expiresAt: Date.now() +120000,
+        });
+
+        await newOTPVerification.save();
+
+        await transporter.sendMail(mailOptions, async (err, status) => {
+            if (err) {
+                console.log('Err', err);
+            } else {
+                
+               
+             
+                
+            }
+        });
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+//to load the otp page
+const forgotPasswordOTP = async (req, res) => {
+    try {
+        const userExist = await User.findOne({ email: req.body.email });
+        
+        if (userExist) {
+            req.session.id3=userExist._id
+            console.log(req.session.id3);
+           
+            sentOTPVerificationEmail(req, res, req.body.email, userExist._id);
+            res.render('forgetpassword-otp', { message: "Otp sent to your mail" });
+        } else {
+
+           
+          
+                res.render('forgotpassword', { message: "Attempt Failed" });
+            
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+
+
+
+
+const passwordOTPVerification = async (req, res) => {
+    try {
+        const userId = req.session.id3;
+        const otp = req.body.fullOTP;
+
+        if (!otp) {
+            const errorMessage = "Empty OTP details are not allowed";
+            return res.redirect(`/otp-page?error=${errorMessage}`);
+        } else {
+            const userOTPVerificationRecords = await UserOTPVerification.find({
+                userId
+            });
+
+            if (userOTPVerificationRecords.length <= 0) {
+                const errorMessage = "Account record doesn't exist or has been verified already. Please sign up or...";
+                return res.redirect(`/otp-page?error=${errorMessage}`);
+            } else {
+                const { expiresAt } = userOTPVerificationRecords[0];
+                const hashedOTP = userOTPVerificationRecords[0].otp;
+
+                if (expiresAt < Date.now()) {
+                    await UserOTPVerification.deleteMany({ userId });
+                    const errorMessage = "Code has expired. Please request again.";
+                    return res.redirect(`/otp-page?error=${errorMessage}`);
+                } else {
+                    const validOTP = await bcrypt.compare(otp, hashedOTP);
+
+                    if (!validOTP) {
+                        const errorMessage = "Invalid code passed. Check your inbox";
+                        return res.redirect(`/otp-page?error=${errorMessage}`);
+                    } else {
+                        
+                        
+                        await UserOTPVerification.deleteMany({userId});
+                       res.render("forgetpassword-change")
+                    }
+                }
+            }
+        }
+    } catch (error) {
+        const errorMessage = "An error occurred during OTP verification";
+        return res.redirect(`/otp-page?error=${errorMessage}`);
+    }
+};
+
+
+const resetPassword = async(req,res)=>{
+    try {
+         
+        const password = req.body.password;
+        const user_id= req.session.id3
+        const secure_password = await securePassword(password);
+        const updatedData= await User.findByIdAndUpdate({_id:user_id},{$set:{password:secure_password}});
+        res.render("forgetpassword-otpsuccess")
+ 
+        
+    } catch (error) {
+        
+    }
+}
+
+
 
 module.exports={
     loadRegister,
@@ -375,6 +568,11 @@ module.exports={
     productList,
     loadCart,
     loadWishlist,
-    loadCheckout
+    loadCheckout,
+    forgotPassword,
+    sentPasswordOTPVerificationEmail,
+    forgotPasswordOTP ,
+    passwordOTPVerification,
+    resetPassword 
    
 }

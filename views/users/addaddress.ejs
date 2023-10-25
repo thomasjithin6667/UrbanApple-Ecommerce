@@ -28,7 +28,7 @@
                                 <aside class="col-md-4 col-lg-3">
                                     <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active " id="tab-dashboard-link" data-toggle="tab"
+                                            <a class="nav-link  " id="tab-dashboard-link" data-toggle="tab"
                                                 href="#tab-dashboard" role="tab" aria-controls="tab-dashboard"
                                                 aria-selected="true">Dashboard</a>
                                         </li>
@@ -47,8 +47,8 @@
                                                 href="#tab-track" role="tab" aria-controls="tab-track"
                                                 aria-selected="false">Track order</a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" id="tab-address-link" data-toggle="tab"
+                                        <li class="nav-item"> 
+                                            <a class="nav-link active" id="tab-address-link" data-toggle="tab"
                                                 href="#tab-address" role="tab" aria-controls="tab-address"
                                                 aria-selected="false">Addresses</a>
 
@@ -79,7 +79,7 @@
 
                                 <div class="col-md-8 col-lg-9">
                                     <div class="tab-content">
-                                        <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel"
+                                        <div class="tab-pane fade " id="tab-dashboard" role="tabpanel"
                                             aria-labelledby="tab-dashboard-link">
                                             <p>this is dashboard</p>
 
@@ -158,40 +158,76 @@
 
                                         </div><!-- .End .tab-pane -->
 
-                                        <div class="tab-pane fade" id="tab-address" role="tabpanel"
+                                        <div class="tab-pane fade show active" id="tab-address" role="tabpanel"
                                             aria-labelledby="tab-address-link">
-                                            <a href="/addaddress?userId=<%= user._id.toString() %>">Add address</a>
-                                            <p>The following addresses will be used on the checkout page by default.</p>
+                                            <h5>Add Address</h5> <br>
+                                            <form action="/addaddress?userId=<%= user._id.toString() %>" method="post">
+                                             
+    
+                                                <label>Name</label>
+                                                <input type="text" class="form-control"  name="name" required>
+                                                <small class="form-text ">This will be how your name will be displayed in the account section and in reviews</small>
+                                                 
+                                                 <label class="mt-2">Address type</label>
+                                                 <div class="row mb-2">
+                                                    <div class="col">
+                                                      <div class="form-check form-check-inline" style="margin-right: 40px;">
+                                                        <input class="form-check-input " type="radio" name="type" id="flexRadioDefault1" value="home" checked />
+                                                        <label class="form-check-label " for="flexRadioDefault1"> Home </label>
+                                                      </div>
+                                                      <div class="form-check form-check-inline" style="margin-right: 40px;">
+                                                        <input class="form-check-input" type="radio" name="type" id="flexRadioDefault2" value="work" />
+                                                        <label class="form-check-label" for="flexRadioDefault2"> Work </label>
+                                                      </div>
+                                                      <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="type" id="flexRadioDefault3" value="other" />
+                                                        <label class="form-check-label" for="flexRadioDefault3"> Other </label>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                  
 
-                                            <div class="row">
-                                                <div class="col-lg-6">
-                                                    <div class="card card-dashboard">
-                                                        <div class="card-body">
-                                                            <h3 class="card-title">Billing Address</h3><!-- End .card-title -->
+
+                                                <label>House name</label>
+                                                <input type="text" class="form-control" name="houseName" required>
     
-                                                            <p>User Name<br>
-                                                            User Company<br>
-                                                            John str<br>
-                                                            New York, NY 10001<br>
-                                                            1-234-987-6543<br>
-                                                            yourmail@mail.com<br>
-                                                            <a href="#">Edit <i class="icon-edit"></i></a></p>
-                                                        </div><!-- End .card-body -->
-                                                    </div><!-- End .card-dashboard -->
-                                                </div><!-- End .col-lg-6 -->
+                                                <label>Street</label>
+                                                <input type="text" class="form-control"  name="street" >
     
-                                                <div class="col-lg-6">
-                                                    <div class="card card-dashboard">
-                                                        <div class="card-body">
-                                                            <h3 class="card-title">Shipping Address</h3><!-- End .card-title -->
+                                              
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <label>City</label>
+                                                        <input type="text" class="form-control"  name="city" required > 
+                                                    </div><!-- End .col-sm-6 -->
     
-                                                            <p>You have not set up this type of address yet.<br>
-                                                            <a href="#">Edit <i class="icon-edit"></i></a></p>
-                                                        </div><!-- End .card-body -->
-                                                    </div><!-- End .card-dashboard -->
-                                                </div><!-- End .col-lg-6 -->
-                                            </div><!-- End .row -->
-                                      
+                                                    <div class="col-sm-6">
+                                                        <label>State</label>
+                                                        <input type="text" class="form-control"  name="state" required>
+                                                    </div><!-- End .col-sm-6 -->
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <label>Pincode</label>
+                                                        <input type="text" class="form-control" name="pinCode" required>
+                                                    </div><!-- End .col-sm-6 -->
+    
+                                                    <div class="col-sm-6">
+                                                        <label>Phone</label>
+                                                        <input type="text" class="form-control" name="phone"  required>
+                                                    </div><!-- End .col-sm-6 -->
+                                                </div> <br>
+                                          
+    
+                                                <button type="submit" class="btn btn-outline-primary-2">
+                                                    
+                                                    <span>ADD ADDRESS</span>
+                                                    <i class="icon-long-arrow-right"></i>
+                                                </button>
+                                            </form>
+                                        
+
+                                          
                                             
                                         </div>
                                         

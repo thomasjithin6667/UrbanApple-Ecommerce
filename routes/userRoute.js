@@ -8,6 +8,7 @@ const multer = require("multer")
 const session = require("express-session")
 const config = require("../config/config")
 const auth =require("../middleware/auth")
+const addressController = require('../controllers/addressController')
 
 //session setup
 user_route.use(session({
@@ -43,21 +44,34 @@ const storage =multer.diskStorage({
 })
 
 const upload =multer({storage:storage});
-
+//get request
 user_route.get('/register',userController.loadRegister);
 user_route.get('/',auth.isLogout,userController.loadHome)
 user_route.get('/home',userController.loadUserHome)
-user_route.post('/register',upload.single('image'),userController.insertUser)
 user_route.get('/otp-page',userController.loadOTPpage)
-user_route.post('/otpVerification',userController.OTPVerification)
 user_route.get('/login',userController.loginLoad)
-user_route.post('/login',userController.verifyLogin)
 user_route.get('/userProfile',userController.loadUserProfile)
 user_route.get('/logout',userController.userLogout)
 user_route.get('/productlist',userController.productList)
 user_route.get('/cart',userController.loadCart)
 user_route.get('/wishlist',userController.loadWishlist)
 user_route.get('/checkout',userController.loadCheckout)
+user_route.get('/addaddress',addressController.loadAddAddress)
+user_route.get('/forgotpassword',userController.forgotPassword)
+
+
+
+//post requests
+user_route.post('/register',upload.single('image'),userController.insertUser)
+user_route.post('/login',userController.verifyLogin)
+user_route.post('/otpVerification',userController.OTPVerification)
+user_route.post('/addAddress',addressController.postAddAddress );
+user_route.post('/forgotpassword',userController.forgotPasswordOTP)
+user_route.post('/passwordotpVerification',userController.passwordOTPVerification)
+user_route.post('/resetpassword',userController.resetPassword )
+
+
+
 
 
 
