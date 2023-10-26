@@ -122,51 +122,40 @@
 	                		<div class="col-md-8 col-lg-9">
 	                			<div class="tab-content">
 								    <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link">
-								    	<p>Hello <span ></span></p>
+								    	
                                         <section class="content-body p-xl-4">
-                                            <form>
+                                            
                                                 <div class="row">
                                                     <div class="col-lg-8">
                                                         <div class="row gx-3">
-                                                            <div class="col-6  mb-3">
-                                                                <label class="form-label">First name</label>
-                                                                <input class="form-control" type="text" placeholder="Type here">
+                                                            <div class="col-12  mb-3">
+                                                                <form action="/edituser" method="post" enctype="multipart/form-data">
+                                                                <label class="form-label">Name</label>
+                                                                <input class="form-control" name="name" type="text" placeholder="Type here" value="<%= user.name %>">
                                                             </div> <!-- col .// -->
-                                                            <div class="col-6  mb-3">
-                                                                <label class="form-label">Last name</label>
-                                                                <input class="form-control" type="text" placeholder="Type here">
-                                                            </div> <!-- col .// -->
+                                                           <!-- col .// -->
                                                             <div class="col-lg-6  mb-3">
                                                                 <label class="form-label">Email</label>
-                                                                <input class="form-control" type="email" placeholder="example@mail.com">
+                                                                <input class="form-control" name="email" type="email"  value="<%= user.email %>">
                                                             </div> <!-- col .// -->
                                                             <div class="col-lg-6  mb-3">
                                                                 <label class="form-label">Phone</label>
-                                                                <input class="form-control" type="tel" placeholder="+1234567890">
+                                                                <input class="form-control" type="number" name="mno" value="<%= user.mobile %>">
                                                             </div> <!-- col .// -->
-                                                            <div class="col-lg-12  mb-3">
-                                                                <label class="form-label">Address</label>
-                                                                <input class="form-control" type="text" placeholder="Type here">
-                                                            </div> <!-- col .// -->
-                                                            <div class="col-lg-6  mb-3">
-                                                                <label class="form-label">Birthday</label>
-                                                                <input class="form-control" type="date">
-                                                            </div> <!-- col .// -->
+                                                            
+                                                     
                                                         </div> <!-- row.// -->
                                                     </div> <!-- col.// -->
                                                     <aside class="col-lg-4">
                                                         <figure class="text-lg-center">
-                                                            <img class="img-lg mb-3 img-avatar" src="assets/imgs/people/avatar1.jpg" alt="User Photo">
-                                                            <figcaption>
-                                                                <a class="btn btn-light rounded font-md" href="#">
-                                                                    <i class="icons material-icons md-backup font-md"></i> Upload
-                                                                </a>
-                                                            </figcaption>
+                                                            <img class="img-lg mb-3 img-avatar" src="assets/images/userImages/<%=user.image%>"  alt="User Photo">
+     
                                                         </figure>
+                                                        <input type="file" class="form-control" value="<%=user.image%>"  name="image">
                                                     </aside> <!-- col.// -->
                                                 </div> <!-- row.// -->
                                                 <br>
-                                                <button class="btn btn-primary" type="submit">Save changes</button>
+                                                <input class="btn btn-primary" type="submit">
                                             </form>
                                             <hr class="my-5">
                                             <div class="row" style="max-width:920px">

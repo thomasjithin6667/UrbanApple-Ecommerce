@@ -15,12 +15,13 @@ const loadAddAddress = async(req, res)=>{
   }
 
 
- const manageAddress = async(req, res)=>{
+ const loadAddress = async(req, res)=>{
     try{
       const userId = req.query.userId;
       const user = await User.findById(userId)
         const addresses = await Address.find({ user: userId }).sort({ createdDate: -1 }).exec();
-          res.render('./user/address', { addresses, user});
+          res.render('address-load', { addresses, user});
+          
       }catch(error){
           console.log(error);
       }
@@ -37,52 +38,73 @@ const loadAddAddress = async(req, res)=>{
       if (!addAddressResult.success) {
           return res.status(400).json({ errorMessage: addAddressResult.message });
       }
-      const userData = await User.findById({_id:userId})
-      res.render('userProfile',{user:userData})
+     
+      const user = await User.findById(userId)
+      const addresses = await Address.find({ user: userId }).sort({ createdDate: -1 }).exec();
+        res.render('address-load', { addresses, user});
+     
   
       
   }
   
-  const removeAddress = async (req, res) => {
-    const userId = req.session.user._id
-      const addressIndex = req.params.addressIndex;
-  
-      const removeAddressResult = await userHelper.removeAddress(addressIndex);
-  
-      if (!removeAddressResult.success) {
-          return res.status(400).json({ errorMessage: removeAddressResult.message });
-      }
-  
-      res.redirect('/manageaddress/' + userId);
+
+const deleteAddress= async(req,res)=>{
+
+  try {
+      const  AddressId = req.query.addressId;
+      const userId = req.query.userId;
+      await Address.deleteOne({_id: AddressId})
+    
+    
+      const user = await User.findById(userId)
+        const addresses = await Address.find({ user: userId }).sort({ createdDate: -1 }).exec();
+          res.render('address-load', { addresses, user});
+          
+      
+  } catch (error) {
+      console.log(error.message);
+      
   }
 
 
-  const getEditAddress = async (req, res) => {
+}
+
+
+  const loadEditAddress = async (req, res) => {
     try {
-    const addressId = req.params.addressId;
+
+      
+    const userId = req.query.userId; 
+    const addressId = req.query.addressId;
+    const user = await User.findById(userId)
       const address = await Address.findById(addressId);
-      res.render('./user/addressEditForm', { address });
+      res.render('address-edit', { address, user });
     } catch (error) {
       console.log("Error occurred", error);
     }
   };
 
-const postEditAddress = async (req, res) => {
-    const addressId = req.params.addressId;
-    const user = req.session.user
-    const userId = user._id
+const editAddress = async (req, res) => {
+  const addressId = req.query.addressId;
+  const userId = req.query.userId; 
+
     const { type, phone, houseName, name, street, city, state, pinCode } = req.body;
   
     try {
         const result = await userHelper.editAddress( addressId, type, phone, houseName, name, street, city, state, pinCode);
+        const user = await User.findById(userId)
+        const addresses = await Address.find({ user: userId }).sort({ createdDate: -1 }).exec();
+      
         if (result.success) {
-            res.redirect('/manageaddress/' + userId);
+          res.render('address-load', { addresses, user });
         } else {
-            res.status(400).json({ message: 'Address edit failed' });
+         
+            res.render('address-load', { addresses, user,message: 'Address edit failed' })
         }
     } catch (error) {
         console.error('Error editing address:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        
+        
     }
   }
   
@@ -91,11 +113,11 @@ const postEditAddress = async (req, res) => {
   
 
 module.exports = {
-  manageAddress,
+  loadAddress,
   postAddAddress,
-  removeAddress,
-  getEditAddress,
-  postEditAddress,
+  deleteAddress,
+  loadEditAddress,
+  editAddress,
   loadAddAddress
 
 }

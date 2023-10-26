@@ -254,8 +254,11 @@ const verifyLogin = async (req, res) => {
                 } else {
                     req.session.user = userData;
                     req.session.user_id = userData._id;
+                    const originalUrl = req.session.originalUrl || '/home';
 
-                    res.redirect('/home');
+                    res.redirect(originalUrl);
+                    delete req.session.originalUrl;
+
                 }
             } else {
                 return res.render('login', { message: "Email and password are incorrect." });
@@ -552,7 +555,106 @@ const resetPassword = async(req,res)=>{
     }
 }
 
+//load user reset password page
+const loadUserPasswordReset = async(req,res)=>{
 
+    try {
+        
+        
+            res.render('userpassword-change');
+      
+
+     
+    } catch (error) {
+ 
+     console.log(error.message);
+     
+    }
+ 
+ 
+ 
+ }
+
+//change password
+
+const userResetPassword = async(req,res)=>{
+    try {
+         
+        const password = req.body.password;
+        const user_id= req.session.user_id 
+        console.log("this is from userres"+ user_id);
+        const secure_password = await securePassword(password);
+        const updatedData= await User.findByIdAndUpdate({_id:user_id},{$set:{password:secure_password}});
+        res.render("userProfile",{user:updatedData})
+ 
+        
+    } catch (error) {
+        
+    }
+}
+
+
+//load user edit page
+const loadEditUser = async(req,res)=>{
+
+    try {
+        
+        const userData = await User.findById({_id:req.session.user_id})
+        
+            res.render('edit-userProfile', { user: userData});
+      
+
+     
+    } catch (error) {
+ 
+     console.log(error.message);
+     
+    }
+ 
+ 
+ 
+ }
+
+
+ const updateProfile = async(req,res)=>{
+
+    try {
+  
+      if (req.file) {
+        const userData=await User.findByIdAndUpdate({_id: req.session.user_id},{$set:{name:req.body.name,email:req.body.email,mobile:req.body.mno,image:req.file.filename}})
+  
+        
+      } else {
+        const userData=await User.findByIdAndUpdate({_id: req.session.user_id},{$set:{name:req.body.name,email:req.body.email,mobile:req.body.mno}})
+        
+      }
+
+      const userData = await User.findById({_id:req.session.user_id})
+      res.render('userProfile', { user: userData})
+      
+    } catch (error) {
+      console.log(error.message);
+      
+    }
+  
+  }
+
+
+  //delete account
+  const deleteUser= async(req,res)=>{
+
+    try {
+        const id = req.query.id;
+        await User.deleteOne({_id:id})
+        res.redirect('/')
+        
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+
+
+}
 
 module.exports={
     loadRegister,
@@ -573,6 +675,11 @@ module.exports={
     sentPasswordOTPVerificationEmail,
     forgotPasswordOTP ,
     passwordOTPVerification,
-    resetPassword 
+    resetPassword,
+    loadEditUser,
+    updateProfile,
+    userResetPassword,
+    loadUserPasswordReset,
+    deleteUser
    
 }

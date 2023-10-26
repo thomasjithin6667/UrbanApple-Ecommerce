@@ -79,30 +79,35 @@ const upload = multer({
   // },
 });
 
-//routes
-
+//GET REQUESTS
+//admin
 admin_route.get('/',adminController.loadAdminLogin)
 admin_route.post('/',adminController.verifyLogin)
 admin_route.get('/dashboard',adminController.loadDashboard);
 admin_route.get("/logout",adminController.logout)
 admin_route.get("/userlist",adminController.loadUserlist)
-admin_route.get("/categorylist",adminController.loadCategorylist)
 admin_route.get('/block-user',adminController.blockUser)
-admin_route.get("/addcategory",adminController.loadaddCategory)
+//product
 admin_route.get("/addproduct",adminController.loadaddProduct)
 admin_route.get("/productlist",adminController.loadProductList)
-admin_route.get('/edit-category',adminController.loadEditCategory)
-admin_route.get('/delete-category',adminController.deleteCategory)
 admin_route.get('/delete-product',adminController.deleteProduct)
 admin_route.get('/edit-product',adminController.loadEditProduct)
 admin_route.get('/show-product',adminController.loadShowProduct)
+//category
+admin_route.get("/addcategory",adminController.loadaddCategory)
+admin_route.get("/categorylist",adminController.loadCategorylist)
+admin_route.get('/edit-category',adminController.loadEditCategory)
+admin_route.get('/delete-category',adminController.deleteCategory)
 
 
-//postroutes
+//POST REQUESTS
+//category
 admin_route.post('/addcategory', categoryUpload.single('categoryImage'), adminController.insertCategory);
-admin_route.post('/addproduct',upload.array('productImages', 4),adminController.insertProduct)
-admin_route.post('/edit-category',categoryUpload.single('categoryImage'),adminController.editCategory)
-admin_route.post('/edit-product',upload.array('productImages', 4),adminController.editProduct)
+admin_route.post('/edit-category',categoryUpload.single('categoryImage'),adminController.editCategory);
+
+//product
+admin_route.post('/addproduct',upload.array('productImages', 4),adminController.insertProduct);
+admin_route.post('/edit-product',upload.array('productImages', 4),adminController.editProduct);
 
 
 

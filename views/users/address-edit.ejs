@@ -28,7 +28,7 @@
                                 <aside class="col-md-4 col-lg-3">
                                     <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active " id="tab-dashboard-link" data-toggle="tab"
+                                            <a class="nav-link  " id="tab-dashboard-link" data-toggle="tab"
                                                 href="#tab-dashboard" role="tab" aria-controls="tab-dashboard"
                                                 aria-selected="true">Dashboard</a>
                                         </li>
@@ -47,10 +47,10 @@
                                                 href="#tab-track" role="tab" aria-controls="tab-track"
                                                 aria-selected="false">Track order</a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" 
+                                        <li class="nav-item"> 
+                                            <a class="nav-link active" 
                                                 href="/address?userId=<%= user._id.toString() %>" 
-                                               >Addresses</a>
+                                                >Addresses</a>
 
                                         </li>
                                         
@@ -79,7 +79,7 @@
 
                                 <div class="col-md-8 col-lg-9">
                                     <div class="tab-content">
-                                        <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel"
+                                        <div class="tab-pane fade " id="tab-dashboard" role="tabpanel"
                                             aria-labelledby="tab-dashboard-link">
                                             <p>this is dashboard</p>
 
@@ -128,21 +128,14 @@
                                             <div class="row" style="max-width:920px">
                                                 <div class="col-md">
                                                     <article class="box mb-3 bg-light p-4">
-                                                        <a class="btn float-end btn-dark btn-sm rounded font-md " href="/changePassword">Change</a>
+                                                        <a class="btn float-end btn-dark btn-sm rounded font-md " href="#">Change</a>
                                                         <h6 class="mt-2">Password</h6>
                                                         <small class="text-muted d-block " style="width:70%">You can reset or change your password by clicking here</small>
                                                     </article>
                                                 </div> <!-- col.// -->
                                                 <div class="col-md">
                                                     <article class="box mb-3 bg-light p-4">
-                                                        <a class="btn float-end btn-dark rounded btn-sm font-md" href="/edituser?userId=<%= user._id.toString() %>">Edit</a>
-                                                        <h6 class="mt-2">Edit account</h6>
-                                                        <small class="text-muted d-block" style="width:70%">You can change your account details by clicking here.</small>
-                                                    </article>
-                                                </div> <!-- col.// -->
-                                                <div class="col-md">
-                                                    <article class="box mb-3 bg-light p-4">
-                                                        <a class="btn float-end btn-dark rounded btn-sm font-md" href="/delete-user?id=<%= user._id.toString() %>">Deactivate</a>
+                                                        <a class="btn float-end btn-dark rounded btn-sm font-md" href="#">Deactivate</a>
                                                         <h6 class="mt-2">Remove account</h6>
                                                         <small class="text-muted d-block" style="width:70%">Once you delete your account, there is no going back.</small>
                                                     </article>
@@ -165,50 +158,80 @@
 
                                         </div><!-- .End .tab-pane -->
 
-                                        <div class="tab-pane fade" id="tab-address" role="tabpanel"
+                                        <div class="tab-pane fade show active" id="tab-address" role="tabpanel"
                                             aria-labelledby="tab-address-link">
-                                         
+                                            <h5>Edit Address</h5> <br>
+                                            <form action="?userId=<%= user._id.toString() %>&addressId=<%= address._id.toString() %>" method="post">
+
+                                                
+    
+                                                <label>Name</label>
+                                                <input type="text" class="form-control"  name="name"  value="<%- address.name %>" required>
+                                                <small class="form-text ">This will be how your name will be displayed in the account section and in reviews</small>
+                                                 
+                                                 <label class="mt-2">Address type</label>
+                                                 <div class="row mb-2">
+                                                    <div class="col">
+                                                      <div class="form-check form-check-inline" style="margin-right: 40px;">
+                                                        <input class="form-check-input " type="radio" name="type" id="flexRadioDefault1" value="home" <% if (address.type == "home") { %>checked<% } %> />
+                                                        <label class="form-check-label " for="flexRadioDefault1"> Home </label>
+                                                        
+                                                      </div>
+                                                      <div class="form-check form-check-inline" style="margin-right: 40px;">
+                                                        <input class="form-check-input" type="radio" name="type" id="flexRadioDefault2" value="work"   <% if (address.type == "work") { %>checked<% } %>/>
+                                                        <label class="form-check-label" for="flexRadioDefault2"> Work </label>
+                                                       
+                                                      </div>
+                                                      <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="type" id="flexRadioDefault3" value="other"  <% if (address.type== "other") { %>checked<% } %> />
+                                                        <label class="form-check-label" for="flexRadioDefault3"> Other </label>
+                                                       
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                  
+
+
+                                                <label>House name</label>
+                                                <input type="text" class="form-control" name="houseName" value="<%- address.houseName %>" required>
+    
+                                                <label>Street</label>
+                                                <input type="text" class="form-control" value="<%- address.street %>"  name="street" >
+    
+                                              
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <label>City</label>
+                                                        <input type="text" class="form-control" value="<%- address.city %>"  name="city" required > 
+                                                    </div><!-- End .col-sm-6 -->
+    
+                                                    <div class="col-sm-6">
+                                                        <label>State</label>
+                                                        <input type="text" class="form-control" value="<%- address.state %>" name="state" required>
+                                                    </div><!-- End .col-sm-6 -->
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <label>Pincode</label>
+                                                        <input type="text" class="form-control" value="<%- address.pinCode %>" name="pinCode" required>
+                                                    </div><!-- End .col-sm-6 -->
+    
+                                                    <div class="col-sm-6">
+                                                        <label>Phone</label>
+                                                        <input type="text" class="form-control" value="<%- address.phone %>" name="phone"  required>
+                                                    </div><!-- End .col-sm-6 -->
+                                                </div> <br>
                                           
-                                            <div class="card card-dashboard">
-                                                <div class="card-body">
-                                                    <h3 class="card-title">Addresses</h3><!-- End .card-title --> <br>
-                                                    <p>You add your address details by clicking here.<br>
-
-                                                    <a class="btn float-end btn-dark rounded btn-sm font-md" href="/addaddress?userId=<%= user._id.toString() %>">Add Address</a>
-
-
-                                                </div><!-- End .card-body -->
-                                            </div><!-- End .card-dashboard -->
-
-                                            <div class="row">
-                                                <div class="col-lg-6">
-                                                    <div class="card card-dashboard">
-                                                        <div class="card-body">
-                                                            <h3 class="card-title">Billing Address</h3><!-- End .card-title -->
     
-                                                            <p>User Name<br>
-                                                            User Company<br>
-                                                            John str<br>
-                                                            New York, NY 10001<br>
-                                                            1-234-987-6543<br>
-                                                            yourmail@mail.com<br>
-                                                            <a href="#">Edit <i class="icon-edit"></i></a></p>
-                                                        </div><!-- End .card-body -->
-                                                    </div><!-- End .card-dashboard -->
-                                                </div><!-- End .col-lg-6 -->
-    
-                                                <div class="col-lg-6">
-                                                    <div class="card card-dashboard">
-                                                        <div class="card-body">
-                                                            <h3 class="card-title">Shipping Address</h3><!-- End .card-title -->
-    
-                                                            <p>You have not set up this type of address yet.<br>
-                                                            <a href="#">Edit <i class="icon-edit"></i></a></p>
-                                                        </div><!-- End .card-body -->
-                                                    </div><!-- End .card-dashboard -->
-                                                </div><!-- End .col-lg-6 -->
-                                            </div><!-- End .row -->
-                                      
+                                                <button type="submit" class="btn btn-outline-primary-2">
+                                                    
+                                                    <span>EDIT ADDRESS</span>
+                                                    <i class="icon-long-arrow-right"></i>
+                                                </button>
+                                            </form>
+                                        
+
+                                          
                                             
                                         </div>
                                         

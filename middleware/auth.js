@@ -13,7 +13,17 @@ try{
 
 }
 
+const isAuthenticated = (req, res, next) => {
+    if (!req.session.user) {
 
+        req.session.originalUrl = req.originalUrl;
+          return res.redirect('/login');
+  
+  } else {
+      next();
+  }
+  }
+  
 
 
 
@@ -36,5 +46,6 @@ const isLogout= async(req,res,next)=>{
 
 module.exports={
     isLogin,
-    isLogout
+    isLogout,
+    isAuthenticated
 }

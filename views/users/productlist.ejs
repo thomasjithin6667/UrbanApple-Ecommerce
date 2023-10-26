@@ -386,60 +386,49 @@
 
                             <div class="products mb-3">
                                 <div class="row">
-                          
-                                 
-                                   
-
-                                    <% if (products.length> 0) { %>
-                                        
-                                                <% for (let i=0; i < products.length; i++) { %>
-                                                    <div class="col-6 col-md-4 col-xl-3">
-                                                        <div class="product">
-                                                            <figure class="product-media">
-                                                                <a href="product.html">
-                                                                    <img src="public/assets/images/productImages/<%= products[i].productImages[0] %>" alt="Product image" class="product-image m-4" style="height: 100px; width:100px ;">
-                                                                </a>
-                
-                                                                <div class="product-action-vertical">
-                                                                    <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                                                                    <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
-                                                                    <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                                                                </div><!-- End .product-action-vertical -->
-                
-                                                                <div class="product-action">
-                                                                    <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                                                </div><!-- End .product-action -->
-                                                            </figure><!-- End .product-media -->
-                
-                                                            <div class="product-body">
-                                                                <div class="product-cat">
-                                                                    <a href="#"> <%= products[i].category %></a>
-                                                                </div><!-- End .product-cat -->
-                                                                <h3 class="product-title"><a href="product.html"> <%= products[i].name %></a></h3><!-- End .product-title -->
-                                                                <div class="product-price">
-                                                                    <%= products[i].price %>
-                                                                </div><!-- End .product-price -->
-                                                                <div class="ratings-container">
-                                                                    <div class="ratings">
-                                                                        <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
-                                                                    </div><!-- End .ratings -->
-                                                                    <span class="ratings-text">( 4 Reviews )</span>
-                                                                </div><!-- End .rating-container -->
-                                                            </div><!-- End .product-body -->
-                                                        </div><!-- End .product -->
-                                                    </div><!-- End .col-sm-6 col-md-4 col-xl-3 -->
-                                          
-
-
-
-
-                                                    <% } %>
-                                           
-                                        <% } else { %>
-                                            <p>Products not found</p>
-                                            <% } %>
-                            
+                                    <% if (products.length > 0) { %>
+                                        <% products.forEach((product) => { %>
+                                            <div class="col-6 col-md-4 col-xl-3">
+                                                <div class="product">
+                                                    <figure class="product-media">
+                                                        <a href="product.html">
+                                                            <img src="public/assets/images/productImages/<%= product.productImages[0] %>" alt="Product image" class="product-image " >
+                                                        </a>
+                                
+                                                        <div class="product-action-vertical">
+                                                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                                                            <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
+                                                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
+                                                        </div><!-- End .product-action-vertical -->
+                                
+                                                        <div class="product-action">
+                                                            <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
+                                                        </div><!-- End .product-action -->
+                                                    </figure><!-- End .product-media -->
+                                
+                                                    <div class="product-body">
+                                                        <div class="product-cat">
+                                                            <a href="#"><%= product.category %></a>
+                                                        </div><!-- End .product-cat -->
+                                                        <h3 class="product-title"><a href="product.html"><%= product.name %></a></h3><!-- End .product-title -->
+                                                        <div class="product-price">
+                                                            <%= product.price %>
+                                                        </div><!-- End .product-price -->
+                                                        <div class="ratings-container">
+                                                            <div class="ratings">
+                                                                <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
+                                                            </div><!-- End .ratings -->
+                                                            <span class="ratings-text">(4 Reviews)</span>
+                                                        </div><!-- End .ratings-container -->
+                                                    </div><!-- End .product-body -->
+                                                </div><!-- End .product -->
+                                            </div><!-- End .col-sm-6 col-md-4 col-xl-3 -->
+                                        <% }); %>
+                                    <% } else { %>
+                                        <p>Products not found</p>
+                                    <% } %>
                                 </div><!-- End .row -->
+                                
                             </div><!-- End .products -->
 
                             <nav aria-label="Page navigation">

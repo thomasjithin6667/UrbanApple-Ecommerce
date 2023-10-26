@@ -28,7 +28,7 @@
                                 <aside class="col-md-4 col-lg-3">
                                     <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active " id="tab-dashboard-link" data-toggle="tab"
+                                            <a class="nav-link " id="tab-dashboard-link" data-toggle="tab"
                                                 href="#tab-dashboard" role="tab" aria-controls="tab-dashboard"
                                                 aria-selected="true">Dashboard</a>
                                         </li>
@@ -48,9 +48,9 @@
                                                 aria-selected="false">Track order</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" 
-                                                href="/address?userId=<%= user._id.toString() %>" 
-                                               >Addresses</a>
+                                            <a class="nav-link active" id="tab-address-link" data-toggle="tab"
+                                                href="#tab-address" role="tab" aria-controls="tab-address"
+                                                aria-selected="false">Addresses</a>
 
                                         </li>
                                         
@@ -79,7 +79,7 @@
 
                                 <div class="col-md-8 col-lg-9">
                                     <div class="tab-content">
-                                        <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel"
+                                        <div class="tab-pane fade " id="tab-dashboard" role="tabpanel"
                                             aria-labelledby="tab-dashboard-link">
                                             <p>this is dashboard</p>
 
@@ -165,7 +165,7 @@
 
                                         </div><!-- .End .tab-pane -->
 
-                                        <div class="tab-pane fade" id="tab-address" role="tabpanel"
+                                        <div class="tab-pane fade show active" id="tab-address" role="tabpanel"
                                             aria-labelledby="tab-address-link">
                                          
                                           
@@ -181,33 +181,31 @@
                                             </div><!-- End .card-dashboard -->
 
                                             <div class="row">
-                                                <div class="col-lg-6">
+                                                <div class="col-lg">
+                                                    <% addresses.forEach(address => { %>
                                                     <div class="card card-dashboard">
                                                         <div class="card-body">
-                                                            <h3 class="card-title">Billing Address</h3><!-- End .card-title -->
-    
-                                                            <p>User Name<br>
-                                                            User Company<br>
-                                                            John str<br>
-                                                            New York, NY 10001<br>
-                                                            1-234-987-6543<br>
-                                                            yourmail@mail.com<br>
-                                                            <a href="#">Edit <i class="icon-edit"></i></a></p>
-                                                        </div><!-- End .card-body -->
-                                                    </div><!-- End .card-dashboard -->
-                                                </div><!-- End .col-lg-6 -->
-    
-                                                <div class="col-lg-6">
-                                                    <div class="card card-dashboard">
-                                                        <div class="card-body">
-                                                            <h3 class="card-title">Shipping Address</h3><!-- End .card-title -->
-    
-                                                            <p>You have not set up this type of address yet.<br>
-                                                            <a href="#">Edit <i class="icon-edit"></i></a></p>
-                                                        </div><!-- End .card-body -->
-                                                    </div><!-- End .card-dashboard -->
-                                                </div><!-- End .col-lg-6 -->
-                                            </div><!-- End .row -->
+                                                            
+                                                            <p>
+                                                               
+                                                                <h6><%- address.type.charAt(0).toUpperCase() + address.type.slice(1) %> Address<br></h6>
+
+                                                                    
+                                                                    <%- address.name %><br>
+                                                                    <%- address.houseName %><br>
+                                                                    <%- address.street %><br>
+                                                                    <%- address.city %>, <%- address.state %> <%- address.pinCode %><br>
+                                                                    <%- address.phone %><br>
+                                                                    <%- address.email %><br>
+                                                                    <a href="/editaddress?userId=<%= user._id.toString() %>&addressId=<%= address._id.toString() %>">Edit <i class="icon-edit"></i></a>
+                                                                    <a class="text-danger m-5" href="/deleteaddress?userId=<%= user._id.toString() %>&addressId=<%= address._id.toString() %>">Delete <i class="icon-close"></i></a>
+                                                              
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <% }); %>
+                                                </div>
+                                            
                                       
                                             
                                         </div>
