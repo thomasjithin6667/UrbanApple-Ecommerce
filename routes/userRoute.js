@@ -67,6 +67,9 @@ user_route.get('/editaddress',addressController.loadEditAddress)
 user_route.get('/deleteaddress',addressController.deleteAddress)
 //product
 user_route.get('/productlist',auth.isAuthenticated,userController.productList)
+user_route.get('/viewproduct/:productId',auth.isAuthenticated,userController.productView)
+
+
 //cart
 user_route.get('/cart',userController.loadCart)
 //wishlist

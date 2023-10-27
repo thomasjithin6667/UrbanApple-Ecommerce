@@ -132,7 +132,7 @@ const blockUser = async (req, res) => {
     } catch (error) {
         console.log(error.message);
 
-        res.status(500).send('An error occurred');
+       
     }
 }
 
@@ -142,7 +142,7 @@ const blockUser = async (req, res) => {
 const insertCategory = async (req, res) => {
     try {
 
-        const categoryExist = await Category.findOne({ name: req.body.category });
+        const categoryExist = await Category.findOne({ category: req.body.category });
 
         if (categoryExist) {
             return res.render('addcategory', { message: "Category already exists" });

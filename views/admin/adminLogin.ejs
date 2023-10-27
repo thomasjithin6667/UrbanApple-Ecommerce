@@ -27,12 +27,14 @@
             <div class="card mx-auto card-login" style="border-radius: 0;">
                 <div class="card-body " style="border-radius: 0;">
                     <h4 class="card-title mb-4">Admin Login</h4>
-                    <form action="" method="POST">
+                    <form id="login-form"  action="" method="POST">
                         <div class="mb-3">
-                            <input class="form-control" placeholder="Username or email" type="text" name="email">
+                            <input  id="email"  class="form-control" placeholder="Username or email" type="text" name="email">
+                            <div class="error"></div>
                         </div> <!-- form-group// -->
                         <div class="mb-3">
-                            <input class="form-control" placeholder="Password" type="password" name="password">
+                            <input  id="password" class="form-control" placeholder="Password" type="password" name="password">
+                            <div class="error"></div>
                         </div> <!-- form-group// -->
                         <div class="mb-3">
                             <a href="#" class="float-center font-sm text-muted m-2">Forgot password?</a>
@@ -61,6 +63,7 @@
     <script src="assetsB/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="assetsB/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="assetsB/js/vendors/jquery.fullscreen.min.js"></script>
+    <script src="/public/assets/js/validation.js"></script>
     <!-- Main Script -->
     <script src="assetsB/js/main.js" type="text/javascript"></script>
 </body>

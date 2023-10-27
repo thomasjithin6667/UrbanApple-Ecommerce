@@ -93,15 +93,17 @@
 							</ul>
 							<div class="tab-content mt-3">
 							    <div aria-labelledby="signin-tab-2">
-							    	<form action="/login" method="post">
+							    	<form  id="login-form"  action="/login" method="post">
 							    		<div class="form-group">
 							    			<label for="singin-email-2">Email address *</label>
-							    			<input type="text" class="form-control" name="email" required>
+							    			<input id="email" type="text" class="form-control" name="email" >
+                                            <div class="error"></div>
 							    		</div><!-- End .form-group -->
 
 							    		<div class="form-group">
 							    			<label for="singin-password-2">Password *</label>
-							    			<input type="password" class="form-control"  name="password" required>
+							    			<input id="password" type="password" class="form-control"  name="password" >
+                                            <div class="error"></div>
 							    		</div><!-- End .form-group -->
                                         <div id="invalid" style="height: 30px;">
                                             <% if (typeof message !== 'undefined' && message) { %>
@@ -115,10 +117,7 @@
 			            						<i class="icon-long-arrow-right"></i>
 			                				</button>
 
-			                				<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="signin-remember-2">
-												<label class="custom-control-label" for="signin-remember-2">Remember Me</label>
-											</div><!-- End .custom-checkbox -->
+			                		
 
 											<a href="/forgotpassword" class="forgot-link">Forgot Your Password?</a>
 							    		</div><!-- End .form-footer -->

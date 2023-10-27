@@ -388,10 +388,10 @@
                                 <div class="row">
                                     <% if (products.length > 0) { %>
                                         <% products.forEach((product) => { %>
-                                            <div class="col-6 col-md-4 col-xl-3">
+                                            <div  class="col-6 col-md-4 col-xl-3">
                                                 <div class="product">
                                                     <figure class="product-media">
-                                                        <a href="product.html">
+                                                        <a href="/viewproduct/<%=product._id%>">
                                                             <img src="public/assets/images/productImages/<%= product.productImages[0] %>" alt="Product image" class="product-image " >
                                                         </a>
                                 

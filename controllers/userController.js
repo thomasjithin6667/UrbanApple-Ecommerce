@@ -492,7 +492,7 @@ const forgotPasswordOTP = async (req, res) => {
 
 
 
-
+//forgot password otp verification 
 
 const passwordOTPVerification = async (req, res) => {
     try {
@@ -656,6 +656,24 @@ const loadEditUser = async(req,res)=>{
 
 }
 
+  //delete account
+  const productView= async(req,res)=>{
+
+    try {
+        const userData = await User.findById({_id:req.session.user_id})
+        const productId = req.params.productId;
+        const productData = await Product.findById(productId);
+        res.render('productView', { user: userData,product:productData})
+       
+        
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+
+
+}
+
 module.exports={
     loadRegister,
     loadHome,
@@ -680,6 +698,7 @@ module.exports={
     updateProfile,
     userResetPassword,
     loadUserPasswordReset,
-    deleteUser
+    deleteUser,
+    productView
    
 }
