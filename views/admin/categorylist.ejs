@@ -210,17 +210,17 @@
                     <div class="row">
 
                         <div class="col-md">
-                            <div class="table-responsive">
+                            <div class="table">
 
 
                                 <% if (categories.length> 0) { %>
-                                    <table class="table table-hover">
+                                    <table  class="table" id="categories">
                                         <thead>
                                             <tr>
                                                 <th>image</th>
                                                 <th>Name</th>
                                                 <th>Description</th>
-                                                <th>Status</th>
+                                                <th style="width: 70px;">Status</th>
                                                 <th class="text-end">Actions</th>
                                             </tr>
                                         </thead>
@@ -238,9 +238,9 @@
                                                     <td>
                                                         <%= categories[i].description %>
                                                     </td>
-                                                    <td>
-                                                        <% if (categories[i].isListed) { %>Listed<% } else { %>Unlisted
-                                                                <% } %>
+                                                    <td style="width: 70px;">
+                                                        <% if (categories[i].isListed) { %><span class="badge badge-pill badge-soft-primary">Listed</span><% } else { %><span class="badge badge-pill badge-soft-danger">Unlisted</span>
+                                                        <% } %>
                                                     </td>
                                                     <td class="text-end">
                                                         <div class="dropdown">
@@ -248,7 +248,21 @@
                                                                 class="btn btn-light rounded btn-sm font-sm"> <i
                                                                     class="material-icons md-more_horiz"></i> </a>
                                                             <div class="dropdown-menu">
-                                                                <a class="dropdown-item" href="#">List</a>
+                                                                <a class="dropdown-item" >
+                                                                    <% if (categories[i].isList) { %>
+                                                                        <a href="/admin/unlist-category?id=<%= categories[i]._id.toString() %>">
+                                                                         
+                                                                           <p class="text-danger ms-4">Unlist</p>
+                                                                         
+                                                                        </a>
+                                                                      <% } else { %>
+                                                                        <a href="/admin/unlist-category?id=<%= categories[i]._id.toString() %>">
+                                                                          
+                                                                            <p class="text-primary ms-4">List</p>
+                                                                         
+                                                                        </a>
+                                                                      <% } %>
+                                                                   </a>
                                                                 <a class="dropdown-item" href="/admin/edit-category?id=<%= categories[i]._id.toString() %>">Edit info</a>
                                                                 <a class="dropdown-item text-danger" href="/admin/delete-category?id=<%= categories[i]._id.toString() %>" >Delete</a>
                                                             </div>
@@ -285,6 +299,16 @@
             </div>
         </footer>
     </main>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+       <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+     <script>
+       $(document).ready(function () {
+    new DataTable('#categories');
+
+     })
+      </script>
+   
     <script src="assetsB/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="assetsB/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="assetsB/js/vendors/select2.min.js"></script>

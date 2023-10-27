@@ -3,6 +3,7 @@ const UserOTPVerification = require('../models/userOTPModel')
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer')
 const Product = require('../models/productModel')
+const Category = require('../models/categoryModel');
 
 const securePassword =async(password)=>{
     try { 
@@ -56,7 +57,6 @@ const insertUser = async (req, res) => {
                 name: req.body.name,
                 email: req.body.email,
                 mobile: req.body.mno,
-                image: req.file.filename,
                 password: spassword,
                 is_Admin: 0
             });
@@ -65,7 +65,7 @@ const insertUser = async (req, res) => {
             req.session.id2=userData._id
             console.log(req.session.id2);
          
-            sentOTPVerificationEmail(req, res, req.body.name, req.body.email, userData._id);
+            sentOTPVerificationEmail(req, res, req.body.email, userData._id);
 
             if (userData) {
                
@@ -87,9 +87,9 @@ const loadHome = async(req,res)=>{
 
     try {
         
-      
-     res.render('home',{user:null})
-     
+    const categoriesData = await Category.find({})
+     res.render('home',{user:null, categories: categoriesData })
+     console.log(categoriesData);
     } catch (error) {
  
      console.log(error.message);
@@ -104,7 +104,9 @@ const loadHome = async(req,res)=>{
  const loadUserHome = async(req,res)=>{
     try{
          const userData = await User.findById({_id:req.session.user_id})
-         res.render('home',{user:userData})
+         const categoriesData = await Category.find({})
+         res.render('home',{user:userData,categories: categoriesData })
+         console.log(categoriesData);
     }catch(error){
         console.log(error.message);
     }
@@ -128,9 +130,10 @@ const loadHome = async(req,res)=>{
 const sentOTPVerificationEmail = async (req, res, email, _id) => {
     try {
         const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
-        req.session.forgortotp = otp;
+        req.session.otp = otp;
         
-        console.log(req.session.otp);
+        console.log("this is pto"+req.session.otp);
+        console.log("this is emial"+email);
        
 
         const mailOptions = {

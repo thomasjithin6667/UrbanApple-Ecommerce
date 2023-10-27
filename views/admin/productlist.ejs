@@ -210,18 +210,18 @@
                     <div class="row">
 
                         <div class="col-md">
-                            <div class="table-responsive">
+                            <div>
 
 
                                 <% if (products.length> 0) { %>
-                                    <table class="table table-hover" id="products">
+                                    <table class="table" id="products">
                                         <thead>
                                             <tr>
                                                 <th>image</th>
                                                 <th>Name</th>
                                                 <th>Category</th>
                                                 <th>Quantity</th>
-                                                <th>Status</th>
+                                                <th style="width: 70px;">Status</th>
                                                 <th class="text-end">Actions</th>
                                             </tr>
                                         </thead>
@@ -243,7 +243,8 @@
                                                         <%= products[i].quantity %>
                                                     </td>
                                                     <td>
-                                                        <% if (products[i].list) { %>Listed<% } else { %>Unlisted
+                                                        
+                                                        <% if (products[i].list) { %><span class="badge badge-pill badge-soft-primary">Listed</span><% } else { %><span class="badge badge-pill badge-soft-danger">Unlisted</span>
                                                             <% } %>
                                                     </td>
                                                     <td class="text-end">
@@ -252,7 +253,21 @@
                                                                 class="btn btn-light rounded btn-sm font-sm"> <i
                                                                     class="material-icons md-more_horiz"></i> </a>
                                                             <div class="dropdown-menu">
-                                                                <a class="dropdown-item" href="#">List</a>
+                                                                <a class="dropdown-item" >
+                                                                    <% if (products[i].list) { %>
+                                                                        <a href="/admin/unlist-product?id=<%= products[i]._id.toString() %>">
+                                                                         
+                                                                           <p class="text-danger ms-4">Unlist</p>
+                                                                         
+                                                                        </a>
+                                                                      <% } else { %>
+                                                                        <a href="/admin/unlist-product?id=<%= products[i]._id.toString() %>">
+                                                                          
+                                                                            <p class="text-primary ms-4">List</p>
+                                                                         
+                                                                        </a>
+                                                                      <% } %>
+                                                                   </a>
                                                                 <a class="dropdown-item" href="/admin/show-product?id=<%= products[i]._id.toString() %>">Show info</a>
                                                                 <a class="dropdown-item" href="/admin/edit-product?id=<%= products[i]._id.toString() %>">Edit info</a>
                                                                 <a class="dropdown-item text-danger" href="/admin/delete-product?id=<%= products[i]._id.toString() %>">Delete</a>

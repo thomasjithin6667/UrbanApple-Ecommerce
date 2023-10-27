@@ -219,18 +219,18 @@
                     </div>
                 </header> -->
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <div class="table-responsive">
+                    <div class="table">
+                        <div class="table">
 
                             <% if (users.length> 0) { %>
-                                <table id="users"  class="table align-middle table-nowrap mb-0">
+                                <table id="users"  class="table">
                                   <thead class="bg-light">
                                     <tr>
                                       <th>Name</th>
                                       <th>Email</th>
                                       <th>Mobile</th>
-                                      <th>Status</th>
-                                      <th>Actions</th>
+                                      <th style="width: 130px;">Status</th>
+                                      <th style="width: 130px;">Actions</th>
                                     </tr>
                                   </thead>
                                   <tbody>
@@ -259,7 +259,9 @@
                                         </td>
                                         <td>
                                             <p class="fw-normal mb-1">
-                                              <%= users[i].isBlocked ? "Blocked" : "Unblocked" %>
+                                                <% if (users[i].isBlocked ) { %><span class="badge badge-pill badge-soft-danger">Blocked</span><% } else { %><span class="badge badge-pill badge-soft-primary">Unblocked</span>
+                                                <% } %>
+                                            
                                             </p>
                                           </td>
                           

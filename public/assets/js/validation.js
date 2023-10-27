@@ -273,20 +273,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
 //product form validation
 document.addEventListener('DOMContentLoaded', function () {
-    const form = document.forms['productform'];
-    const name = form.elements['name'];
-    const quantity = form.elements['quantity'];
-    const productColor = form.elements['productColor'];
-    const battery = form.elements['battery'];
-    const ram = form.elements['ram'];
-    const rom = form.elements['rom'];
-    const expandable = form.elements['expandable'];
-    const rearCam = form.elements['rearCam'];
-    const frontCam = form.elements['frontCam'];
-    const processor = form.elements['processor'];
-    const price = form.elements['price'];
-    const discountPrice = form.elements['discountPrice'];
-    const category = form.elements['category'];
+
+    
+    const form = document.querySelector('form[name="productform"]');
+    const productname = document.querySelector('input[name="name"]');
+    const quantity = document.querySelector('input[name="quantity"]');
+    const productColor = document.querySelector('input[name="productColor"]');
+    const battery = document.querySelector('input[name="battery"]');
+    const ram = document.querySelector('input[name="ra"]');
+    const rom = document.querySelector('input[name="rom"]');
+    const expandable = document.querySelector('input[name="expandable"]');
+    const rearCam = document.querySelector('input[name="rearCam"]');
+    const frontCam = document.querySelector('input[name="frontCam"]');
+    const processor = document.querySelector('input[name="processor"]');
+    const price = document.querySelector('input[name="price"]');
+    const discountPrice = document.querySelector('input[name="discountPrice"]');
+    const category = document.querySelectorAll('input[name="category"]');
 
     form.addEventListener('submit', function (e) {
         e.preventDefault();
@@ -296,29 +298,32 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     const setError = (element, message) => {
-        const formGroup = element.closest('.mb-3');
-        const errorDisplay = formGroup.querySelector('.error');
+        const inputControl = element.parentElement;
+        const errorDisplay = inputControl.querySelector('.error');
         errorDisplay.innerText = message;
-        formGroup.classList.remove('success');
-        formGroup.classList.add('error');
+   
+        inputControl.classList.remove('success');
     };
 
-    const setSuccess = (element) => {
-        const formGroup = element.closest('.mb-3');
-        const errorDisplay = formGroup.querySelector('.error');
-        errorDisplay.innerText = '';
-        formGroup.classList.remove('error');
-        formGroup.classList.add('success');
+
+    const setSuccess = element => {
+        const inputControl = element.parentElement;
+        const errorDisplay = inputControl.querySelector('.error');
+       
+        inputControl.classList.add('success');
+        inputControl.classList.remove('error');
     };
+
+    
 
     const validateForm = () => {
         let isValid = true;
 
-        if (name.value.trim() === '') {
-            setError(name, 'Product title is required');
+        if (productname.value.trim() === '') {
+            setError(productname, 'Product title is required');
             isValid = false;
         } else {
-            setSuccess(name);
+            setSuccess(productname);
         }
 
         if (quantity.value.trim() === '') {
@@ -335,7 +340,7 @@ document.addEventListener('DOMContentLoaded', function () {
             setSuccess(productColor);
         }
 
-        // Add validation for other fields here
+
 
         if (price.value.trim() === '') {
             setError(price, 'Price is required');
@@ -352,12 +357,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         let categoryChecked = false;
+
         category.forEach((radio) => {
             if (radio.checked) {
                 categoryChecked = true;
             }
         });
-
+        
         if (!categoryChecked) {
             setError(category[0], 'Please select a category');
             isValid = false;
@@ -371,5 +377,6 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 });
 
+console.log("hello");
 
 

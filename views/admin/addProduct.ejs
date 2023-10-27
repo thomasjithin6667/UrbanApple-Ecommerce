@@ -180,14 +180,14 @@
             </div>
         </header>
         <section class="content-main">
-            <form form action="" method="POST" enctype="multipart/form-data">
+            <form name="productform" id="productform" form action="" method="POST" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-9">
                     <div class="content-header">
                         <h2 class="content-title">Add New Product</h2>
                         <div>
                            
-                            <button type="submit" class="btn btn-md rounded font-sm hover-up">Create Product</button>
+                            <input type="submit" class="btn btn-md rounded font-sm hover-up" value="Create Product">
                         </div>
                     </div>
                 </div>
@@ -201,7 +201,7 @@
                             <h5 class="my-2">Product Info</h5>
                             <div class="mb-4">
                                 <label for="product_title" class="form-label">Product title</label>
-                                <input type="text" placeholder="Type here" class="form-control" name="name" >
+                                <input type="text" placeholder="Type here" class="form-control" name="name" id="name">
                                 <div class="error"></div>
                             </div>
                             <div class="row gx-3">
@@ -296,8 +296,10 @@
                             <hr>
                             <h5 class="mb-3">Categories</h5>
                             <div class="form-check">
+                                <div class="error"></div>
                                 <input class="form-check-input" type="radio" value="iphone" id="product-cat" name="category">
                                 <label class="form-check-label" for="product-cat">iphone</label>
+                               
                             </div>
                             
                             <div class="form-check">
@@ -323,10 +325,12 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" value="apple tv" id="product-cat-5" name="category">
                                 <label class="form-check-label" for="product-cat-5">Apple TV</label>
+                                
                             </div>
-                            <div class="error"></div>
+                            
                          
                         </div>
+                       
                     </div> <!-- card end// -->
                 </div>
             </div>

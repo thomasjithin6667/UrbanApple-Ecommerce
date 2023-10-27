@@ -87,17 +87,20 @@ admin_route.get('/dashboard',adminController.loadDashboard);
 admin_route.get("/logout",adminController.logout)
 admin_route.get("/userlist",adminController.loadUserlist)
 admin_route.get('/block-user',adminController.blockUser)
+
 //product
 admin_route.get("/addproduct",adminController.loadaddProduct)
 admin_route.get("/productlist",adminController.loadProductList)
 admin_route.get('/delete-product',adminController.deleteProduct)
 admin_route.get('/edit-product',adminController.loadEditProduct)
 admin_route.get('/show-product',adminController.loadShowProduct)
+admin_route.get('/unlist-product',adminController.unlistProduct )
 //category
 admin_route.get("/addcategory",adminController.loadaddCategory)
 admin_route.get("/categorylist",adminController.loadCategorylist)
 admin_route.get('/edit-category',adminController.loadEditCategory)
 admin_route.get('/delete-category',adminController.deleteCategory)
+admin_route.get('/unlist-category',adminController.unlistCategory )
 
 
 //POST REQUESTS
@@ -115,7 +118,7 @@ admin_route.post('/edit-product',upload.array('productImages', 4),adminControlle
 
 
 admin_route.get('*',(req,res)=>{
-    res.redirect('/admin')
+    res.render('401-notAuthorized')
 })
 
 

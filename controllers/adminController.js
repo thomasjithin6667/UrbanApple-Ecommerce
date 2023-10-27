@@ -137,6 +137,57 @@ const blockUser = async (req, res) => {
 }
 
 
+//list and unlist products
+
+const unlistProduct = async (req, res) => {
+    try {
+        const id = req.query.id;
+
+
+        const product = await Product.findById(id);
+
+       
+
+        product.list = !product.list;
+
+
+        await product.save();
+
+        res.redirect('/admin/productlist');
+    } catch (error) {
+        console.log(error.message);
+
+       
+    }
+}
+
+//list and unlist category
+
+const unlistCategory = async (req, res) => {
+    try {
+        const id = req.query.id;
+
+
+        const category = await Category.findById(id);
+
+       
+
+        category.isListed = !category.isListed;
+
+
+        await category .save();
+
+        res.redirect('/admin/categorylist');
+    } catch (error) {
+        console.log(error.message);
+
+       
+    }
+}
+
+
+
+
 
 
 const insertCategory = async (req, res) => {
@@ -536,6 +587,8 @@ module.exports = {
     deleteProduct,
     loadEditProduct,
     loadShowProduct,
-    editProduct 
+    editProduct,
+    unlistProduct,
+    unlistCategory 
 }
 

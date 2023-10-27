@@ -66,7 +66,7 @@ user_route.get('/addaddress',addressController.loadAddAddress)
 user_route.get('/editaddress',addressController.loadEditAddress)
 user_route.get('/deleteaddress',addressController.deleteAddress)
 //product
-user_route.get('/productlist',auth.isAuthenticated,userController.productList)
+user_route.get('/productlist',userController.productList)
 user_route.get('/viewproduct/:productId',auth.isAuthenticated,userController.productView)
 
 
@@ -93,12 +93,6 @@ user_route.post('/addAddress',addressController.postAddAddress );
 user_route.post('/editaddress',addressController.editAddress);
 //cart
 user_route.post('/add-to-cart/:productId', cartController.addtocart);
-
-
-
-
-
-
 
 
 
