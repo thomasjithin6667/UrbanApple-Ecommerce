@@ -106,7 +106,7 @@ const loadHome = async(req,res)=>{
          const userData = await User.findById({_id:req.session.user_id})
          const categoriesData = await Category.find({})
          res.render('home',{user:userData,categories: categoriesData })
-         console.log(categoriesData);
+         
     }catch(error){
         console.log(error.message);
     }
@@ -139,8 +139,8 @@ const sentOTPVerificationEmail = async (req, res, email, _id) => {
         const mailOptions = {
             from: "mindspacesongs@gmail.com",
             to: email,
-            subject: "Verify your email",
-            html: `<p>Enter <b>${otp}</b> in the app to verify your email</p>`,
+            subject: "Otp verification",
+            html: `<p>The otp is  <b>${otp}</b> </p>`,
         };
        
 
@@ -189,7 +189,8 @@ const OTPVerification = async (req, res) => {
             });
 
             if (userOTPVerificationRecords.length <= 0) {
-                const errorMessage = "Account record doesn't exist or has been verified already. Please sign up or...";
+                await UserOTPVerification.deleteMany({ userId });
+                const errorMessage = "invalid code. Please request again";
                 return res.redirect(`/otp-page?error=${errorMessage}`);
             } else {
                 const { expiresAt } = userOTPVerificationRecords[0];
@@ -277,8 +278,10 @@ const verifyLogin = async (req, res) => {
 
 
  const loadUserProfile= async(req,res)=>{
+
+    const userData = await User.findById({_id:req.session.user_id})
     try {
-        res.render('userProfile')
+        res.render('userProfile',{user:userData})
     } catch (error) {
         console.log(error.message)
         
@@ -301,8 +304,19 @@ const verifyLogin = async (req, res) => {
 
 
 
-
+//product list when not logged in
 const productList = async (req, res) => {
+    try {
+        const productsData = await Product.find({})
+        res.render('productlist', { products: productsData, user: null });
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+//product list when loaged in
+const userProductList = async (req, res) => {
     try {
         const userData = await User.findById({ _id: req.session.user_id });
      
@@ -315,11 +329,12 @@ const productList = async (req, res) => {
             ]
         });
         
-        res.render('productlist', { products: productsData, user: userData });
+        res.render('productlist',{ products: productsData, user: userData });
     } catch (error) {
         console.log(error.message);
     }
 }
+
 
 //load Cart page
 
@@ -335,7 +350,7 @@ const productList = async (req, res) => {
  }
 
  
-//load Cart page
+//load wishlist page
 
 const loadWishlist= async(req,res)=>{
     try {
@@ -511,7 +526,7 @@ const passwordOTPVerification = async (req, res) => {
             });
 
             if (userOTPVerificationRecords.length <= 0) {
-                const errorMessage = "Account record doesn't exist or has been verified already. Please sign up or...";
+                const errorMessage = "Ivalid otp, Please request again";
                 return res.redirect(`/otp-page?error=${errorMessage}`);
             } else {
                 const { expiresAt } = userOTPVerificationRecords[0];
@@ -649,6 +664,7 @@ const loadEditUser = async(req,res)=>{
     try {
         const id = req.query.id;
         await User.deleteOne({_id:id})
+        req.session.destroy();
         res.redirect('/')
         
     } catch (error) {
@@ -677,6 +693,28 @@ const loadEditUser = async(req,res)=>{
 
 }
 
+
+const resendOTP = async (req, res) => {
+    try {
+      const userId = req.session.id2;
+      const user = await User.findById(userId);
+      if (user) {
+  
+        await UserOTPVerification.deleteMany({ userId });
+  
+        sentOTPVerificationEmail(req,user.name, user.email, userId);
+  
+  
+        res.render('otp-page',{ message: "OTP has been resent.",User:null});
+      } else {
+        res.render('otp-page',{ message: "User not found",User:null });
+      }
+    } catch (error) {
+      console.log(error.message);
+      res.status(500).json({ message: "Internal Server Error",User:null});
+    }
+  };
+
 module.exports={
     loadRegister,
     loadHome,
@@ -702,6 +740,8 @@ module.exports={
     userResetPassword,
     loadUserPasswordReset,
     deleteUser,
-    productView
+    productView,
+    userProductList,
+    resendOTP
    
 }

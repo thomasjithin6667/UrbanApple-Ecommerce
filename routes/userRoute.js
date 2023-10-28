@@ -10,6 +10,7 @@ const config = require("../config/config")
 const auth =require("../middleware/auth")
 const addressController = require('../controllers/addressController')
 const cartController = require('../controllers/cartController')
+const checkoutController = require('../controllers/checkoutController')
 
 //session setup
 user_route.use(session({
@@ -50,30 +51,37 @@ const upload =multer({storage:storage});
 //GET REQUESTS
 user_route.get('/register',userController.loadRegister);
 user_route.get('/',auth.isLogout,userController.loadHome)
-user_route.get('/home',userController.loadUserHome)
+
+user_route.get('/home',auth.isLogin,userController.loadUserHome)
 user_route.get('/otp-page',userController.loadOTPpage)
-user_route.get('/login',userController.loginLoad)
-user_route.get('/userProfile',userController.loadUserProfile)
-user_route.get('/logout',userController.userLogout)
-user_route.get('/checkout',userController.loadCheckout)
+user_route.get('/login',auth.isLogout,userController.loginLoad)
+user_route.get('/userProfile',auth.isLogin,userController.loadUserProfile)
+user_route.get('/logout',auth.isLogin,userController.userLogout)
 user_route.get('/forgotpassword',userController.forgotPassword)
-user_route.get('/edituser',userController.loadEditUser)
+user_route.get('/edituser',auth.isLogin,userController.loadEditUser)
 user_route.get('/changePassword',userController.loadUserPasswordReset)
-user_route.get('/delete-user',userController.deleteUser)
+user_route.get('/delete-user',auth.isLogin,userController.deleteUser)
 //address
-user_route.get('/address',addressController.loadAddress)
-user_route.get('/addaddress',addressController.loadAddAddress)
-user_route.get('/editaddress',addressController.loadEditAddress)
-user_route.get('/deleteaddress',addressController.deleteAddress)
+user_route.get('/address',auth.isLogin,addressController.loadAddress)
+user_route.get('/addaddress',auth.isLogin,addressController.loadAddAddress)
+user_route.get('/editaddress',auth.isLogin,addressController.loadEditAddress)
+user_route.get('/deleteaddress',auth.isLogin,addressController.deleteAddress)
 //product
-user_route.get('/productlist',userController.productList)
+user_route.get('/productlist',auth.isLogoutStore,userController.productList)
 user_route.get('/viewproduct/:productId',auth.isAuthenticated,userController.productView)
+user_route.get('/userproductlist',userController.userProductList)
 
 
 //cart
-user_route.get('/cart',userController.loadCart)
+user_route.get('/cart',auth.isLogin,cartController.getcart)
+
+
 //wishlist
-user_route.get('/wishlist',userController.loadWishlist)
+user_route.get('/wishlist',auth.isLogin,userController.loadWishlist)
+
+//checkout
+user_route.get('/checkout',auth.isLogin,checkoutController.getCheckout)
+user_route.get('/orderPlaced',auth.isLogin, checkoutController.orderPlaced)
 
 
 
@@ -87,13 +95,17 @@ user_route.post('/forgotpassword',userController.forgotPasswordOTP)
 user_route.post('/passwordotpVerification',userController.passwordOTPVerification)
 user_route.post('/resetpassword',userController.resetPassword )
 user_route.post('/userResetpassword',userController.userResetPassword )
-user_route.post('/edituser',upload.single('image'),userController.updateProfile)
+user_route.post('/edituser',auth.isLogin,upload.single('image'),userController.updateProfile)
+user_route.get('/resendOtp',userController.resendOTP);
 //address
-user_route.post('/addAddress',addressController.postAddAddress );
-user_route.post('/editaddress',addressController.editAddress);
+user_route.post('/addAddress',auth.isLogin,addressController.postAddAddress );
+user_route.post('/editaddress',auth.isLogin,addressController.editAddress);
 //cart
-user_route.post('/add-to-cart/:productId', cartController.addtocart);
+user_route.post('/add-to-cart/:productId',auth.isAuthenticated, cartController.addtocart);
+user_route.post('/removeItemFromCart/:productId',auth.isLogin,cartController.deleteCart)
 
+//checkout
+user_route.post('/postCheckout/:userId',auth.isLogin,checkoutController.postCheckout)
 
 
 

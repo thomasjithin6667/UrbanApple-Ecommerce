@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const adminRoute= require("./routes/adminRoute")
 const userRoute= require("./routes/userRoute")
 const express= require("express");
+const nocache= require("nocache")
 
 
 
@@ -10,6 +11,7 @@ const express= require("express");
 mongoose.connect("mongodb://127.0.0.1:27017/apple_store");
 
 const app = express();
+app.use(nocache())
 
 //middlewares
 app.set('view engine','ejs')

@@ -7,9 +7,9 @@ const adminController = require("../controllers/adminController")
 const multer = require("multer")
 const session = require("express-session")
 const config = require("../config/config")
-const auth =require("../middleware/auth")
+const auth =require("../middleware/adminAuth")
 const fs = require('fs');
-
+const checkoutController = require('../controllers/checkoutController')
 
 
 //session setup
@@ -69,48 +69,45 @@ const storage = multer.diskStorage({
 // Create the Multer instance
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 10 * 1024 * 1024 },
-  // fileFilter: function (req, file, cb) {
-  //   if (file.mimetype.startsWith('image/')) {
-  //     cb(null, true);
-  //   } else {
-  //     cb(new Error('Invalid file type.'));
-  //   }
-  // },
+  limits: { fileSize: 10 * 1024 * 1024 }
+ 
 });
 
 //GET REQUESTS
 //admin
 admin_route.get('/',adminController.loadAdminLogin)
 admin_route.post('/',adminController.verifyLogin)
-admin_route.get('/dashboard',adminController.loadDashboard);
-admin_route.get("/logout",adminController.logout)
-admin_route.get("/userlist",adminController.loadUserlist)
-admin_route.get('/block-user',adminController.blockUser)
+admin_route.get('/dashboard',auth.isLogin,adminController.loadDashboard);
+admin_route.get("/logout",auth.isLogin,adminController.logout)
+admin_route.get("/userlist",auth.isLogin,adminController.loadUserlist)
+admin_route.get('/block-user',auth.isLogin,adminController.blockUser)
 
 //product
-admin_route.get("/addproduct",adminController.loadaddProduct)
-admin_route.get("/productlist",adminController.loadProductList)
-admin_route.get('/delete-product',adminController.deleteProduct)
-admin_route.get('/edit-product',adminController.loadEditProduct)
-admin_route.get('/show-product',adminController.loadShowProduct)
-admin_route.get('/unlist-product',adminController.unlistProduct )
+admin_route.get("/addproduct",auth.isLogin,adminController.loadaddProduct)
+admin_route.get("/productlist",auth.isLogin,adminController.loadProductList)
+admin_route.get('/delete-product',auth.isLogin,adminController.deleteProduct)
+admin_route.get('/edit-product',auth.isLogin,adminController.loadEditProduct)
+admin_route.get('/show-product',auth.isLogin,adminController.loadShowProduct)
+admin_route.get('/unlist-product',auth.isLogin,adminController.unlistProduct )
 //category
-admin_route.get("/addcategory",adminController.loadaddCategory)
-admin_route.get("/categorylist",adminController.loadCategorylist)
-admin_route.get('/edit-category',adminController.loadEditCategory)
-admin_route.get('/delete-category',adminController.deleteCategory)
-admin_route.get('/unlist-category',adminController.unlistCategory )
+admin_route.get("/addcategory",auth.isLogin,adminController.loadaddCategory)
+admin_route.get("/categorylist",auth.isLogin,adminController.loadCategorylist)
+admin_route.get('/edit-category',auth.isLogin,adminController.loadEditCategory)
+admin_route.get('/delete-category',auth.isLogin,adminController.deleteCategory)
+admin_route.get('/unlist-category',auth.isLogin,adminController.unlistCategory )
+//orders
+admin_route.get('/orderlist',auth.isLogin,checkoutController.orderDetails )
+
 
 
 //POST REQUESTS
 //category
-admin_route.post('/addcategory', categoryUpload.single('categoryImage'), adminController.insertCategory);
-admin_route.post('/edit-category',categoryUpload.single('categoryImage'),adminController.editCategory);
+admin_route.post('/addcategory',auth.isLogin, categoryUpload.single('categoryImage'), adminController.insertCategory);
+admin_route.post('/edit-category',auth.isLogin,categoryUpload.single('categoryImage'),adminController.editCategory);
 
 //product
-admin_route.post('/addproduct',upload.array('productImages', 4),adminController.insertProduct);
-admin_route.post('/edit-product',upload.array('productImages', 4),adminController.editProduct);
+admin_route.post('/addproduct',auth.isLogin,upload.array('productImages', 4),adminController.insertProduct);
+admin_route.post('/edit-product',auth.isLogin,upload.array('productImages', 4),adminController.editProduct);
 
 
 

@@ -32,7 +32,7 @@
               <input class="btn btn-primary mt-3" value="Submit" type="submit">
             
             
-              <a href="/" class="btn btn-dark mt-3">Resend OTP</a>
+              <a href="/resendOtp" class="btn btn-dark mt-3">Resend OTP</a>
             </form>
 
             <% if (typeof errorMessage !== 'undefined') { %>
@@ -52,14 +52,12 @@
 </div><!-- End .row -->
 
 <script>
-    // Get references to the OTP input fields and the hidden field
     const inputFields = document.querySelectorAll('input[name="otp"]');
     const fullOTPField = document.getElementById('fullOTP');
   
-    // Add an event listener to each OTP input field
     inputFields.forEach((input, index) => {
       input.addEventListener('input', (event) => {
-        // Update the hidden field with the combined value of all OTP input fields
+       
         let fullOTP = '';
         inputFields.forEach((field) => {
           fullOTP += field.value;
