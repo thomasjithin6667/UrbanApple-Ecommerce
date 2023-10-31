@@ -304,38 +304,6 @@ const verifyLogin = async (req, res) => {
 
 
 
-//product list when not logged in
-const productList = async (req, res) => {
-    try {
-        const productsData = await Product.find({})
-        res.render('productlist', { products: productsData, user: null });
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-
-//product list when loaged in
-const userProductList = async (req, res) => {
-    try {
-        const userData = await User.findById({ _id: req.session.user_id });
-     
-        const search = req.query.search || '';
-
-        const productsData = await Product.find({
-            $or: [
-                { name: { $regex: new RegExp(search, 'i') } },
-                { category: { $regex: new RegExp(search, 'i') } },
-            ]
-        });
-        
-        res.render('productlist',{ products: productsData, user: userData });
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-
 //load Cart page
 
   const    loadCart= async(req,res)=>{
@@ -675,23 +643,6 @@ const loadEditUser = async(req,res)=>{
 
 }
 
-  //delete account
-  const productView= async(req,res)=>{
-
-    try {
-        const userData = await User.findById({_id:req.session.user_id})
-        const productId = req.params.productId;
-        const productData = await Product.findById(productId);
-        res.render('productView', { user: userData,product:productData})
-       
-        
-    } catch (error) {
-        console.log(error.message);
-        
-    }
-
-
-}
 
 
 const resendOTP = async (req, res) => {
@@ -726,7 +677,7 @@ module.exports={
     verifyLogin,
     loadUserProfile,
     userLogout,
-    productList,
+  
     loadCart,
     loadWishlist,
     loadCheckout,
@@ -740,8 +691,7 @@ module.exports={
     userResetPassword,
     loadUserPasswordReset,
     deleteUser,
-    productView,
-    userProductList,
+  
     resendOTP
    
 }

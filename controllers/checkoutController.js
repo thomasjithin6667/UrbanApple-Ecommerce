@@ -165,6 +165,7 @@ const postCheckout = async (req, res) => {
   
 const orderDetails = async (req, res) => {
   try {
+    const admin=  req.session.userData
     const orderId = req.params.orderId;
     const orders = await Order.find({})
       .populate('user')
@@ -177,7 +178,8 @@ const orderDetails = async (req, res) => {
         model: 'Product',
       })
       .sort({ orderDate: -1 });
-    res.render('orderlist', { orders});
+    res.render('orderlist', { orders,admin:admin});
+    
   } catch (error) {
     console.error('Error fetching order details:', error);
     res.status(500).json({ error: 'Internal Server Error' });

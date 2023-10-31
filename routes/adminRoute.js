@@ -4,12 +4,14 @@ const express= require("express");
 const admin_route= express();
 const path= require("path")
 const adminController = require("../controllers/adminController")
+const checkoutController = require('../controllers/checkoutController')
+const productController = require('../controllers/productController')
+const categoryController = require('../controllers/categoryController')
 const multer = require("multer")
 const session = require("express-session")
 const config = require("../config/config")
 const auth =require("../middleware/adminAuth")
-const fs = require('fs');
-const checkoutController = require('../controllers/checkoutController')
+const fs = require('fs')
 
 
 //session setup
@@ -83,18 +85,18 @@ admin_route.get("/userlist",auth.isLogin,adminController.loadUserlist)
 admin_route.get('/block-user',auth.isLogin,adminController.blockUser)
 
 //product
-admin_route.get("/addproduct",auth.isLogin,adminController.loadaddProduct)
-admin_route.get("/productlist",auth.isLogin,adminController.loadProductList)
-admin_route.get('/delete-product',auth.isLogin,adminController.deleteProduct)
-admin_route.get('/edit-product',auth.isLogin,adminController.loadEditProduct)
-admin_route.get('/show-product',auth.isLogin,adminController.loadShowProduct)
-admin_route.get('/unlist-product',auth.isLogin,adminController.unlistProduct )
+admin_route.get("/addproduct",auth.isLogin,productController.loadaddProduct)
+admin_route.get("/productlist",auth.isLogin,productController.loadProductList)
+admin_route.get('/delete-product',auth.isLogin,productController.deleteProduct)
+admin_route.get('/edit-product',auth.isLogin,productController.loadEditProduct)
+admin_route.get('/show-product',auth.isLogin,productController.loadShowProduct)
+admin_route.get('/unlist-product',auth.isLogin,productController.unlistProduct )
 //category
-admin_route.get("/addcategory",auth.isLogin,adminController.loadaddCategory)
-admin_route.get("/categorylist",auth.isLogin,adminController.loadCategorylist)
-admin_route.get('/edit-category',auth.isLogin,adminController.loadEditCategory)
-admin_route.get('/delete-category',auth.isLogin,adminController.deleteCategory)
-admin_route.get('/unlist-category',auth.isLogin,adminController.unlistCategory )
+admin_route.get("/addcategory",auth.isLogin,categoryController.loadaddCategory)
+admin_route.get("/categorylist",auth.isLogin,categoryController.loadCategorylist)
+admin_route.get('/edit-category',auth.isLogin,categoryController.loadEditCategory)
+admin_route.get('/delete-category',auth.isLogin,categoryController.deleteCategory)
+admin_route.get('/unlist-category',auth.isLogin,categoryController.unlistCategory )
 //orders
 admin_route.get('/orderlist',auth.isLogin,checkoutController.orderDetails )
 
@@ -102,12 +104,12 @@ admin_route.get('/orderlist',auth.isLogin,checkoutController.orderDetails )
 
 //POST REQUESTS
 //category
-admin_route.post('/addcategory',auth.isLogin, categoryUpload.single('categoryImage'), adminController.insertCategory);
-admin_route.post('/edit-category',auth.isLogin,categoryUpload.single('categoryImage'),adminController.editCategory);
+admin_route.post('/addcategory',auth.isLogin, categoryUpload.single('categoryImage'), categoryController.insertCategory);
+admin_route.post('/edit-category',auth.isLogin,categoryUpload.single('categoryImage'),categoryController.editCategory);
 
 //product
-admin_route.post('/addproduct',auth.isLogin,upload.array('productImages', 4),adminController.insertProduct);
-admin_route.post('/edit-product',auth.isLogin,upload.array('productImages', 4),adminController.editProduct);
+admin_route.post('/addproduct',auth.isLogin,upload.array('productImages', 4),productController.insertProduct);
+admin_route.post('/edit-product',auth.isLogin,upload.array('productImages', 4),productController.editProduct);
 
 
 

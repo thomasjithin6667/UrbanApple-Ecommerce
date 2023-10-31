@@ -11,6 +11,7 @@ const auth =require("../middleware/auth")
 const addressController = require('../controllers/addressController')
 const cartController = require('../controllers/cartController')
 const checkoutController = require('../controllers/checkoutController')
+const productController = require('../controllers/productController')
 
 //session setup
 user_route.use(session({
@@ -67,9 +68,9 @@ user_route.get('/addaddress',auth.isLogin,addressController.loadAddAddress)
 user_route.get('/editaddress',auth.isLogin,addressController.loadEditAddress)
 user_route.get('/deleteaddress',auth.isLogin,addressController.deleteAddress)
 //product
-user_route.get('/productlist',auth.isLogoutStore,userController.productList)
-user_route.get('/viewproduct/:productId',auth.isAuthenticated,userController.productView)
-user_route.get('/userproductlist',userController.userProductList)
+user_route.get('/productlist',auth.isLogoutStore,productController.productList)
+user_route.get('/viewproduct/:productId',auth.isAuthenticated,productController.productView)
+user_route.get('/userproductlist',productController.userProductList)
 
 
 //cart

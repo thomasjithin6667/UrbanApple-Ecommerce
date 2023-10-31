@@ -25,268 +25,74 @@
 
 <body>
     <div class="screen-overlay"></div>
-    <aside class="navbar-aside" id="offcanvas_aside">
-        <div class="aside-top">
-            <a href="index.html" class="brand-wrap">
-                <img src="assets/images/logo.png" class="logo" alt="Evara Dashboard">
-            </a>
-            <div>
-                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
-                </button>
-            </div>
-        </div>
-        <nav>
-            <ul class="menu-aside">
-                <li class="menu-item">
-                    <a class="menu-link" href="/admin/dashboard"> <i class="icon material-icons md-home"></i>
-                        <span class="text">Dashboard</span>
-                    </a>
-                    <li class="menu-item ">
-                        <a class="menu-link"  href="/admin/userlist"> <i class="icon material-icons md-person"></i>
-                            <span class="text">Users</span>
-                        </a>
-                    </li>
-             
-                    <li class="menu-item has-submenu">
-                        <a class="menu-link" href="page-products-list.html"> <i  class="icon material-icons md-add_box"></i>
-                            <span class="text">Categories</span>
-                        </a>
-                        <div class="submenu">
-                            <a href="/admin/categorylist">Category Listing</a>
-                            <a href="/admin/addcategory">Add category</a>
-                            
-                        </div>
-                    </li>
-            
-           
-                <li class="menu-item has-submenu active">
-                    <a class="menu-link" href="page-products-list.html"> <i class="icon material-icons md-shopping_bag"></i>
-                        <span class="text">Products</span>
-                    </a>
-                    <div class="submenu">
-                        <a href="/admin/productlist">Product Listing</a>
-                        <a href="/admin/addproduct">Add Product</a>
-                        
-                    </div>
-                </li>
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="page-products-list.html"> <i class="icon material-icons md-stars"></i>
-                        <span class="text">Banners</span>
-                    </a>
-                    <div class="submenu">
-                        <a href="page-products-list.html">Banner Listing</a>
-                        <a href="page-products-grid.html">Add Banner</a>
-                        
-                    </div>
-                </li>
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="page-form-product-1.html"> <i class="icon material-icons md-local_offer"></i>
-                        <span class="text">Coupon</span>
-                    </a>
-                    <div class="submenu">
-                        <a href="page-form-product-1.html">Coupon listing</a>
-                        <a href="page-form-product-2.html">Add Coupon</a>
-                       
-                    </div>
-                </li>
-                <li class="menu-item">
-                    <a class="menu-link" disabled href="#"> <i class="icon material-icons md-shopping_cart"></i>
-                        <span class="text">Orders</span>
-                    </a>
-                </li>
-             
-           
-       
-        
-         
-                <li class="menu-item">
-                    <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-monetization_on"></i>
-                        <span class="text">Transaction</span>
-                    </a>
-                </li>
-           
-          
-                <li class="menu-item">
-                    <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
-                        <span class="text">Reviews</span>
-                    </a>
-                </li>
-           
-                <li class="menu-item">
-                    <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
-                        <span class="text">Statistics</span>
-                    </a>
-                </li>
-            </ul>
-            <hr>
-            <ul class="menu-aside">
-            
-                <li class="menu-item">
-                    <a class="menu-link" disabled href="#"> <i class="icon material-icons md-settings"></i>
-                        <span class="text">Settings</span>
-                    </a>
-                </li>
-              
-            </ul>
-            <br>
-            <br>
-        </nav>
-    </aside>
+    <%- include('../partials/ecomAdminAside') %>
     <main class="main-wrap">
-        <header class="main-header navbar">
-            <div class="col-search">
-                <form class="searchform">
-                    <div class="input-group">
-                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
-                        <button class="btn btn-light bg" type="button"> <i
-                                class="material-icons md-search"></i></button>
-                    </div>
-                    <datalist id="search_terms">
-                        <option value="Products">
-                        <option value="New orders">
-                        <option value="Apple iphone">
-                        <option value="Ahmed Hassan">
-                    </datalist>
-                </form>
-            </div>
-            <div class="col-nav">
-                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
-                        class="material-icons md-apps"></i> </button>
-                <ul class="nav">
-                    <li class="nav-item">
-                        <a class="nav-link btn-icon" href="#">
-                            <i class="material-icons md-notifications animation-shake"></i>
-                            <span class="badge rounded-pill">3</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="requestfullscreen nav-link btn-icon"><i
-                                class="material-icons md-cast"></i></a>
-                    </li>
-                    <p class="ms-4"></p>
-                    <li class="dropdown nav-item">
-
-                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount"
-                            aria-expanded="false"> <img class="img-xs rounded-circle" src="" alt="User"></a>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit
-                                Profile</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account
-                                Settings</a>
-                            <a class="dropdown-item" href="#"><i
-                                    class="material-icons md-account_balance_wallet"></i>Wallet</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help
-                                center</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-danger" href="/admin/logout"><i
-                                    class="material-icons md-exit_to_app"></i>Logout</a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </header>
+        <%- include('../partials/ecomAdminHeader') %>
         <section class="content-main">
             <div class="content-header">
                 <div>
-                    <h2 class="content-title card-title">Products </h2>
-                    <p>Add, edit or delete a Product</p>
+                    <h2 class="content-title card-title">Orders </h2>
+                    <p>Add, edit Orders</p>
                 </div>
 
 
-                <div>
-                    <a href="/admin/addproduct" class="btn btn-primary"><i
-                            class="text-muted material-icons md-post_add"></i>Create </a>
-                </div>
+            
 
 
             </div>
+
             <div class="card">
-                <div class="card-body">
-                    <div class="row">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div class="table-responsive">
+                        <table class="table align-middle table-nowrap mb-0">
+                            <thead class="table-light">
+                                <tr>
+                             
+                                    <th class="align-middle" scope="col">Order ID</th>
+                                    <th class="align-middle" scope="col">Billing Name</th>
+                                    <th class="align-middle" scope="col">Date</th>
+                                    <th class="align-middle" scope="col">Total</th>
+                                    <th class="align-middle" scope="col">Order Status</th>
+                                    <th class="align-middle" scope="col">Payment Method</th>
+                                    <th class="align-middle" scope="col">View Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                        <div class="col-md">
-                            <div>
-
-
-                                <% if (products.length> 0) { %>
-                                    <table class="table" id="products">
-                                        <thead>
-                                            <tr>
-                                                <th>image</th>
-                                                <th>Name</th>
-                                                <th>Category</th>
-                                                <th>Quantity</th>
-                                                <th style="width: 70px;">Status</th>
-                                                <th class="text-end">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <% for (let i=0; i < products.length; i++) { %>
-                                                <tr>
-                                                    <td>
-                                                        <img src=""
-
-                                                            alt="Category Image" style="width: 45px;"  />
-                                                    </td>
-                                                    <td>
-                                                        <%= products[i].name %>
-                                                    </td>
-                                                    <td>
-                                                        <%= products[i].category %>
-                                                    </td>
-                                                    <td>
-                                                        <%= products[i].quantity %>
-                                                    </td>
-                                                    <td>
-                                                        
-                                                        <% if (products[i].list) { %><span class="badge badge-pill badge-soft-primary">Listed</span><% } else { %><span class="badge badge-pill badge-soft-danger">Unlisted</span>
-                                                            <% } %>
-                                                    </td>
-                                                    <td class="text-end">
-                                                        <div class="dropdown">
-                                                            <a href="#" data-bs-toggle="dropdown"
-                                                                class="btn btn-light rounded btn-sm font-sm"> <i
-                                                                    class="material-icons md-more_horiz"></i> </a>
-                                                            <div class="dropdown-menu">
-                                                                <a class="dropdown-item" >
-                                                                    <% if (products[i].list) { %>
-                                                                        <a href="">
-                                                                         
-                                                                           <p class="text-danger ms-4">Unlist</p>
-                                                                         
-                                                                        </a>
-                                                                      <% } else { %>
-                                                                        <a href="">
-                                                                          
-                                                                            <p class="text-primary ms-4">List</p>
-                                                                         
-                                                                        </a>
-                                                                      <% } %>
-                                                                   </a>
-                                                                <a class="dropdown-item" href="">Show info</a>
-                                                                <a class="dropdown-item" href="">Edit info</a>
-                                                                <a class="dropdown-item text-danger" href="">Delete</a>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <% } %>
-                                        </tbody>
-                                    </table>
-                                    <% } else { %>
-                                        <p>Products not found</p>
-                                        <% } %>
-
-                            </div>
-                        </div> <!-- .col// -->
-                    </div> <!-- .row // -->
-                </div> <!-- card body .// -->
-            </div> <!-- card .// -->
+                                <% orders.forEach(function(order) { %>
+                                  
+                                <tr>
+                                
+                                    <td><a href="#" class="fw-bold"><%= order._id %></a> </td>
+                                    <td><%= order.user.name %></td>
+                                    <td>
+                                        <%= order.orderDate.toDateString() %>
+                                    </td>
+                                    <td>
+                                        $<%= order.totalAmount %>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-pill badge-soft-danger"><%= order.status %></span>
+                                    </td>
+                                    <td>
+                                        <i class="material-icons md-payment font-xxl text-muted mr-5"></i><%= order.paymentMethod %>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn btn-xs"> View details</a>
+                                    </td>
+                                </tr>
+                                <% }); %>
+                            
+                    
+                          
+                            </tbody>
+                        </table>
+                    </div>
+                </div> <!-- table-responsive end// -->
+            </div>
+        </div>
+       
         </section> <!-- content-main end// -->
 
         <footer class="main-footer font-xs">

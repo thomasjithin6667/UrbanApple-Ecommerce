@@ -1,0 +1,147 @@
+<aside class="navbar-aside" id="offcanvas_aside">
+    <div class="aside-top">
+        <a href="index.html" class="brand-wrap">
+            <img src="assets/images/logo.png"  class="logo" alt="Evara Dashboard">
+        </a>
+        <div>
+            <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+        </div>
+    </div>
+    <nav>
+        <ul class="menu-aside">
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/dashboard"> <i class="icon material-icons md-home"></i>
+                    <span class="text">Dashboard</span>
+                </a>
+                <li class="menu-item ">
+                    <a class="menu-link"  href="/admin/userlist"> <i class="icon material-icons md-person"></i>
+                        <span class="text">Users</span>
+                    </a>
+                </li>
+         
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="page-products-list.html"> <i  class="icon material-icons md-add_box"></i>
+                        <span class="text">Categories</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/categorylist">Category Listing</a>
+                        <a href="/admin/addcategory">Add category</a>
+                        
+                    </div>
+                </li>
+        
+       
+            <li class="menu-item has-submenu">
+                <a class="menu-link" href="page-products-list.html"> <i class="icon material-icons md-shopping_bag"></i>
+                    <span class="text">Products</span>
+                </a>
+                <div class="submenu">
+                    <a href="/admin/productlist">Product Listing</a>
+                    <a href="/admin/addproduct">Add Product</a>
+                    
+                </div>
+            </li>
+            <li class="menu-item has-submenu">
+                <a class="menu-link" href="page-products-list.html"> <i class="icon material-icons md-stars"></i>
+                    <span class="text">Banners</span>
+                </a>
+                <div class="submenu">
+                    <a href="page-products-list.html">Banner Listing</a>
+                    <a href="page-products-grid.html">Add Banner</a>
+                    
+                </div>
+            </li>
+            <li class="menu-item has-submenu">
+                <a class="menu-link" href="page-form-product-1.html"> <i class="icon material-icons md-local_offer"></i>
+                    <span class="text">Coupon</span>
+                </a>
+                <div class="submenu">
+                    <a href="page-form-product-1.html">Coupon listing</a>
+                    <a href="page-form-product-2.html">Add Coupon</a>
+                   
+                </div>
+            </li>
+            <li class="menu-item">
+                <a class="menu-link" disabled href="/admin/orderlist"> <i class="icon material-icons md-shopping_cart"></i>
+                    <span class="text">Orders</span>
+                </a>
+            </li>
+         
+       
+   
+    
+     
+            <li class="menu-item">
+                <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-monetization_on"></i>
+                    <span class="text">Transaction</span>
+                </a>
+            </li>
+       
+      
+            <li class="menu-item">
+                <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
+                    <span class="text">Reviews</span>
+                </a>
+            </li>
+       
+            <li class="menu-item">
+                <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
+                    <span class="text">Statistics</span>
+                </a>
+            </li>
+        </ul>
+        <hr>
+        <ul class="menu-aside">
+        
+            <li class="menu-item">
+                <a class="menu-link" disabled href="#"> <i class="icon material-icons md-settings"></i>
+                    <span class="text">Settings</span>
+                </a>
+            </li>
+          
+        </ul>
+        <br>
+        <br>
+    </nav>
+</aside>
+
+<script>
+const currentURL = window.location.href;
+
+// Select all menu links
+const menuLinks = document.querySelectorAll('.menu-link');
+
+// Loop through the menu links
+menuLinks.forEach((link) => {
+    const menuItem = link.parentElement;
+
+    if (currentURL.includes(link.getAttribute('href'))) {
+        // Add the "active" class to the parent menu item
+        menuItem.classList.add('active');
+
+        // If it's a sub-menu item, also highlight the parent menu item
+        if (menuItem.classList.contains('submenu')) {
+            menuItem.closest('.menu-item').classList.add('active');
+        }
+    }
+});
+
+
+const currentURLd = window.location.pathname;
+const menuItems = document.querySelectorAll('.menu-item');
+
+menuItems.forEach((menuItem) => {
+    const links = menuItem.querySelectorAll('.menu-link');
+
+    links.forEach((link) => {
+        if (currentURLd.includes(link.getAttribute('href'))) {
+            menuItem.classList.add('active');
+
+            // If it's a submenu link, also highlight the parent menu item
+            if (menuItem.classList.contains('has-submenu')) {
+                menuItem.querySelector('.submenu').style.display = 'block'; // Show the submenu if necessary
+            }
+        }
+    });
+});
+</script>
