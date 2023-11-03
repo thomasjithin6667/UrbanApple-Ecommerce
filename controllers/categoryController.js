@@ -75,7 +75,7 @@ const insertCategory = async (req, res) => {
 //load catergory list
 const loadCategorylist = async (req, res) => {
     try {
-        const admin=  req.session.userData
+        const admin=  req.session.adminData
         var search = "";
 
         if (req.query.search) {
@@ -99,7 +99,9 @@ const loadCategorylist = async (req, res) => {
 //load insert category page
 const loadaddCategory = async (req, res) => {
     try {
-        const admin=  req.session.userData
+
+        
+        const admin=  req.session.adminData
       
         res.render('addcategory',{admin:admin} )
     } catch (error) {
@@ -132,7 +134,7 @@ const deleteCategory= async(req,res)=>{
 const loadEditCategory= async (req, res) => {
     try {
         const id = req.query.id
-        const admin=  req.session.userData
+        const admin=  req.session.adminData
       
 
         const categoryData = await Category.findById({ _id: id })

@@ -48,7 +48,7 @@ const loadRegister = async(req,res)=>{
 const insertUser = async (req, res) => {
     try {
         const userExist = await User.findOne({ email: req.body.email });
-        console.log(userExist);
+       
         if (userExist) {
             res.render('registration', { message: "User already exists" });
         } else {
@@ -63,7 +63,7 @@ const insertUser = async (req, res) => {
 
             const userData = await user.save();
             req.session.id2=userData._id
-            console.log(req.session.id2);
+            
          
             sentOTPVerificationEmail(req, res, req.body.email, userData._id);
 
@@ -89,7 +89,7 @@ const loadHome = async(req,res)=>{
         
     const categoriesData = await Category.find({})
      res.render('home',{user:null, categories: categoriesData })
-     console.log(categoriesData);
+     
     } catch (error) {
  
      console.log(error.message);
@@ -131,6 +131,7 @@ const sentOTPVerificationEmail = async (req, res, email, _id) => {
     try {
         const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
         req.session.otp = otp;
+        console.log(otp);
         
         console.log("this is pto"+req.session.otp);
         console.log("this is emial"+email);
@@ -453,6 +454,30 @@ const sentPasswordOTPVerificationEmail = async (req, res) => {
 
 
 //to load the otp page
+const userforgotPasswordOTP = async (req, res) => {
+    try {
+        const userExist = await User.findOne({ email: req.body.email });
+        
+        if (userExist) {
+            req.session.id3=userExist._id
+            console.log(req.session.id3);
+           
+            sentOTPVerificationEmail(req, res, req.body.email, userExist._id);
+            res.render('forgetpassword-otp', { message: "Otp sent to your mail" });
+        } else {
+
+           
+          
+                res.render('forgetpassword', { message: "Account details doesnt match" });
+            
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+//to load the otp page
 const forgotPasswordOTP = async (req, res) => {
     try {
         const userExist = await User.findOne({ email: req.body.email });
@@ -467,14 +492,13 @@ const forgotPasswordOTP = async (req, res) => {
 
            
           
-                res.render('forgotpassword', { message: "Attempt Failed" });
+                res.render('forgetpassword', { message: "Account details doesnt match" });
             
         }
     } catch (error) {
         console.log(error.message);
     }
 }
-
 
 
 
@@ -568,7 +592,7 @@ const userResetPassword = async(req,res)=>{
          
         const password = req.body.password;
         const user_id= req.session.user_id 
-        console.log("this is from userres"+ user_id);
+      
         const secure_password = await securePassword(password);
         const updatedData= await User.findByIdAndUpdate({_id:user_id},{$set:{password:secure_password}});
         res.render("userProfile",{user:updatedData})
@@ -691,6 +715,7 @@ module.exports={
     userResetPassword,
     loadUserPasswordReset,
     deleteUser,
+    userforgotPasswordOTP,
   
     resendOTP
    

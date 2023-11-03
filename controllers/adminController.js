@@ -40,8 +40,8 @@ const verifyLogin = async (req, res) => {
 
                 } else {
 
-                    req.session.userData= userData;
-                    req.session.user_id = userData._id;
+                    req.session.adminData= userData;
+                    req.session.admin_id = userData._id;
                     res.redirect('/admin/dashboard');
                 }
 
@@ -68,7 +68,7 @@ const loadDashboard = async (req, res) => {
     try {
         
 
-        const admin=  req.session.userData
+        const admin=  req.session.adminData
         res.render('adminDashboard',{admin:admin})
     } catch (error) {
         console.log(error.message)
@@ -89,7 +89,7 @@ const logout = async (req, res) => {
 //load user list
 
 const loadUserlist = async (req, res) => {
-    const admin=  req.session.userData
+    const admin=  req.session.adminData
     
     try {
         var search = "";
@@ -146,36 +146,58 @@ const loadUserlist = async (req, res) => {
 // }
 
 
+// const blockUser = async (req, res) => {
+//     try {
+//         const id = req.query.id;
+
+//         const user = await User.findById(id);
+
+//         if (!user) {
+//             return res.status(404).send('User not found');
+//         }
+
+//         // Check if the user is currently logged in and their session exists.
+//         if (req.session.user_id === user._id) {
+//             // Destroy the user's session to log them out.
+//             req.session.destroy((err) => {
+//                 if (err) {
+//                     console.error('Error destroying session:', err);
+//                 }
+//             });
+//         }
+
+//         user.isBlocked = !user.isBlocked;
+//         await user.save();
+
+//         res.redirect('/admin/userlist');
+//     } catch (error) {
+//         console.log(error.message);
+//     }
+// }
+
+
+
 const blockUser = async (req, res) => {
     try {
-        const id = req.query.id;
-
-        const user = await User.findById(id);
-
-        if (!user) {
-            return res.status(404).send('User not found');
-        }
-
-        // Check if the user is currently logged in and their session exists.
-        if (req.session.user_id === user._id) {
-            // Destroy the user's session to log them out.
-            req.session.destroy((err) => {
-                if (err) {
-                    console.error('Error destroying session:', err);
-                }
-            });
-        }
-
-        user.isBlocked = !user.isBlocked;
-        await user.save();
-
-        res.redirect('/admin/userlist');
+      const id = req.query.id;
+      const userData = await User.findById({ _id: id });
+  
+      if (userData.isBlocked === false) {
+      
+        userData.isBlocked = true;
+        if(req.session.userData)
+        delete req.session.userData;
+      } else {
+        userData.isBlocked = false;
+      }
+  
+      await userData.save();
+  res.redirect('/admin/userlist')
     } catch (error) {
-        console.log(error.message);
+      console.log(error.message);
+      res.status(500).json({ error: 'Internal server error' });
     }
-}
-
-
+  };
 
 
 

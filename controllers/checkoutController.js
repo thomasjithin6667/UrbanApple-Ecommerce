@@ -163,10 +163,10 @@ const postCheckout = async (req, res) => {
 
 
   
-const orderDetails = async (req, res) => {
+const orderList = async (req, res) => {
   try {
-    const admin=  req.session.userData
-    const orderId = req.params.orderId;
+    const admin=  req.session.adminData
+    
     const orders = await Order.find({})
       .populate('user')
       .populate({
@@ -187,11 +187,127 @@ const orderDetails = async (req, res) => {
 };
   
 
+
+//get order details in the admin side  
+const orderDetails = async (req, res) => {
+  try {
+    const admin=  req.session.adminData
+    const orderId= req.query.orderId;
+
+    
+    const orderData = await Order.findOne({_id: orderId })
+      .populate('user')
+      .populate({
+        path: 'address',
+        model: 'Address',
+      })
+      .populate({
+        path: 'items.product',
+        model: 'Product',
+      })
+
+     
+      
+    res.render('show-order', { order:orderData,admin:admin});
+    
+  } catch (error) {
+    console.error('Error fetching order details:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+
+
+//get the order list of the user
+const userOrderlist = async (req, res) => {
+  try {
+    const userId = req.session.user._id;
+    const userData= req.session.user
+   
+
+    
+    const orderData = await Order.find({user:userId })
+      .populate('user')
+      .populate({
+        path: 'address',
+        model: 'Address',
+      })
+      .populate({
+        path: 'items.product',
+        model: 'Product',
+      }).sort({ orderDate: -1 })
+
+     
+      
+    res.render('userorderlist', { orders:orderData,user:userData});
+    
+  } catch (error) {
+    console.error('Error fetching order details:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+
+  
+
+
+  
+//change status in  the admin side
+const setStatus= async(req,res)=>{
+  try {
+    const orderStatus= req.query.status;
+    const orderId= req.query.orderId;
+   
+  
+    await Order.findByIdAndUpdate({_id:orderId},{$set:{status:orderStatus}});
+  res.redirect('/admin/orderlist')
+
+    
+  } catch (error) {
+    console.log(error.message);
+    
+  }
+}
+
+
+//get order details in the admin side  
+const userOrderDetails = async (req, res) => {
+  try {
+    const userData= req.session.user
+    const orderId= req.query.orderId;
+
+    
+    const orderData = await Order.findOne({_id: orderId })
+      .populate('user')
+      .populate({
+        path: 'address',
+        model: 'Address',
+      })
+      .populate({
+        path: 'items.product',
+        model: 'Product',
+      })
+    res.render('userOrderDetails', { order:orderData,user:userData});
+    
+  } catch (error) {
+    console.error('Error fetching order details:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+
   module.exports = {
     postCheckout,
     getCheckout,
     orderPlaced,
-    orderDetails 
+    orderList,
+    orderDetails,
+    setStatus,
+    userOrderlist,
+    userOrderDetails
     
 
     

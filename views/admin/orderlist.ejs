@@ -53,7 +53,7 @@
                                     <th class="align-middle" scope="col">Billing Name</th>
                                     <th class="align-middle" scope="col">Date</th>
                                     <th class="align-middle" scope="col">Total</th>
-                                    <th class="align-middle" scope="col">Order Status</th>
+                                    <th style="width: 150px;" class="align-middle" scope="col">Order Status</th>
                                     <th class="align-middle" scope="col">Payment Method</th>
                                     <th class="align-middle" scope="col">View Details</th>
                                 </tr>
@@ -73,14 +73,45 @@
                                         $<%= order.totalAmount %>
                                     </td>
                                     <td>
-                                        <span class="badge badge-pill badge-soft-danger"><%= order.status %></span>
+                                        <% if (order.status === 'Pending') { %>
+                                            <span class="badge badge-pill badge-soft-warning"><%= order.status %></span>
+                                        <% } else if (order.status === 'Order Confirmed') { %>
+                                            <span class="badge badge-pill badge-soft-warning"><%= order.status %></span>
+                                        <% } else if (order.status === 'Shipped') { %>
+                                            <span class="badge badge-pill badge-soft-dark"><%= order.status %></span>
+                                        <% } else if (order.status === 'Out For Delivery') { %>
+                                            <span class="badge badge-pill badge-soft-dark"><%= order.status %></span>
+                                        <% } else if (order.status === 'Delivered') { %>
+                                            <span class="badge badge-pill badge-soft-success"><%= order.status %></span>
+                                        <% } else { %>
+                                            <span class="badge badge-pill badge-soft-danger"><%= order.status %></span>
+                                        <% } %>
+                                        
+                                        
+                                        
                                     </td>
                                     <td>
                                         <i class="material-icons md-payment font-xxl text-muted mr-5"></i><%= order.paymentMethod %>
                                     </td>
-                                    <td>
-                                        <a href="#" class="btn btn-xs"> View details</a>
-                                    </td>
+                                    
+                                        
+                                        <td >
+                                            <a href="/admin/orderdetails?orderId=<%= order._id.toString() %>" class="btn btn-xs rounded font-xs">Details</a>
+                                            <div class="dropdown">
+                                                <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-xs"> <i class="material-icons md-more_horiz"></i> </a>
+                                                <div class="dropdown-menu">
+                                                    <h6 style="margin-left: 20px;" class="font-xs">Order Status</h6>
+                                                    
+                                                    <a class="dropdown-item font-xs"   href="/admin/orderstatus?orderId=<%= order._id.toString()%>&status=Pending " >Pending</a>
+                                                    <a class="dropdown-item font-xs"   href="/admin/orderstatus?orderId=<%= order._id.toString()%>&status=Order Confirmed " >Order Confirmed</a>
+                                                    <a class="dropdown-item font-xs"  href="/admin/orderstatus?orderId=<%= order._id.toString()%>&status=Shipped" >Shipped</a>
+                                                    <a class="dropdown-item  font-xs"  href="/admin/orderstatus?orderId=<%= order._id.toString()%>&status=Out For Delivery " >Out For Delivery</a>
+                                                    <a class="dropdown-item  font-xs"  href="/admin/orderstatus?orderId=<%= order._id.toString()%>&status=Delivered" >Delivered</a>
+                                                    <a class="dropdown-item  text-danger  font-xs"  href="/admin/orderstatus?orderId=<%= order._id.toString()%>&status=Cancelled" >Cancel Order</a>
+                                                </div>
+                                            </div> <!-- dropdown //end -->
+                                        </td>
+                                    
                                 </tr>
                                 <% }); %>
                             

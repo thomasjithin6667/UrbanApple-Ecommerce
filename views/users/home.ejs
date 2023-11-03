@@ -22,12 +22,12 @@
                             <div class="row justify-content-end">
                                 <div class="col-auto col-sm-7 col-md-6 col-lg-5">
                                     <h3 class="intro-subtitle text-third">Deals and Promotions</h3><!-- End .h3 intro-subtitle -->
-                                    <h1 class="intro-title">Apple iPad Pro</h1>
-                                    <h1 class="intro-title">12.9 Inch, 64GB</h1><!-- End .intro-title -->
+                                    <h1 style="font-weight: 200;" class="intro-title">Apple iPad Pro</h1>
+                                    <h1 style="font-weight: 400;" class="intro-title">12.9 Inch, 64GB</h1><!-- End .intro-title -->
 
                                     <div class="intro-price">
                                         <sup class="intro-old-price">$349,95</sup>
-                                        <span class="text-third">
+                                        <span  style="font-weight: 200;" class="text-third">
                                             $279<sup>.99</sup>
                                         </span>
                                     </div><!-- End .intro-price -->
@@ -46,13 +46,14 @@
                         <div class="container intro-content">
                             <div class="row justify-content-end">
                                 <div class="col-auto col-sm-7 col-md-6 col-lg-5">
-                                    <h3 class="intro-subtitle text-primary">New Arrival</h3><!-- End .h3 intro-subtitle -->
-                                    <h1 class="intro-title">Apple iPad Pro <br>12.9 Inch, 64GB </h1><!-- End .intro-title -->
+                                    <h3  class="intro-subtitle text-primary">New Arrival</h3>
+                                    <h1 style="font-weight: 200;" class="intro-title">Apple iPad Pro</h1>
+                                    <h1 style="font-weight: 400;" class="intro-title">12.9 Inch, 64GB</h1><!-- End .intro-title -->
 
                                     <div class="intro-price">
-                                        <sup>Today:</sup>
-                                        <span class="text-primary">
-                                            $999<sup>.99</sup>
+                                        <sup class="intro-old-price">$349,95</sup>
+                                        <span  style="font-weight: 200;" class="text-third">
+                                            $279<sup>.99</sup>
                                         </span>
                                     </div><!-- End .intro-price -->
 
@@ -60,7 +61,7 @@
                                         <span>Shop More</span>
                                         <i class="icon-long-arrow-right"></i>
                                     </a>
-                                </div><!-- End .col-md-6 offset-md-6 -->
+                                </div>
                             </div><!-- End .row -->
                         </div><!-- End .intro-content -->
                     </div><!-- End .intro-slide -->
@@ -106,7 +107,7 @@
                     <div class="col-md-6 col-lg-4">
                         <div class="banner banner-overlay banner-overlay-light">
                             <a href="#">
-                                <img src="assets/images/demos/demo-4/banners/banner-1.png" alt="Banner">
+                                <img src="assets/images/demos/demo-4/banners/banner-1.png" alt="Banner" class="hover-scale">
                             </a>
 
                             <div class="banner-content">
@@ -117,10 +118,10 @@
                         </div><!-- End .banner -->
                     </div><!-- End .col-md-4 -->
 
-                    <div class="col-md-6 col-lg-4">
-                        <div class="banner banner-overlay banner-overlay-light">
-                            <a href="#">
-                                <img src="assets/images/demos/demo-4/banners/banner-2.jpg" alt="Banner">
+                    <div class="col-md-6 col-lg-4 "  >
+                        <div class="banner banner-overlay banner-overlay-light ">
+                            <a href="#" >
+                                <img src="assets/images/demos/demo-4/banners/banner-2.jpg" alt="Banner" >
                             </a>
 
                             <div class="banner-content">
@@ -2982,7 +2983,16 @@
             </div><!-- End .modal-content -->
         </div><!-- End .modal-dialog -->
     </div><!-- End .modal -->
+<style>
+    .hover-scale {
+    transition: transform 0.2s ease-in-out; /* Add a smooth transition effect */
+}
 
+.hover-scale:hover {
+    transform: scale(1.1); /* Scale the image by 10% when hovering */
+}
+
+</style>
 
 
 

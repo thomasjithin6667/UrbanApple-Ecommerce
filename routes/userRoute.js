@@ -93,6 +93,7 @@ user_route.post('/register',upload.single('image'),userController.insertUser)
 user_route.post('/login',userController.verifyLogin)
 user_route.post('/otpVerification',userController.OTPVerification)
 user_route.post('/forgotpassword',userController.forgotPasswordOTP)
+user_route.post('/userforgotpassword',userController.userforgotPasswordOTP)
 user_route.post('/passwordotpVerification',userController.passwordOTPVerification)
 user_route.post('/resetpassword',userController.resetPassword )
 user_route.post('/userResetpassword',userController.userResetPassword )
@@ -107,6 +108,11 @@ user_route.post('/removeItemFromCart/:productId',auth.isLogin,cartController.del
 
 //checkout
 user_route.post('/postCheckout/:userId',auth.isLogin,checkoutController.postCheckout)
+//orders
+user_route.get('/userorderlist',auth.isLogin,checkoutController.userOrderlist)
+user_route.get('/userorderdetails',auth.isLogin,checkoutController.userOrderDetails )
+
+
 
 
 

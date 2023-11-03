@@ -55,11 +55,8 @@ const categoryUpload = multer({ storage: categoryStorage });
 
 
 //  storage for product images
-
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
- 
-    
     cb(null, path.join(__dirname, '../public/assets/images/productImages'));
   },
   filename: function (req, file, cb) {
@@ -68,12 +65,19 @@ const storage = multer.diskStorage({
   },
 });
 
-// Create the Multer instance
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 10 * 1024 * 1024 }
- 
+  limits: { fileSize: 10 * 1024 * 1024 },
 });
+
+// Use upload.fields() instead of upload.array() to handle multiple files with different field names
+const uploadFields = upload.fields([
+  { name: 'image1', maxCount: 1 },
+  { name: 'image2', maxCount: 1 },
+  { name: 'image3', maxCount: 1 },
+  { name: 'image4', maxCount: 1 },
+]);
+
 
 //GET REQUESTS
 //admin
@@ -91,6 +95,7 @@ admin_route.get('/delete-product',auth.isLogin,productController.deleteProduct)
 admin_route.get('/edit-product',auth.isLogin,productController.loadEditProduct)
 admin_route.get('/show-product',auth.isLogin,productController.loadShowProduct)
 admin_route.get('/unlist-product',auth.isLogin,productController.unlistProduct )
+admin_route.get('/productimagedelete',auth.isLogin,productController.deleteProductImage)
 //category
 admin_route.get("/addcategory",auth.isLogin,categoryController.loadaddCategory)
 admin_route.get("/categorylist",auth.isLogin,categoryController.loadCategorylist)
@@ -98,7 +103,9 @@ admin_route.get('/edit-category',auth.isLogin,categoryController.loadEditCategor
 admin_route.get('/delete-category',auth.isLogin,categoryController.deleteCategory)
 admin_route.get('/unlist-category',auth.isLogin,categoryController.unlistCategory )
 //orders
-admin_route.get('/orderlist',auth.isLogin,checkoutController.orderDetails )
+admin_route.get('/orderlist',auth.isLogin,checkoutController.orderList )
+admin_route.get('/orderdetails',auth.isLogin,checkoutController.orderDetails )
+admin_route.get('/orderstatus',auth.isLogin,checkoutController.setStatus )
 
 
 
@@ -108,8 +115,10 @@ admin_route.post('/addcategory',auth.isLogin, categoryUpload.single('categoryIma
 admin_route.post('/edit-category',auth.isLogin,categoryUpload.single('categoryImage'),categoryController.editCategory);
 
 //product
-admin_route.post('/addproduct',auth.isLogin,upload.array('productImages', 4),productController.insertProduct);
-admin_route.post('/edit-product',auth.isLogin,upload.array('productImages', 4),productController.editProduct);
+// admin_route.post('/addproduct',auth.isLogin,upload.array('productImages', 4),productController.insertProduct);
+admin_route.post('/addproduct',auth.isLogin,uploadFields,productController.insertProduct);
+admin_route.post('/edit-product',auth.isLogin,uploadFields,productController.editProduct);
+// admin_route.post('/edit-product',auth.isLogin,upload.array('productImages', 4),productController.editProduct);
 
 
 
