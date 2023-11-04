@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const UserOTPVerification = require('../models/userOTPModel')
 const nodemailer = require('nodemailer')
 const sharp = require('sharp')
-const path= require("path")
+const path = require("path")
 
 
 
@@ -13,38 +13,38 @@ const path= require("path")
 //list and unlist products
 
 const unlistProduct = async (req, res) => {
-    try {
-        const admin=  req.session.adminData
-        const id = req.query.id;
+  try {
+    const admin = req.session.adminData
+    const id = req.query.id;
 
 
-        const product = await Product.findById(id);
-
-       
-
-        product.list = !product.list;
+    const product = await Product.findById(id);
 
 
-        await product.save();
 
-        res.redirect('/admin/productlist');
-    } catch (error) {
-        console.log(error.message);
+    product.list = !product.list;
 
-       
-    }
+
+    await product.save();
+
+    res.redirect('/admin/productlist');
+  } catch (error) {
+    console.log(error.message);
+
+
+  }
 }
 
 //load add product
 const loadaddProduct = async (req, res) => {
-    try {
-        const admin=  req.session.adminData
-        const categoriesData = await Category.find({})
-      
-        res.render('addProduct',{admin:admin,category:categoriesData})
-    } catch (error) {
-        console.log(error.message)
-    }
+  try {
+    const admin = req.session.adminData
+    const categoriesData = await Category.find({})
+
+    res.render('addProduct', { admin: admin, category: categoriesData })
+  } catch (error) {
+    console.log(error.message)
+  }
 }
 
 
@@ -55,16 +55,16 @@ const loadaddProduct = async (req, res) => {
 //         try {
 //             const categoriesData = await Category.find({})
 //             const admin=  req.session.userData
-         
+
 //             const existingProduct = await Product.findOne({ name: req.body.name });
-          
+
 //             if (existingProduct) {
 //                 return res.render('addproduct', { message: "Product already exists",admin:admin,category:categoriesData });
 //             }
-          
-     
+
+
 //             const newProduct = {};
-          
+
 //             if (req.body.name) {
 //               newProduct.name = req.body.name;
 //             }
@@ -84,7 +84,7 @@ const loadaddProduct = async (req, res) => {
 //             if (req.files && req.files.length > 0) {
 //                 newProduct.productImages = req.files.map((file) =>file.filename);
 //               } 
-          
+
 //             if (req.body.battery) {
 //               newProduct.battery = req.body.battery;
 //             }
@@ -109,19 +109,19 @@ const loadaddProduct = async (req, res) => {
 //             if (req.body.processor) {
 //               newProduct.processor = req.body.processor;
 //             }
-          
+
 //             const savedProduct = await new Product(newProduct).save();
 //             return res.render('addproduct', { message: " Product added successfully",admin:admin,category:categoriesData });
 //           } catch (error) {
-           
+
 //             res.render('addproduct', { error: error.message ,category:categoriesData});
 //           }
-          
 
-        
+
+
 //     } catch (error) {
 //         console.log(error.message);
-        
+
 //     }
 // }
 
@@ -211,39 +211,39 @@ const insertProduct = async (req, res) => {
 
 //load product list
 const loadProductList = async (req, res) => {
-    const admin=  req.session.adminData
-    try {
-        const search = req.query.search || '';
+  const admin = req.session.adminData
+  try {
+    const search = req.query.search || '';
 
-        const productsData = await Product.find({
-            $or: [
-                { name: { $regex: new RegExp(search, 'i') } },
-                { category: { $regex: new RegExp(search, 'i') } },
-            ]
-        });
-       
+    const productsData = await Product.find({
+      $or: [
+        { name: { $regex: new RegExp(search, 'i') } },
+        { category: { $regex: new RegExp(search, 'i') } },
+      ]
+    });
 
-        res.render('productlist', { products: productsData ,admin:admin});
-    } catch (error) {
-        console.log(error.message);
-    }
+
+    res.render('productlist', { products: productsData, admin: admin });
+  } catch (error) {
+    console.log(error.message);
+  }
 }
 
 //delete product
 
 
-const deleteProduct= async(req,res)=>{
+const deleteProduct = async (req, res) => {
 
-    try {
-        const admin=  req.session.adminData
-        const id = req.query.id;
-        await Product.deleteOne({_id:id})
-        res.redirect('/admin/productlist')
-        
-    } catch (error) {
-        console.log(error.message);
-        
-    }
+  try {
+    const admin = req.session.adminData
+    const id = req.query.id;
+    await Product.deleteOne({ _id: id })
+    res.redirect('/admin/productlist')
+
+  } catch (error) {
+    console.log(error.message);
+
+  }
 
 
 }
@@ -350,26 +350,26 @@ const editProduct = async (req, res) => {
 
 
 
-  //load show product page
+//load show product page
 
-const loadShowProduct= async (req, res) => {
-    try {
-        const admin=  req.session.adminData
-        const id = req.query.id
+const loadShowProduct = async (req, res) => {
+  try {
+    const admin = req.session.adminData
+    const id = req.query.id
 
-        const productData = await Product.findById({ _id: id })
-        if ( productData ) {
-            res.render('show-product', { products:productData ,admin:admin})
+    const productData = await Product.findById({ _id: id })
+    if (productData) {
+      res.render('show-product', { products: productData, admin: admin })
 
-        } else {
-            res.redirect('/admin/productlist')
-
-        }
-
-    } catch (error) {
-        console.log(error.message);
+    } else {
+      res.redirect('/admin/productlist')
 
     }
+
+  } catch (error) {
+    console.log(error.message);
+
+  }
 }
 
 
@@ -377,77 +377,237 @@ const loadShowProduct= async (req, res) => {
 
 
 //load edit  page
-const loadEditProduct= async (req, res) => {
-    try {
-        const categoriesData = await Category.find({})
-        const admin=  req.session.adminData
-        const id = req.query.id
+const loadEditProduct = async (req, res) => {
+  try {
+    const categoriesData = await Category.find({})
+    const admin = req.session.adminData
+    const id = req.query.id
 
-        const productData = await Product.findById({ _id: id })
-        if ( productData) {
-            res.render('edit-product', { products: productData ,admin:admin,category:categoriesData})
+    const productData = await Product.findById({ _id: id })
+    if (productData) {
+      res.render('edit-product', { products: productData, admin: admin, category: categoriesData })
 
-        } else {
-            res.redirect('/admin/productlist')
+    } else {
+      res.redirect('/admin/productlist')
 
+    }
+
+  } catch (error) {
+    console.log(error.message);
+
+  }
+}
+
+
+
+
+
+
+
+
+
+const productList = async (req, res) => {
+  try {
+ 
+    if (req.session.user_id) {
+
+
+      const userData = await User.findById({ _id: req.session.user_id });
+
+  const categoriesData = await Category.find({});
+
+  try {
+    const search = req.query.search || '';
+    const categories = Array.isArray(req.query.category) ? req.query.category : [req.query.category];
+    const priceRange = req.query.price || 'all';
+    const colors = Array.isArray(req.query.color) ? req.query.color : [req.query.color];
+    const sortBy = req.query.sortBy || 'priceLowToHigh';
+
+    // Define price range filters
+    let minPrice = 0;
+    let maxPrice = Number.MAX_VALUE;
+
+    switch (priceRange) {
+      case 'under25':
+        maxPrice = 25;
+        break;
+      case '25to50':
+        minPrice = 25;
+        maxPrice = 50;
+        break;
+      case '50to100':
+        minPrice = 50;
+        maxPrice = 100;
+        break;
+      case '100to200':
+        minPrice = 100;
+        maxPrice = 200;
+        break;
+      case '200above':
+        minPrice = 200;
+        break;
+      default:
+     
+    }
+
+    let sortQuery = {};
+
+    if (sortBy === 'priceLowToHigh') {
+      sortQuery = { price: 1 };
+    } else if (sortBy === 'priceHighToLow') {
+      sortQuery = { price: -1 };
+    }
+
+  
+
+    const filter = {
+      $or: [
+
+        { category: { $in: categories.map(c => new RegExp(c, 'i')) } }, 
+      ],
+      price: { $gte: minPrice, $lte: maxPrice },
+      productColor: { $in: colors.map(c => new RegExp(c, 'i')) },
+    };
+
+    const productsData = await Product.find(filter).sort(sortQuery);
+    const selectedCategories = categories; 
+    const selectedPriceRange = priceRange;
+    const selectedColors = colors;
+  console.log(userData);
+
+    res.render('productlist', { user:userData ,products: productsData, category: categoriesData, sortBy,selectedCategories, selectedPriceRange,
+selectedColors, });
+  } catch (error) {
+    console.log(error.message);
+  }
+
+      
+  
+    } else {
+      const categoriesData = await Category.find({});
+
+      try {
+        const search = req.query.search || '';
+        const categories = Array.isArray(req.query.category) ? req.query.category : [req.query.category];
+        const priceRange = req.query.price || 'all';
+        const colors = Array.isArray(req.query.color) ? req.query.color : [req.query.color];
+        const sortBy = req.query.sortBy || 'priceLowToHigh';
+    
+        // Define price range filters
+        let minPrice = 0;
+        let maxPrice = Number.MAX_VALUE;
+    
+        switch (priceRange) {
+          case 'under25':
+            maxPrice = 25;
+            break;
+          case '25to50':
+            minPrice = 25;
+            maxPrice = 50;
+            break;
+          case '50to100':
+            minPrice = 50;
+            maxPrice = 100;
+            break;
+          case '100to200':
+            minPrice = 100;
+            maxPrice = 200;
+            break;
+          case '200above':
+            minPrice = 200;
+            break;
+          default:
+         
+        }
+    
+        let sortQuery = {};
+    
+        if (sortBy === 'priceLowToHigh') {
+          sortQuery = { price: 1 };
+        } else if (sortBy === 'priceHighToLow') {
+          sortQuery = { price: -1 };
         }
 
-    } catch (error) {
+    
+        const filter = {
+          $or: [
+    
+            { category: { $in: categories.map(c => new RegExp(c, 'i')) } }, 
+          ],
+          price: { $gte: minPrice, $lte: maxPrice },
+          productColor: { $in: colors.map(c => new RegExp(c, 'i')) },
+        };
+    
+        const productsData = await Product.find(filter).sort(sortQuery);
+        const selectedCategories = categories; 
+        const selectedPriceRange = priceRange;
+        const selectedColors = colors;
+      
+    
+        res.render('productlist', { products: productsData, user: null, category: categoriesData, sortBy,selectedCategories, selectedPriceRange,
+    selectedColors, });
+      } catch (error) {
         console.log(error.message);
+      }
 
+  
     }
-}
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
 
 
 
 
-//product list when not logged in
-const productList = async (req, res) => {
-    try {
-        const productsData = await Product.find({})
-        res.render('productlist', { products: productsData, user: null });
-    } catch (error) {
-        console.log(error.message);
-    }
-}
 
 
-//product list when logged in
-const userProductList = async (req, res) => {
-    try {
-        const userData = await User.findById({ _id: req.session.user_id });
-     
-        const search = req.query.search || '';
-
-        const productsData = await Product.find({
-            $or: [
-                { name: { $regex: new RegExp(search, 'i') } },
-                { category: { $regex: new RegExp(search, 'i') } },
-            ]
-        });
-        
-        res.render('productlist',{ products: productsData, user: userData });
-    } catch (error) {
-        console.log(error.message);
-    }
-}
 
 
-  //view product
-  const productView= async(req,res)=>{
 
-    try {
-        const userData = await User.findById({_id:req.session.user_id})
-        const productId = req.params.productId;
-        const productData = await Product.findById(productId);
-        res.render('productView', { user: userData,product:productData})
-       
-        
-    } catch (error) {
-        console.log(error.message);
-        
-    }
+// const userProductList = async (req, res) => {
+//   try {
+//     const userData = await User.findById({ _id: req.session.user_id });
+//     const categoriesData = await Category.find({});
+
+//     const search = req.query.search || '';
+
+//     const productsData = await Product.find({
+//       $or: [
+//         { name: { $regex: new RegExp(search, 'i') } },
+//         { category: { $regex: new RegExp(search, 'i') } },
+//       ]
+//     });
+
+//     res.render('productlist', { products: productsData, user: userData, category: categoriesData });
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// }
+
+
+//view product
+const productView = async (req, res) => {
+
+  try {
+   
+    const userData = await User.findById({ _id: req.session.user_id })
+    const productId = req.params.productId;
+    const productData = await Product.findById(productId);
+    const sameProducts = await Product.find({
+      list: true,
+      category: productData.category,
+      _id: { $ne: productId },
+
+    }).limit(7)
+    res.render('productView', { user: userData, product: productData,sameProducts :sameProducts  })
+
+
+  } catch (error) {
+    console.log(error.message);
+
+  }
 
 
 }
@@ -461,11 +621,11 @@ const deleteProductImage = async (req, res) => {
     console.log(productId);
 
     const product = await Product.findById(productId);
-   
+
     const imageToDelete = product.productImages[imageIndex];
-    
+
     product.productImages.splice(imageIndex, 1);
-    
+
     await product.save();
 
     return res.json({ message: 'Image deleted successfully' });
@@ -484,20 +644,19 @@ const deleteProductImage = async (req, res) => {
 
 module.exports = {
 
-    loadaddProduct,
-    insertProduct,
-    loadProductList,
-    deleteProduct,
-    loadEditProduct,
-    loadShowProduct,
-    editProduct,
-    unlistProduct,
-    productView,
-    userProductList,
-    productList,
-    deleteProductImage
+  loadaddProduct,
+  insertProduct,
+  loadProductList,
+  deleteProduct,
+  loadEditProduct,
+  loadShowProduct,
+  editProduct,
+  unlistProduct,
+  productView,
+  productList,
+  deleteProductImage
 
-    
+
 }
 
 

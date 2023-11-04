@@ -1,9 +1,9 @@
-const User=require('../models/userModel');
+const User = require('../models/userModel');
 const Product = require('../models/productModel')
 const Category = require('../models/categoryModel');
-const Cart = require('../models/cartModel'); 
+const Cart = require('../models/cartModel');
 const Order = require('../models/orderModel')
-const Address =require('../models/addressesModel')
+const Address = require('../models/addressesModel')
 
 
 
@@ -21,18 +21,18 @@ const unlistCategory = async (req, res) => {
 
         const category = await Category.findById(id);
 
-       
+
 
         category.isListed = !category.isListed;
 
 
-        await category .save();
+        await category.save();
 
         res.redirect('/admin/categorylist');
     } catch (error) {
         console.log(error.message);
 
-       
+
     }
 }
 
@@ -62,7 +62,7 @@ const insertCategory = async (req, res) => {
         const categoryData = await category.save();
 
         if (categoryData) {
-            return res.render('addcategory',{ message: "Category Registration succesful" });
+            return res.render('addcategory', { message: "Category Registration succesful" });
         } else {
             return res.render('addcategory', { message: "Category Registration Failed" });
         }
@@ -75,7 +75,7 @@ const insertCategory = async (req, res) => {
 //load catergory list
 const loadCategorylist = async (req, res) => {
     try {
-        const admin=  req.session.adminData
+        const admin = req.session.adminData
         var search = "";
 
         if (req.query.search) {
@@ -89,7 +89,7 @@ const loadCategorylist = async (req, res) => {
             ]
         });
 
-        res.render('categorylist', { categories: categoriesData ,admin:admin});
+        res.render('categorylist', { categories: categoriesData, admin: admin });
     } catch (error) {
         console.log(error.message);
     }
@@ -100,10 +100,10 @@ const loadCategorylist = async (req, res) => {
 const loadaddCategory = async (req, res) => {
     try {
 
-        
-        const admin=  req.session.adminData
-      
-        res.render('addcategory',{admin:admin} )
+
+        const admin = req.session.adminData
+
+        res.render('addcategory', { admin: admin })
     } catch (error) {
         console.log(error.message)
     }
@@ -112,16 +112,16 @@ const loadaddCategory = async (req, res) => {
 
 
 //delete category
-const deleteCategory= async(req,res)=>{
+const deleteCategory = async (req, res) => {
 
     try {
         const id = req.query.id;
-        await Category.deleteOne({_id:id})
+        await Category.deleteOne({ _id: id })
         res.redirect('/admin/categorylist')
-        
+
     } catch (error) {
         console.log(error.message);
-        
+
     }
 
 
@@ -131,15 +131,15 @@ const deleteCategory= async(req,res)=>{
 
 
 //load edit category page
-const loadEditCategory= async (req, res) => {
+const loadEditCategory = async (req, res) => {
     try {
         const id = req.query.id
-        const admin=  req.session.adminData
-      
+        const admin = req.session.adminData
+
 
         const categoryData = await Category.findById({ _id: id })
-        if ( categoryData ) {
-            res.render('edit-category', { categories: categoryData,admin:admin  })
+        if (categoryData) {
+            res.render('edit-category', { categories: categoryData, admin: admin })
 
         } else {
             res.redirect('/admin/categorylist')
@@ -156,49 +156,49 @@ const loadEditCategory= async (req, res) => {
 //edit category
 const editCategory = async (req, res) => {
     try {
-       
-        const categoryId = req.body.category_id 
+
+        const categoryId = req.body.category_id
 
 
         const category = await Category.findById(categoryId);
 
         if (!category) {
-         
+
             return res.render('edit-category', { message: "Category not found" });
         }
 
-        
+
         const updateFields = {
             category: req.body.category,
             description: req.body.description,
-            
+
         };
 
-       
+
         if (req.file) {
             updateFields.image = req.file.filename;
         }
 
-   
+
         await Category.findByIdAndUpdate(categoryId, { $set: updateFields });
 
         res.redirect('/admin/categorylist');
     } catch (error) {
         console.log(error.message);
-       
+
     }
 }
 
 
 module.exports = {
- 
+
     loadCategorylist,
     insertCategory,
     loadaddCategory,
     deleteCategory,
     loadEditCategory,
     editCategory,
-    unlistCategory 
+    unlistCategory
 }
 
 

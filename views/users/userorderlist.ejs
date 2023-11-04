@@ -36,12 +36,46 @@
 
                                         </div>
 
+                              
                                         <div class="tab-pane fade" id="tab-account" role="tabpanel"
                                             aria-labelledby="tab-account-link">
                                            
                                               
                                         <section class="content-body p-xl-4">
-                                      
+                                            <form>
+                                                <div class="row">
+                                                    <div class="col-lg-8">
+                                                        <div class="row gx-3">
+                                                            <div class="col-6  mb-3">
+                                                                <label style="font-weight: 600;" class="form-label">First name</label>
+                                                               <p><%= user.name.split(' ')[0] %></p>
+                                                            </div> <!-- col .// -->
+                                                            <div class="col-6  mb-3">
+                                                                <label style="font-weight: 600;"  class="form-label">Last name</label>
+                                                                <p><%= user.name.split(' ')[1] %></p>
+                                                            </div> <!-- col .// -->
+                                                            <div class="col-lg-6  mb-3">
+                                                                <label style="font-weight: 600;"   class="form-label">Email</label>
+                                                               <p><%= user.email %></p>
+                                                            </div> <!-- col .// -->
+                                                            <div class="col-lg-6  mb-3">
+                                                                <label  style="font-weight: 600;"    class="form-label">Phone</label>
+                                                                <p><%= user.mobile %></p>
+                                                            </div> <!-- col .// -->
+                                                    
+                                                     
+                                                        </div> <!-- row.// -->
+                                                    </div> <!-- col.// -->
+                                                    <aside class="col-lg-2">
+                                                        <figure class="text-lg-center">
+                                                            <img  class="img-lg mb-3 img-avatar " src="assets/images/userImages/<%=user.image%>" alt="User Photo">
+                                                          
+                                                        </figure>
+                                                    </aside> <!-- col.// -->
+                                                </div> <!-- row.// -->
+                                                <br>
+                                       
+                                            </form>
                                             <hr class="my-5">
                                             <div class="row" style="max-width:920px">
                                                 <div class="col-md">

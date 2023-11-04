@@ -25,7 +25,7 @@ app.use('/',userRoute)
 
 
 
-//for user route
+//for admin route
 app.use('/admin',adminRoute)
 
 
