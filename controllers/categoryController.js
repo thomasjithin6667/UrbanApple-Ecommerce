@@ -18,7 +18,7 @@ const unlistCategory = async (req, res) => {
     try {
         const id = req.query.id;
 
-
+         
         const category = await Category.findById(id);
 
 
@@ -40,60 +40,76 @@ const unlistCategory = async (req, res) => {
 
 
 
-
+//insert category
 const insertCategory = async (req, res) => {
     try {
+        const admin = req.session.adminData
+        const categoryName = req.body.category;
 
-        const categoryExist = await Category.findOne({ category: req.body.category });
+        const categoryExist = await Category.findOne({ category: { $regex: new RegExp(`^${categoryName}$`, 'i') } });
 
         if (categoryExist) {
-            return res.render('addcategory', { message: "Category already exists" });
+            return res.render('addcategory', { admin:admin,message: "Category already exists" });
         }
 
-
         const category = new Category({
-            category: req.body.category,
+            category: categoryName,
             description: req.body.description,
             image: req.file.filename,
             isListed: true
         });
 
-
         const categoryData = await category.save();
 
         if (categoryData) {
-            return res.render('addcategory', { message: "Category Registration succesful" });
+            res.render('addcategory', { admin:admin,message: "Category Registration successful" });
         } else {
-            return res.render('addcategory', { message: "Category Registration Failed" });
+             res.render('addcategory', { admin:admin,message: "Category Registration Failed"});
         }
     } catch (error) {
+        const admin = req.session.adminData
         console.error(error.message);
-        return res.render('addcategory', { message: "An error occurred while creating the category" });
+         res.render('addcategory', { admin:admin,message: "An error occurred while creating the category" });
     }
 }
 
 //load catergory list
 const loadCategorylist = async (req, res) => {
     try {
-        const admin = req.session.adminData
-        var search = "";
+        const admin = req.session.adminData;
+        const search = req.query.search || ""; 
+        const page = parseInt(req.query.page) || 1;
+        const perPage = 3;
+        const isBlocked = req.query.blocked;
 
-        if (req.query.search) {
-            search = req.query.search;
+        const filter = {
+            $or: [
+                { category: { $regex: '.*' + search + '.*', $options: 'i' } },
+                { description: { $regex: '.*' + search + '.*', $options: 'i' } },
+            ],
+        };
+
+        if (isBlocked === "true") {
+            filter.isListed = false;
+        } else if (isBlocked === "false") {
+            filter.isListed = true;
+        } else {
+        
         }
 
-        const categoriesData = await Category.find({
-            $or: [
-                { name: { $regex: '.*' + search + '.*', $options: 'i' } },
-                { description: { $regex: '.*' + search + '.*', $options: 'i' } },
-            ]
-        });
+        const totalCategories = await Category.countDocuments(filter);
+        const totalPages = Math.ceil(totalCategories / perPage);
 
-        res.render('categorylist', { categories: categoriesData, admin: admin });
+        const categoriesData = await Category.find(filter)
+            .skip((page - 1) * perPage)
+            .limit(perPage);
+
+        res.render('categorylist', { categories: categoriesData, admin: admin, totalPages, currentPage: page });
     } catch (error) {
         console.log(error.message);
     }
 }
+
 
 
 //load insert category page
@@ -156,38 +172,40 @@ const loadEditCategory = async (req, res) => {
 //edit category
 const editCategory = async (req, res) => {
     try {
-
-        const categoryId = req.body.category_id
-
-
+        const admin = req.session.adminData
+        const categoryId = req.body.category_id;
         const category = await Category.findById(categoryId);
+        const updatedCategoryName = req.body.category;
 
-        if (!category) {
+        const duplicateCategory = await Category.findOne({ _id: { $ne: categoryId }, category: { $regex: new RegExp(`^${updatedCategoryName}$`, 'i') } });
 
-            return res.render('edit-category', { message: "Category not found" });
+        if (duplicateCategory) {
+            res.render('edit-category', {categories:category,admin:admin,message: "Category with the same name already exists" });
         }
 
+        
+
+        if (!category) {
+            res.render('edit-category', {categories:category,admin:admin, message: "Category not found" });
+        }
 
         const updateFields = {
-            category: req.body.category,
+            category: updatedCategoryName,
             description: req.body.description,
-
         };
-
 
         if (req.file) {
             updateFields.image = req.file.filename;
         }
-
 
         await Category.findByIdAndUpdate(categoryId, { $set: updateFields });
 
         res.redirect('/admin/categorylist');
     } catch (error) {
         console.log(error.message);
-
     }
 }
+
 
 
 module.exports = {

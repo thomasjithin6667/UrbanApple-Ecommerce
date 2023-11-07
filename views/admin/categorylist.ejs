@@ -43,7 +43,33 @@
 
 
             </div>
+            
             <div class="card">
+                <div class="row align-items-center mx-2 my-4">
+                    <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
+                      <div class="custom_select">
+                        <select class="form-select" id="filterSelect">
+                            <option value="all">Category status</option>
+                            <option value="all">All categories</option>
+                            <option value="unblocked">Listed</option>
+                            <option value="blocked">Unlisted</option>
+                            
+                        </select>
+                    </div>
+                  </div>
+                    
+                      <div class="col-md-2 col-6">
+                          <div class="custom_select">
+                              <select class="form-select select-nice">
+                                  <option selected>Sort by Date</option>
+                                  
+                                  <option>Latest</option>
+                                  <option>Earliest</option>
+                                  
+                              </select>
+                          </div>
+                      </div>
+                  </div>
                 <div class="card-body">
                     <div class="row">
 
@@ -52,7 +78,7 @@
 
 
                                 <% if (categories.length> 0) { %>
-                                    <table  class="table" id="categories">
+                                    <table  class="table">
                                         <thead>
                                             <tr>
                                                 <th>image</th>
@@ -118,8 +144,42 @@
                         </div> <!-- .col// -->
                     </div> <!-- .row // -->
                 </div> <!-- card body .// -->
-            </div> <!-- card .// -->
+            </div>
+             
+            
+            
+            
+            <div class="pagination-area mt-30 mb-50">
+                <nav aria-label="Page navigation">
+                  <ul class="pagination justify-content-start">
+                    <% if (currentPage > 1) { %>
+                      <li class="page-item">
+                        <a class="page-link" href="?page=<%= currentPage - 1 %>">
+                          <i class="material-icons md-chevron_left"></i>
+                        </a>
+                      </li>
+                    <% } %>
+                
+                    <% for (let i = 1; i <= totalPages; i++) { %>
+                      <li class="page-item <% if (i === currentPage) { %>active<% } %>">
+                        <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                      </li>
+                    <% } %>
+                
+                    <% if (currentPage < totalPages) { %>
+                      <li class="page-item">
+                        <a class="page-link" href="?page=<%= currentPage + 1 %>">
+                          <i class="material-icons md-chevron_right"></i>
+                        </a>
+                      </li>
+                    <% } %>
+                  </ul>
+                </nav>
+              </div>
+              
         </section> <!-- content-main end// -->
+ 
+  
         
 
         <footer class="main-footer font-xs">
@@ -146,6 +206,33 @@
 
      })
       </script>
+
+<script>
+    filterSelect.addEventListener("change", function() {
+        const selectedOption = filterSelect.value;
+        console.log(selectedOption);
+        
+    
+        let url = '/admin/categorylist';
+        
+        if (selectedOption === "blocked") {
+            url += '?blocked=true';
+        } else if (selectedOption === "unblocked") {
+            url += '?blocked=false';
+        } else if (selectedOption === "all"){
+          url += '?blocked=all'
+    
+        }
+        
+        console.log(selectedOption);
+    
+        window.location.href = url;
+    });
+    
+    
+    
+    
+        </script>
    
     <script src="assetsB/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="assetsB/js/vendors/bootstrap.bundle.min.js"></script>

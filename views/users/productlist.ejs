@@ -3,6 +3,7 @@
 
 
 <!-- molla/category-market.html  22 Nov 2019 10:02:55 GMT -->
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -32,7 +33,9 @@
     <link rel="stylesheet" href="assets/css/plugins/nouislider/nouislider.css">
     <link rel="stylesheet" href="assets/css/skins/skin-demo-13.css">
     <link rel="stylesheet" href="assets/css/demos/demo-13.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 </head>
 
@@ -40,428 +43,499 @@
     <div class="page-wrapper">
         <%- include('../partials/ecomHeader1') %>
 
-        <main class="main">
-            <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
-                <div class="container">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/">Home</a></li>
-                        <li class="breadcrumb-item"><a href="/">Shop</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Products</li>
-                    </ol>
-                </div><!-- End .container -->
-            </nav><!-- End .breadcrumb-nav -->
-            <form id="filterForm" action="" method="get">
-            <div class="page-content">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-9 col-xl-4-5col">
+            <main class="main">
                 
+                <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+                    <div class="container">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/">Home</a></li>
+           
+                            <li class="breadcrumb-item active" aria-current="page">Products</li>
+                        </ol>
+                    </div><!-- End .container -->
+                </nav><!-- End .breadcrumb-nav -->
+                <form id="filterForm" action="" method="get">
+                    <div class="page-content">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-9 col-xl-4-5col">
 
-                          
 
-                  
 
-                        
 
-                            
 
-                            <div class="mb-3">
-                                
-                            </div><!-- End .mb-2 -->
 
-                            <h2 class="title title-border ">Featured Products</h2><!-- End .title -->
 
-            
-                            <div class="mb-2"></div><!-- End .mb-4 -->
 
-                            <div class="toolbox">
-                                <div class="toolbox-left">
-                                    <div class="toolbox-info">
-                                 
-                                    </div><!-- End .toolbox-info -->
-                                </div><!-- End .toolbox-left -->
 
-                                <div class="toolbox-right">
-                                    <div class="toolbox-sort">
-                                        <label>Sort by Price:</label>
-                                        <div class="filter-group">
-                                         
-                                            <select name="sortBy" class="form-control">
-                                                <option value="priceLowToHigh" <%= sortBy === "priceLowToHigh" ? "selected" : "" %>>Price: Low to High</option>
-                                                <option value="priceHighToLow" <%= sortBy === "priceHighToLow" ? "selected" : "" %>>Price: High to Low</option>
-                                            </select>
+                                    <!-- Include this section in your view template to display flash messages -->
+                                    <% if (typeof messages !=='undefined' && messages.error) { %>
+                                        <div class="error-message">
+                                            <%= messages.error %>
                                         </div>
-                                    </div><!-- End .toolbox-sort -->
-                                </div><!-- End .toolbox-right -->
-                            </div><!-- End .toolbox -->
+                                        <% } %>
 
-                            <div class="products mb-3">
-                                <div class="row">
-                                    <% if (products.length > 0) { %>
-                                        <% products.filter(product => product.list === true).forEach((product) => { %>
-                                            <div  class="col-6 col-md-4 col-xl-3">
-                                                <div class="product">
-                                                    <figure class="product-media">
-                                                        <a href="/viewproduct/<%=product._id%>">
-                                                            <img src="public/assets/images/productImages/<%= product.productImages[0] %>" alt="Product image" class="product-image " >
-                                                        </a>
-                                
-                                                        <div class="product-action-vertical">
-                                                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                                                            
-                                                        </div><!-- End .product-action-vertical -->
+                                            <div class="mb-3">
 
-                                                        <div class="product-action">
-                                                            <form class="add-to-cart-form" action="/add-to-cart/<%= product._id %>" method="post">
-                                                                <button type="submit" class="btn btn-outline-primary-2 " data-product-id="<%= product._id %>">
-                                                                    <i class="fa-solid fa-cart-plus"></i> Add to cart
-                                                                </button>
-                                                                <input type="number" value="1" name="qty" style="display: none;">
-                                                            </form>
+                                            </div><!-- End .mb-2 -->
+
+                                            <h2 class="title title-border ">Featured Products</h2><!-- End .title -->
+
+
+                                            <div class="mb-2"></div><!-- End .mb-4 -->
+
+                                            <div class="toolbox">
+                                                <div class="toolbox-left">
+                                                    <div class="toolbox-info">
+
+                                                    </div><!-- End .toolbox-info -->
+                                                </div><!-- End .toolbox-left -->
+
+                                                <div class="toolbox-right">
+                                                    <div class="toolbox-sort">
+                                                        <label>Sort by Price:</label>
+                                                        <div class="filter-group">
+
+                                                            <select name="sortBy" class="form-control">
+                                                                <option value="priceLowToHigh"
+                                                                    <%=sortBy==="priceLowToHigh" ? "selected" : "" %>
+                                                                    >Price: Low to High</option>
+                                                                <option value="priceHighToLow"
+                                                                    <%=sortBy==="priceHighToLow" ? "selected" : "" %>
+                                                                    >Price: High to Low</option>
+                                                            </select>
                                                         </div>
-                                
-                                                        <!-- <div class="product-action">
+                                                    </div><!-- End .toolbox-sort -->
+                                                </div><!-- End .toolbox-right -->
+                                            </div><!-- End .toolbox -->
+
+                                            <div class="products mb-3">
+                                                <div class="row">
+                                                    <% if (products.length> 0) { %>
+                                                        <% products.filter(product=> product.list ===
+                                                            true).forEach((product) => { %>
+                                                            <div class="col-6 col-md-4 col-xl-3">
+                                                                <div class="product">
+                                                                    <figure class="product-media">
+                                                                        <a href="/viewproduct/<%=product._id%>">
+                                                                            <img src="public/assets/images/productImages/<%= product.productImages[0] %>"
+                                                                                alt="Product image"
+                                                                                class="product-image ">
+                                                                        </a>
+
+                                                                        <div class="product-action-vertical">
+                                                                            <a href="/addToWishlist/<%= product._id %>"
+                                                                                class="btn-product-icon btn-wishlist btn-expandable"><span>add
+                                                                                    to wishlist</span></a>
+
+                                                                        </div><!-- End .product-action-vertical -->
+
+                                                                        <div class="product-action">
+                                                                            <form class="add-to-cart-form"
+                                                                                action="/add-to-cart/<%= product._id %>"
+                                                                                method="post">
+                                                                                <button type="submit"
+                                                                                    class="btn btn-outline-primary-2 "
+                                                                                    data-product-id="<%= product._id %>">
+                                                                                    <i
+                                                                                        class="fa-solid fa-cart-plus"></i>
+                                                                                    Add to cart
+                                                                                </button>
+                                                                                <input type="number" value="1"
+                                                                                    name="qty" style="display: none;">
+                                                                            </form>
+                                                                        </div>
+
+                                                                        <!-- <div class="product-action">
                                                             <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
                                                         </div> -->
-                                                    </figure><!-- End .product-media -->
-                                
-                                                    <div class="product-body">
-                                                        <div class="product-cat">
-                                                            <a href="#"><%= product.category %></a>
-                                                        </div><!-- End .product-cat -->
-                                                        <h3 class="product-title"><a href="product.html"><% if (product.name.length > 50) { %>
-                                                            <%= product.name.slice(0, 60) + '...' %>
-                                                          <% } else { %>
-                                                            <%= product.name %>
-                                                          <% } %></a></h3><!-- End .product-title -->
-                                                        <div class="product-price">
-                                                            <%= product.price %>
-                                                        </div><!-- End .product-price -->
-                                                        <div class="ratings-container">
-                                                            <div class="ratings">
-                                                                <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
-                                                            </div><!-- End .ratings -->
-                                                            <span class="ratings-text">(4 Reviews)</span>
-                                                        </div><!-- End .ratings-container -->
-                                                    </div><!-- End .product-body -->
-                                                </div><!-- End .product -->
-                                            </div><!-- End .col-sm-6 col-md-4 col-xl-3 -->
-                                        <% }); %>
-                                    <% } else { %>
-                                        <p>Products not found</p>
-                                    <% } %>
-                                </div><!-- End .row -->
-                                
-                            </div><!-- End .products -->
+                                                                    </figure><!-- End .product-media -->
 
-                            <nav aria-label="Page navigation">
-                                <ul class="pagination">
-                                    <li class="page-item disabled">
-                                        <a class="page-link page-link-prev" href="#" aria-label="Previous" tabindex="-1" aria-disabled="true">
-                                            <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
-                                        </a>
-                                    </li>
-                                    <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item-total">of 2</li>
-                                    <li class="page-item">
-                                        <a class="page-link page-link-next" href="#" aria-label="Next">
-                                            Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
-                        <!-- End .col-lg-9 -->
-                       
+                                                                    <div class="product-body">
+                                                                        <div class="product-cat">
+                                                                            <a href="#">
+                                                                                <%= product.category %>
+                                                                            </a>
+                                                                        </div><!-- End .product-cat -->
+                                                                        <h3 class="product-title"><a
+                                                                                href="product.html">
+                                                                                <% if (product.name.length> 50) { %>
+                                                                                    <%= product.name.slice(0, 60)
+                                                                                        + '...' %>
+                                                                                        <% } else { %>
+                                                                                            <%= product.name %>
+                                                                                                <% } %>
+                                                                            </a></h3><!-- End .product-title -->
+                                                                        <div class="product-price">
+                                                                            <%= product.price %>
+                                                                        </div><!-- End .product-price -->
+                                                                        <div class="ratings-container">
+                                                                            <div class="ratings">
+                                                                                <div class="ratings-val"
+                                                                                    style="width: 100%;"></div>
+                                                                                <!-- End .ratings-val -->
+                                                                            </div><!-- End .ratings -->
+                                                                            <span class="ratings-text">(4
+                                                                                Reviews)</span>
+                                                                        </div><!-- End .ratings-container -->
+                                                                    </div><!-- End .product-body -->
+                                                                </div><!-- End .product -->
+                                                            </div><!-- End .col-sm-6 col-md-4 col-xl-3 -->
+                                                            <% }); %>
+                                                                <% } else { %>
+                                                                    <p>Products not found</p>
+                                                                    <% } %>
+                                                </div><!-- End .row -->
 
-                        <aside class="col-lg-3 col-xl-5col order-lg-first">
-                       
-                            <div class="sidebar sidebar-shop">
-                                <br>
-                            
+                                            </div><!-- End .products -->
 
-                                <div class="widget">
+                                            <nav aria-label="Page navigation">
+                                                <ul class="pagination">
+                                                    <li class="page-item disabled">
+                                                        <a class="page-link page-link-prev" href="#"
+                                                            aria-label="Previous" tabindex="-1" aria-disabled="true">
+                                                            <span aria-hidden="true"><i
+                                                                    class="icon-long-arrow-left"></i></span>Prev
+                                                        </a>
+                                                    </li>
+                                                    <li class="page-item active" aria-current="page"><a
+                                                            class="page-link" href="#">1</a></li>
+                                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                    <li class="page-item-total">of 2</li>
+                                                    <li class="page-item">
+                                                        <a class="page-link page-link-next" href="#" aria-label="Next">
+                                                            Next <span aria-hidden="true"><i
+                                                                    class="icon-long-arrow-right"></i></span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                </div>
+                                <!-- End .col-lg-9 -->
 
 
-                                    <h3 class="widget-title">Categories</h3><!-- End .widget-title -->
-                                    <hr>
+                                <aside class="col-lg-3 col-xl-5col order-lg-first">
 
-                                    <div class="widget-body">
-                                        <div class="filter-items">
-                                     
+                                    <div class="sidebar sidebar-shop">
+                                        <br>
 
-                                            
-                         
 
-                                            <div class="filter-group">
-                                                <%
-                                                category.forEach((cat) => {
-                                                  const isSelected = selectedCategories.includes(cat.category);
-                                                %>
-                                                <div>
-                                                    <input name="category" type="checkbox" value="<%= cat.category %>" id="product-cat" <%= isSelected ? 'checked' : '' %>>
-                                                    <label for="product-cat"><%= cat.category %></label>
+                                        <div class="widget">
+
+
+                                            <h3 class="widget-title">Categories</h3><!-- End .widget-title -->
+                                            <hr>
+
+                                            <div class="widget-body">
+                                                <div class="filter-items">
+
+
+
+
+
+                                                    <div class="filter-group">
+                                                        <% category.forEach((cat)=> {
+                                                            const isSelected =
+                                                            selectedCategories.includes(cat.category);
+                                                            %>
+                                                            <div>
+                                                                <input name="category" type="checkbox"
+                                                                    value="<%= cat.category %>" id="product-cat"
+                                                                    <%=isSelected ? 'checked' : '' %>>
+                                                                <label for="product-cat">
+                                                                    <%= cat.category %>
+                                                                </label>
+                                                            </div>
+                                                            <% }); %>
+                                                    </div>
+                                                </div><!-- End .widget -->
+                                            </div><!-- End .widget -->
+                                        </div><!-- End .widget -->
+
+
+                                        <div class="widget">
+                                            <h3 class="widget-title">Price</h3><!-- End .widget-title -->
+
+                                            <div class="widget-body">
+
+                                                <div class="filter-group">
+                                                    <label>Price Range:</label>
+                                                    <div>
+                                                        <input type="radio" id="priceAll" name="price" value="all"
+                                                            <%=selectedPriceRange==='all' ? 'checked' : '' %>>
+                                                        <label for="priceAll">All Prices</label>
+                                                    </div>
+                                                    <div>
+                                                        <input type="radio" id="priceUnder25" name="price"
+                                                            value="under25" <%=selectedPriceRange==='under25'
+                                                            ? 'checked' : '' %>>
+                                                        <label for="priceUnder25">Under ₹20,000</label>
+                                                    </div>
+                                                    <div>
+                                                        <input type="radio" id="price25to50" name="price" value="25to50"
+                                                            <%=selectedPriceRange==='25to50' ? 'checked' : '' %>>
+                                                        <label for="price25to50"> ₹20,000 to ₹40,000</label>
+                                                    </div>
+                                                    <div>
+                                                        <input type="radio" id="price50to100" name="price"
+                                                            value="50to100" <%=selectedPriceRange==='50to100'
+                                                            ? 'checked' : '' %>>
+                                                        <label for="price50to100"> ₹40,000 to ₹60,000</label>
+                                                    </div>
+                                                    <div>
+                                                        <input type="radio" id="price100to200" name="price"
+                                                            value="100to200" <%=selectedPriceRange==='100to200'
+                                                            ? 'checked' : '' %>>
+                                                        <label for="price100to200"> ₹60,000 to ₹80,000</label>
+                                                    </div>
+                                                    <div>
+                                                        <input type="radio" id="price200above" name="price"
+                                                            value="200above" <%=selectedPriceRange==='200above'
+                                                            ? 'checked' : '' %>>
+                                                        <label for="price200above"> ₹80,000 & Above</label>
+                                                    </div>
                                                 </div>
-                                                <% });
-                                                %>
-                                            </div>
-                                </div><!-- End .widget -->
-                            </div><!-- End .widget -->
-                        </div><!-- End .widget -->
-                                
 
+                                            </div><!-- End .widget-body -->
+                                        </div><!-- End .widget -->
+
+
+
+                                        <div class="widget">
+                                            <h3 class="widget-title">Colour</h3><!-- End .widget-title -->
+                                            <div class="widget-body">
+                                                <div class="filter-group">
+                                                    <label>Color:</label>
+                                                    <div>
+                                                        <input type="checkbox" id="colorBlack" name="color"
+                                                            value="Black" <%=selectedColors.includes('Black')
+                                                            ? 'checked' : '' %>>
+                                                        <label for="colorBlack">Black</label>
+                                                    </div>
+                                                    <div>
+                                                        <input type="checkbox" id="colorWhite" name="color"
+                                                            value="White" <%=selectedColors.includes('White')
+                                                            ? 'checked' : '' %>>
+                                                        <label for="colorWhite">White</label>
+                                                    </div>
+                                                    <div>
+                                                        <input type="checkbox" id="colorBlue" name="color" value="Blue"
+                                                            <%=selectedColors.includes('Blue') ? 'checked' : '' %>>
+                                                        <label for="colorBlue">Blue</label>
+                                                    </div>
+                                                    <div>
+                                                        <input type="checkbox" id="colorPink" name="color" value="Pink"
+                                                            <%=selectedColors.includes('Pink') ? 'checked' : '' %>>
+                                                        <label for="colorPink">Pink</label>
+                                                    </div>
+                                                    <!-- Add more color checkboxes here -->
+                                                </div>
+                                            </div><!-- End .widget-body -->
+                                        </div><!-- End .widget -->
+
+
+                                        <button type="submit" class="btn btn-outline-primary-2 ">Apply Filters <i
+                                                class="fa-solid fa-arrow-right"></i> </button> <br>
+                                        <a href="/productlist" class="btn btn-primary mt-3 "> Reset all <i
+                                                class="fa-solid fa-xmark"></i> </a>
+
+
+                                        <!-- End .sidebar sidebar-shop -->
+
+
+                                </aside><!-- End .col-lg-3 -->
+
+                            </div><!-- End .row -->
+                        </div><!-- End .container -->
+                    </div><!-- End .page-content -->
+                </form>
+
+                <div class="cta cta-horizontal cta-horizontal-box bg-primary">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-lg-5">
+                                <h3 class="cta-title text-white">Join Our Newsletter</h3><!-- End .cta-title -->
+                                <p class="cta-desc text-white">Subcribe to get information about products and coupons
+                                </p><!-- End .cta-desc -->
+                            </div><!-- End .col-lg-5 -->
+
+                            <div class="col-lg-7">
+                                <form action="#">
+                                    <div class="input-group">
+                                        <input type="email" class="form-control form-control-white"
+                                            placeholder="Enter your Email Address" aria-label="Email Adress" required>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-white-2"
+                                                type="submit"><span>Subscribe</span><i
+                                                    class="icon-long-arrow-right"></i></button>
+                                        </div><!-- .End .input-group-append -->
+                                    </div><!-- .End .input-group -->
+                                </form>
+                            </div><!-- End .col-lg-7 -->
+                        </div><!-- End .row -->
+                    </div><!-- End .container -->
+                </div><!-- End .cta -->
+            </main><!-- End .main -->
+
+            <footer class="footer footer-2">
+                <div class="icon-boxes-container">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="icon-box icon-box-side">
+                                    <span class="icon-box-icon">
+                                        <i class="icon-rocket"></i>
+                                    </span>
+
+                                    <div class="icon-box-content">
+                                        <h3 class="icon-box-title">Free Shipping</h3><!-- End .icon-box-title -->
+                                        <p>Orders $50 or more</p>
+                                    </div><!-- End .icon-box-content -->
+                                </div><!-- End .icon-box -->
+                            </div><!-- End .col-sm-6 col-lg-3 -->
+
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="icon-box icon-box-side">
+                                    <span class="icon-box-icon">
+                                        <i class="icon-rotate-left"></i>
+                                    </span>
+
+                                    <div class="icon-box-content">
+                                        <h3 class="icon-box-title">Free Returns</h3><!-- End .icon-box-title -->
+                                        <p>Within 30 days</p>
+                                    </div><!-- End .icon-box-content -->
+                                </div><!-- End .icon-box -->
+                            </div><!-- End .col-sm-6 col-lg-3 -->
+
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="icon-box icon-box-side">
+                                    <span class="icon-box-icon">
+                                        <i class="icon-info-circle"></i>
+                                    </span>
+
+                                    <div class="icon-box-content">
+                                        <h3 class="icon-box-title">Get 20% Off 1 Item</h3><!-- End .icon-box-title -->
+                                        <p>When you sign up</p>
+                                    </div><!-- End .icon-box-content -->
+                                </div><!-- End .icon-box -->
+                            </div><!-- End .col-sm-6 col-lg-3 -->
+
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="icon-box icon-box-side">
+                                    <span class="icon-box-icon">
+                                        <i class="icon-life-ring"></i>
+                                    </span>
+
+                                    <div class="icon-box-content">
+                                        <h3 class="icon-box-title">We Support</h3><!-- End .icon-box-title -->
+                                        <p>24/7 amazing services</p>
+                                    </div><!-- End .icon-box-content -->
+                                </div><!-- End .icon-box -->
+                            </div><!-- End .col-sm-6 col-lg-3 -->
+                        </div><!-- End .row -->
+                    </div><!-- End .container -->
+                </div><!-- End .icon-boxes-container -->
+
+                <div class="footer-middle border-0">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12 col-lg-6">
+                                <div class="widget widget-about">
+                                    <img src="assets/images/logo.png" class="footer-logo" alt="Footer Logo" width="110"
+                                        height="25">
+                                    <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu
+                                        vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis,
+                                        accumsan porttitor, facilisis luctus, metus. </p>
+
+                                    <div class="widget-about-info">
+                                        <div class="row">
+                                            <div class="col-sm-6 col-md-4">
+                                                <span class="widget-about-title">Got Question? Call us 24/7</span>
+                                                <a href="tel:123456789">+0123 456 789</a>
+                                            </div><!-- End .col-sm-6 -->
+                                            <div class="col-sm-6 col-md-8">
+                                                <span class="widget-about-title">Payment Method</span>
+                                                <figure class="footer-payments">
+                                                    <img src="assets/images/payments.png" alt="Payment methods"
+                                                        width="272" height="20">
+                                                </figure><!-- End .footer-payments -->
+                                            </div><!-- End .col-sm-6 -->
+                                        </div><!-- End .row -->
+                                    </div><!-- End .widget-about-info -->
+                                </div><!-- End .widget about-widget -->
+                            </div><!-- End .col-sm-12 col-lg-3 -->
+
+                            <div class="col-sm-4 col-lg-2">
                                 <div class="widget">
-                                    <h3 class="widget-title">Price</h3><!-- End .widget-title -->
+                                    <h4 class="widget-title">Information</h4><!-- End .widget-title -->
 
-                                    <div class="widget-body">
-                                     
-                                        <div class="filter-group">
-                                            <label>Price Range:</label>
-                                            <div>
-                                                <input type="radio" id="priceAll" name="price" value="all" <%= selectedPriceRange === 'all' ? 'checked' : '' %>>
-                                                <label for="priceAll">All Prices</label>
-                                            </div>
-                                            <div>
-                                                <input type="radio" id="priceUnder25" name="price" value="under25" <%= selectedPriceRange === 'under25' ? 'checked' : '' %>>
-                                                <label for="priceUnder25">Under $25</label>
-                                            </div>
-                                            <div>
-                                                <input type="radio" id="price25to50" name="price" value="25to50" <%= selectedPriceRange === '25to50' ? 'checked' : '' %>>
-                                                <label for="price25to50">$25 to $50</label>
-                                            </div>
-                                            <div>
-                                                <input type="radio" id="price50to100" name="price" value="50to100" <%= selectedPriceRange === '50to100' ? 'checked' : '' %>>
-                                                <label for="price50to100">$50 to $100</label>
-                                            </div>
-                                            <div>
-                                                <input type="radio" id="price100to200" name="price" value="100to200" <%= selectedPriceRange === '100to200' ? 'checked' : '' %>>
-                                                <label for="price100to200">$100 to $200</label>
-                                            </div>
-                                            <div>
-                                                <input type="radio" id="price200above" name="price" value="200above" <%= selectedPriceRange === '200above' ? 'checked' : '' %>>
-                                                <label for="price200above">$200 & Above</label>
-                                            </div>
-                                        </div>
-                                        
-                                    </div><!-- End .widget-body -->
+                                    <ul class="widget-list">
+                                        <li><a href="about.html">About Molla</a></li>
+                                        <li><a href="#">How to shop on Molla</a></li>
+                                        <li><a href="faq.html">FAQ</a></li>
+                                        <li><a href="contact.html">Contact us</a></li>
+                                        <li><a href="login.html">Log in</a></li>
+                                    </ul><!-- End .widget-list -->
                                 </div><!-- End .widget -->
+                            </div><!-- End .col-sm-4 col-lg-3 -->
 
-                    
-
+                            <div class="col-sm-4 col-lg-2">
                                 <div class="widget">
-                                    <h3 class="widget-title">Colour</h3><!-- End .widget-title -->
-                                    <div class="widget-body">
-                                        <div class="filter-group">
-                                            <label>Color:</label>
-                                            <div>
-                                                <input type="checkbox" id="colorBlack" name="color" value="Black" <%= selectedColors.includes('Black') ? 'checked' : '' %>>
-                                                <label for="colorBlack">Black</label>
-                                            </div>
-                                            <div>
-                                                <input type="checkbox" id="colorWhite" name="color" value="White" <%= selectedColors.includes('White') ? 'checked' : '' %>>
-                                                <label for="colorWhite">White</label>
-                                            </div>
-                                            <div>
-                                                <input type="checkbox" id="colorBlue" name="color" value="Blue" <%= selectedColors.includes('Blue') ? 'checked' : '' %>>
-                                                <label for="colorBlue">Blue</label>
-                                            </div>
-                                            <div>
-                                                <input type="checkbox" id="colorPink" name="color" value="Pink" <%= selectedColors.includes('Pink') ? 'checked' : '' %>>
-                                                <label for="colorPink">Pink</label>
-                                            </div>
-                                            <!-- Add more color checkboxes here -->
-                                        </div>
-                                    </div><!-- End .widget-body -->
+                                    <h4 class="widget-title">Customer Service</h4><!-- End .widget-title -->
+
+                                    <ul class="widget-list">
+                                        <li><a href="#">Payment Methods</a></li>
+                                        <li><a href="#">Money-back guarantee!</a></li>
+                                        <li><a href="#">Returns</a></li>
+                                        <li><a href="#">Shipping</a></li>
+                                        <li><a href="#">Terms and conditions</a></li>
+                                        <li><a href="#">Privacy Policy</a></li>
+                                    </ul><!-- End .widget-list -->
                                 </div><!-- End .widget -->
-                            
-                               
-                                <button type="submit" class="btn btn-outline-primary-2 ">Apply Filters <i class="fa-solid fa-arrow-right"></i> </button> <br>
-                                <a href="/productlist" class="btn btn-primary mt-3 ">  Reset all <i class="fa-solid fa-xmark"></i>  </a>
-                               
+                            </div><!-- End .col-sm-4 col-lg-3 -->
 
-                                <!-- End .sidebar sidebar-shop -->
-                           
-                      
-                        </aside><!-- End .col-lg-3 -->
-                   
-                    </div><!-- End .row -->
-                </div><!-- End .container -->
-            </div><!-- End .page-content -->
-        </form>
+                            <div class="col-sm-4 col-lg-2">
+                                <div class="widget">
+                                    <h4 class="widget-title">My Account</h4><!-- End .widget-title -->
 
-            <div class="cta cta-horizontal cta-horizontal-box bg-primary">
-                <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-lg-5">
-                            <h3 class="cta-title text-white">Join Our Newsletter</h3><!-- End .cta-title -->
-                            <p class="cta-desc text-white">Subcribe to get information about products and coupons</p><!-- End .cta-desc -->
-                        </div><!-- End .col-lg-5 -->
-                        
-                        <div class="col-lg-7">
-                            <form action="#">
-                                <div class="input-group">
-                                    <input type="email" class="form-control form-control-white" placeholder="Enter your Email Address" aria-label="Email Adress" required>
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-white-2" type="submit"><span>Subscribe</span><i class="icon-long-arrow-right"></i></button>
-                                    </div><!-- .End .input-group-append -->
-                                </div><!-- .End .input-group -->
-                            </form>
-                        </div><!-- End .col-lg-7 -->
-                    </div><!-- End .row -->
-                </div><!-- End .container -->
-            </div><!-- End .cta -->
-        </main><!-- End .main -->
+                                    <ul class="widget-list">
+                                        <li><a href="#">Sign In</a></li>
+                                        <li><a href="cart.html">View Cart</a></li>
+                                        <li><a href="#">My Wishlist</a></li>
+                                        <li><a href="#">Track My Order</a></li>
+                                        <li><a href="#">Help</a></li>
+                                    </ul><!-- End .widget-list -->
+                                </div><!-- End .widget -->
+                            </div><!-- End .col-sm-64 col-lg-3 -->
+                        </div><!-- End .row -->
+                    </div><!-- End .container -->
+                </div><!-- End .footer-middle -->
 
-        <footer class="footer footer-2">
-            <div class="icon-boxes-container">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="icon-box icon-box-side">
-                                <span class="icon-box-icon">
-                                    <i class="icon-rocket"></i>
-                                </span>
+                <div class="footer-bottom">
+                    <div class="container">
+                        <p class="footer-copyright">Copyright © 2019 AppleStore. All Rights Reserved.</p>
+                        <!-- End .footer-copyright -->
+                        <ul class="footer-menu">
+                            <li><a href="#">Terms Of Use</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                        </ul><!-- End .footer-menu -->
 
-                                <div class="icon-box-content">
-                                    <h3 class="icon-box-title">Free Shipping</h3><!-- End .icon-box-title -->
-                                    <p>Orders $50 or more</p>
-                                </div><!-- End .icon-box-content -->
-                            </div><!-- End .icon-box -->
-                        </div><!-- End .col-sm-6 col-lg-3 -->
-                        
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="icon-box icon-box-side">
-                                <span class="icon-box-icon">
-                                    <i class="icon-rotate-left"></i>
-                                </span>
-
-                                <div class="icon-box-content">
-                                    <h3 class="icon-box-title">Free Returns</h3><!-- End .icon-box-title -->
-                                    <p>Within 30 days</p>
-                                </div><!-- End .icon-box-content -->
-                            </div><!-- End .icon-box -->
-                        </div><!-- End .col-sm-6 col-lg-3 -->
-
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="icon-box icon-box-side">
-                                <span class="icon-box-icon">
-                                    <i class="icon-info-circle"></i>
-                                </span>
-
-                                <div class="icon-box-content">
-                                    <h3 class="icon-box-title">Get 20% Off 1 Item</h3><!-- End .icon-box-title -->
-                                    <p>When you sign up</p>
-                                </div><!-- End .icon-box-content -->
-                            </div><!-- End .icon-box -->
-                        </div><!-- End .col-sm-6 col-lg-3 -->
-
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="icon-box icon-box-side">
-                                <span class="icon-box-icon">
-                                    <i class="icon-life-ring"></i>
-                                </span>
-
-                                <div class="icon-box-content">
-                                    <h3 class="icon-box-title">We Support</h3><!-- End .icon-box-title -->
-                                    <p>24/7 amazing services</p>
-                                </div><!-- End .icon-box-content -->
-                            </div><!-- End .icon-box -->
-                        </div><!-- End .col-sm-6 col-lg-3 -->
-                    </div><!-- End .row -->
-                </div><!-- End .container -->
-            </div><!-- End .icon-boxes-container -->
-
-            <div class="footer-middle border-0">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-12 col-lg-6">
-                            <div class="widget widget-about">
-                                <img src="assets/images/logo.png"class="footer-logo" alt="Footer Logo" width="110" height="25">
-                                <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus. </p>
-                                
-                                <div class="widget-about-info">
-                                    <div class="row">
-                                        <div class="col-sm-6 col-md-4">
-                                            <span class="widget-about-title">Got Question? Call us 24/7</span>
-                                            <a href="tel:123456789">+0123 456 789</a>
-                                        </div><!-- End .col-sm-6 -->
-                                        <div class="col-sm-6 col-md-8">
-                                            <span class="widget-about-title">Payment Method</span>
-                                            <figure class="footer-payments">
-                                                <img src="assets/images/payments.png" alt="Payment methods" width="272" height="20">
-                                            </figure><!-- End .footer-payments -->
-                                        </div><!-- End .col-sm-6 -->
-                                    </div><!-- End .row -->
-                                </div><!-- End .widget-about-info -->
-                            </div><!-- End .widget about-widget -->
-                        </div><!-- End .col-sm-12 col-lg-3 -->
-
-                        <div class="col-sm-4 col-lg-2">
-                            <div class="widget">
-                                <h4 class="widget-title">Information</h4><!-- End .widget-title -->
-
-                                <ul class="widget-list">
-                                    <li><a href="about.html">About Molla</a></li>
-                                    <li><a href="#">How to shop on Molla</a></li>
-                                    <li><a href="faq.html">FAQ</a></li>
-                                    <li><a href="contact.html">Contact us</a></li>
-                                    <li><a href="login.html">Log in</a></li>
-                                </ul><!-- End .widget-list -->
-                            </div><!-- End .widget -->
-                        </div><!-- End .col-sm-4 col-lg-3 -->
-
-                        <div class="col-sm-4 col-lg-2">
-                            <div class="widget">
-                                <h4 class="widget-title">Customer Service</h4><!-- End .widget-title -->
-
-                                <ul class="widget-list">
-                                    <li><a href="#">Payment Methods</a></li>
-                                    <li><a href="#">Money-back guarantee!</a></li>
-                                    <li><a href="#">Returns</a></li>
-                                    <li><a href="#">Shipping</a></li>
-                                    <li><a href="#">Terms and conditions</a></li>
-                                    <li><a href="#">Privacy Policy</a></li>
-                                </ul><!-- End .widget-list -->
-                            </div><!-- End .widget -->
-                        </div><!-- End .col-sm-4 col-lg-3 -->
-
-                        <div class="col-sm-4 col-lg-2">
-                            <div class="widget">
-                                <h4 class="widget-title">My Account</h4><!-- End .widget-title -->
-
-                                <ul class="widget-list">
-                                    <li><a href="#">Sign In</a></li>
-                                    <li><a href="cart.html">View Cart</a></li>
-                                    <li><a href="#">My Wishlist</a></li>
-                                    <li><a href="#">Track My Order</a></li>
-                                    <li><a href="#">Help</a></li>
-                                </ul><!-- End .widget-list -->
-                            </div><!-- End .widget -->
-                        </div><!-- End .col-sm-64 col-lg-3 -->
-                    </div><!-- End .row -->
-                </div><!-- End .container -->
-            </div><!-- End .footer-middle -->
-
-            <div class="footer-bottom">
-                <div class="container">
-                    <p class="footer-copyright">Copyright © 2019 AppleStore. All Rights Reserved.</p><!-- End .footer-copyright -->
-                    <ul class="footer-menu">
-                        <li><a href="#">Terms Of Use</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                    </ul><!-- End .footer-menu -->
-
-                    <div class="social-icons social-icons-color">
-                        <span class="social-label">Social Media</span>
-                        <a href="#" class="social-icon social-facebook" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
-                        <a href="#" class="social-icon social-twitter" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
-                        <a href="#" class="social-icon social-instagram" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>
-                        <a href="#" class="social-icon social-youtube" title="Youtube" target="_blank"><i class="icon-youtube"></i></a>
-                        <a href="#" class="social-icon social-pinterest" title="Pinterest" target="_blank"><i class="icon-pinterest"></i></a>
-                    </div><!-- End .soial-icons -->
-                </div><!-- End .container -->
-            </div><!-- End .footer-bottom -->
-        </footer><!-- End .footer -->
+                        <div class="social-icons social-icons-color">
+                            <span class="social-label">Social Media</span>
+                            <a href="#" class="social-icon social-facebook" title="Facebook" target="_blank"><i
+                                    class="icon-facebook-f"></i></a>
+                            <a href="#" class="social-icon social-twitter" title="Twitter" target="_blank"><i
+                                    class="icon-twitter"></i></a>
+                            <a href="#" class="social-icon social-instagram" title="Instagram" target="_blank"><i
+                                    class="icon-instagram"></i></a>
+                            <a href="#" class="social-icon social-youtube" title="Youtube" target="_blank"><i
+                                    class="icon-youtube"></i></a>
+                            <a href="#" class="social-icon social-pinterest" title="Pinterest" target="_blank"><i
+                                    class="icon-pinterest"></i></a>
+                        </div><!-- End .soial-icons -->
+                    </div><!-- End .container -->
+                </div><!-- End .footer-bottom -->
+            </footer><!-- End .footer -->
     </div><!-- End .page-wrapper -->
     <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
 
@@ -471,24 +545,28 @@
     <div class="mobile-menu-container mobile-menu-light">
         <div class="mobile-menu-wrapper">
             <span class="mobile-menu-close"><i class="icon-close"></i></span>
-            
+
             <form action="#" method="get" class="mobile-search">
                 <label for="mobile-search" class="sr-only">Search</label>
-                <input type="search" class="form-control" name="mobile-search" id="mobile-search" placeholder="Search in..." required>
+                <input type="search" class="form-control" name="mobile-search" id="mobile-search"
+                    placeholder="Search in..." required>
                 <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
             </form>
 
             <ul class="nav nav-pills-mobile nav-border-anim" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="mobile-menu-link" data-toggle="tab" href="#mobile-menu-tab" role="tab" aria-controls="mobile-menu-tab" aria-selected="true">Menu</a>
+                    <a class="nav-link active" id="mobile-menu-link" data-toggle="tab" href="#mobile-menu-tab"
+                        role="tab" aria-controls="mobile-menu-tab" aria-selected="true">Menu</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="mobile-cats-link" data-toggle="tab" href="#mobile-cats-tab" role="tab" aria-controls="mobile-cats-tab" aria-selected="false">Categories</a>
+                    <a class="nav-link" id="mobile-cats-link" data-toggle="tab" href="#mobile-cats-tab" role="tab"
+                        aria-controls="mobile-cats-tab" aria-selected="false">Categories</a>
                 </li>
             </ul>
 
             <div class="tab-content">
-                <div class="tab-pane fade show active" id="mobile-menu-tab" role="tabpanel" aria-labelledby="mobile-menu-link">
+                <div class="tab-pane fade show active" id="mobile-menu-tab" role="tabpanel"
+                    aria-labelledby="mobile-menu-link">
                     <nav class="mobile-nav">
                         <ul class="mobile-menu">
                             <li class="active">
@@ -528,10 +606,12 @@
                                     <li><a href="category-2cols.html">Shop Grid 2 Columns</a></li>
                                     <li><a href="category.html">Shop Grid 3 Columns</a></li>
                                     <li><a href="category-4cols.html">Shop Grid 4 Columns</a></li>
-                                    <li><a href="category-boxed.html"><span>Shop Boxed No Sidebar<span class="tip tip-hot">Hot</span></span></a></li>
+                                    <li><a href="category-boxed.html"><span>Shop Boxed No Sidebar<span
+                                                    class="tip tip-hot">Hot</span></span></a></li>
                                     <li><a href="category-fullwidth.html">Shop Fullwidth No Sidebar</a></li>
                                     <li><a href="product-category-boxed.html">Product Category Boxed</a></li>
-                                    <li><a href="product-category-fullwidth.html"><span>Product Category Fullwidth<span class="tip tip-new">New</span></span></a></li>
+                                    <li><a href="product-category-fullwidth.html"><span>Product Category Fullwidth<span
+                                                    class="tip tip-new">New</span></span></a></li>
                                     <li><a href="cart.html">Cart</a></li>
                                     <li><a href="checkout.html">Checkout</a></li>
                                     <li><a href="wishlist.html">Wishlist</a></li>
@@ -543,7 +623,8 @@
                                 <ul>
                                     <li><a href="product.html">Default</a></li>
                                     <li><a href="product-centered.html">Centered</a></li>
-                                    <li><a href="product-extended.html"><span>Extended Info<span class="tip tip-new">New</span></span></a></li>
+                                    <li><a href="product-extended.html"><span>Extended Info<span
+                                                    class="tip tip-new">New</span></span></a></li>
                                     <li><a href="product-gallery.html">Gallery</a></li>
                                     <li><a href="product-sticky.html">Sticky Info</a></li>
                                     <li><a href="product-sidebar.html">Boxed With Sidebar</a></li>
@@ -666,5 +747,6 @@
             </div><!-- End .social-icons -->
         </div><!-- End .mobile-menu-wrapper -->
     </div><!-- End .mobile-menu-container -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />

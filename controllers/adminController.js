@@ -88,34 +88,86 @@ const logout = async (req, res) => {
 
 //load user list
 
-const loadUserlist = async (req, res) => {
-    const admin=  req.session.adminData
+// const loadUserlist = async (req, res) => {
+//     const admin=  req.session.adminData
     
+//     try {
+//         var search = "";
+
+//         if (req.query.search) {
+//             search = req.query.search;
+//         }
+
+
+//         const usersData = await User.find({
+//             is_Admin: 0,
+//             $or: [
+//                 { name: { $regex: '.*' + search + '.*', $options: 'i' } },
+//                 { email: { $regex: '.*' + search + '.*', $options: 'i' } },
+//                 { mobile: { $regex: '.*' + search + '.*', $options: 'i' } },
+//             ]
+//         })
+
+//         res.render('userlist', { users: usersData ,admin:admin})
+
+//     } catch (error) {
+//         console.log(error.message);
+
+//     }
+
+// }
+
+
+const loadUserlist = async (req, res) => {
+    const admin = req.session.adminData;
+
     try {
         var search = "";
+        var isBlocked = req.query.blocked; 
+        const page = parseInt(req.query.page) || 1; 
+        const perPage = 3; 
 
         if (req.query.search) {
             search = req.query.search;
         }
 
-
-        const usersData = await User.find({
+        const filter = {
             is_Admin: 0,
             $or: [
                 { name: { $regex: '.*' + search + '.*', $options: 'i' } },
                 { email: { $regex: '.*' + search + '.*', $options: 'i' } },
                 { mobile: { $regex: '.*' + search + '.*', $options: 'i' } },
-            ]
-        })
+            ],
+        };
 
-        res.render('userlist', { users: usersData ,admin:admin})
+        if (isBlocked === "true") {
+            filter.isBlocked = true;
+        } else if (isBlocked === "false") {
+            filter.isBlocked = false;
+        } else {
+        }
 
+        const totalUsers = await User.countDocuments(filter);
+        const totalPages = Math.ceil(totalUsers / perPage); 
+
+        const usersData = await User.find(filter)
+            .skip((page - 1) * perPage) 
+            .limit(perPage);
+
+        res.render('userlist', { users: usersData, admin: admin, totalPages, currentPage: page });
     } catch (error) {
         console.log(error.message);
-
     }
-
 }
+
+
+
+
+
+
+
+
+
 
 //block and unblock user
 
@@ -185,8 +237,13 @@ const blockUser = async (req, res) => {
       if (userData.isBlocked === false) {
       
         userData.isBlocked = true;
-        if(req.session.userData)
-        delete req.session.userData;
+        req.session.user_id=id
+        
+        if(req.session.user_id)
+        delete req.session.user_id;
+         delete req.session.userData
+    
+    
       } else {
         userData.isBlocked = false;
       }

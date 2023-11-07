@@ -39,6 +39,11 @@
                 </div>
              
             </div>
+            <% if(typeof message !=='undefined' ){ %>
+                <p style="color: rgb(18, 91, 194);">
+                    <%=message%>
+                </p>
+                <% } %>
             <div class="div d-flex">
 
             
@@ -47,7 +52,7 @@
                 <div class="card-body ">
                     <div class="row">
                         <div class="col-md">
-                            <form action="" method="post" enctype="multipart/form-data">
+                            <form  action="" method="post" enctype="multipart/form-data">
                                 <div class="mb-4">
                                     <label for="product_name" class="form-label">Category</label>
                                     <input type="text" placeholder="Type here" class="form-control" value="<%=categories.category%>"  name="category"/>
@@ -65,11 +70,7 @@
                                 <div class="d-grid">
                                     <button type="submit" class="btn btn-primary"> Apply changes</button>
                                 </div>
-                                <% if(typeof message !=='undefined' ){ %>
-                                    <p style="color: green;">
-                                        <%=message%>
-                                    </p>
-                                    <% } %>
+                              
                             </form>
                         </div>
                       

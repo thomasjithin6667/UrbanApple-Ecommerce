@@ -3,48 +3,99 @@
 const Cart = require('../models/cartModel'); 
 const User=require('../models/userModel');
 const Product = require('../models/productModel')
+const Wishlist=require('../models/wishlistModel')
 
 
 
 
 //add to cart
+// const addtocartd = async (req, res) => {
+//     try {
+//         const userId = req.session.user._id;
+//         const productId = req.params.productId;
+//         const {qty} = req.body;
+
+//         const existingCart = await Cart.findOne({user: userId});
+//         let newCart = {}
+
+//         if (existingCart) {
+//             const existingCartItem = existingCart.items.find(item => item.product.toString() === productId);
+
+//             if (existingCartItem){
+//                 existingCartItem.quantity += parseInt(qty);
+//             } else {
+//                 existingCart.items.push({product: productId, quantity: parseInt(qty)});
+//             }
+
+//             existingCart.total = existingCart.items.reduce((total, item) => total + (item.quantity || 0), 0)
+
+//             await existingCart.save();
+//         } else {
+//             newCart = new Cart({
+//                 user: userId,
+//                 items: [{product: productId, quantity: parseInt(qty)}],
+//                 total: parseInt(qty,10),
+//             });
+
+//             await newCart.save()
+//         }
+
+//         req.session.cartLength = (existingCart || newCart).items.length
+
+//         res.redirect('/productlist')
+//     } catch (error) {
+//         console.error('Error adding product to cart:', error);
+     
+//     }
+// };
+
+
+
 const addtocart = async (req, res) => {
     try {
         const userId = req.session.user._id;
         const productId = req.params.productId;
-        const {qty} = req.body;
+        const { qty } = req.body;
 
-        const existingCart = await Cart.findOne({user: userId});
-        let newCart = {}
+        const existingCart = await Cart.findOne({ user: userId });
+        let newCart = {};
 
         if (existingCart) {
             const existingCartItem = existingCart.items.find(item => item.product.toString() === productId);
 
-            if (existingCartItem){
+            if (existingCartItem) {
                 existingCartItem.quantity += parseInt(qty);
             } else {
-                existingCart.items.push({product: productId, quantity: parseInt(qty)});
+                existingCart.items.push({ product: productId, quantity: parseInt(qty) });
             }
 
-            existingCart.total = existingCart.items.reduce((total, item) => total + (item.quantity || 0), 0)
+            existingCart.total = existingCart.items.reduce((total, item) => total + (item.quantity || 0), 0);
 
             await existingCart.save();
         } else {
             newCart = new Cart({
                 user: userId,
-                items: [{product: productId, quantity: parseInt(qty)}],
-                total: parseInt(qty,10),
+                items: [{ product: productId, quantity: parseInt(qty) }],
+                total: parseInt(qty, 10),
             });
 
-            await newCart.save()
+            await newCart.save();
         }
 
-        req.session.cartLength = (existingCart || newCart).items.length
+        const userWishlist = await Wishlist.findOne({ user: userId });
+        if (userWishlist) {
+            const wishlistItemIndex = userWishlist.items.findIndex(item => item.product.toString() === productId);
+            if (wishlistItemIndex !== -1) {
+                userWishlist.items.splice(wishlistItemIndex, 1);
+                await userWishlist.save();
+            }
+        }
 
-        res.redirect('/productlist')
+        req.session.cartLength = (existingCart || newCart).items.length;
+
+        res.redirect('/productlist');
     } catch (error) {
         console.error('Error adding product to cart:', error);
-     
     }
 };
 
@@ -74,7 +125,7 @@ const calculateSubtotal = (cart) => {
 
 //To load the cart
 const getcart = async (req, res) => {
-    const userId = req.session.user._id;
+    const userId = req.session.user_id;
 
     try {
         const userCart = await Cart.findOne({ user: userId }).populate('items.product');
@@ -151,11 +202,50 @@ const getcart = async (req, res) => {
   };
 
 
+  //update cart quantity
+   const updateQuantity = async (req, res) => {
+    const userId = req.session.user._id;
+    const productId = req.params.productId;
+    const newQuantity = req.body.quantity;
+  
+    try {
+        
+        const maxQuantity = 3;
+  
+        const userCart = await Cart.findOne({ user: userId });
+  
+        if (!userCart) {
+            return res.status(404).json({ error: 'User cart not found.' });
+        }
+  
+        const cartItem = userCart.items.find((item) =>
+            item.product.equals(productId)
+        );
+  
+        if (!cartItem) {
+            return res.status(404).json({ error: 'Product not found in cart.' });
+        }
+  
+    
+        if (newQuantity >= 0 && newQuantity <= 4) {
+            cartItem.quantity = newQuantity;
+            await userCart.save();
+            res.sendStatus(200);
+        } else {
+            res.status(400).json({ error: `Quantity must be between 0 and ${maxQuantity}.` });
+        }
+    } catch (error) {
+        console.error('Error updating quantity:', error);
+        res.status(500).json({ error: 'An error occurred while updating quantity.' });
+    }
+  };
+
 
 module.exports = {
     addtocart,
     getcart,
-    deleteCart
+    deleteCart,
+    updateQuantity 
  
 }
 

@@ -107,15 +107,57 @@
 
                                         <div class="tab-pane fade show active" id="tab-orders" role="tabpanel"
                                         aria-labelledby="tab-orders-link">
+
+
+                          
+
+
+
+                                        
                                         <div class="card card-dashboard m-5 "   >
-                                          
+
+                                    
                                        
                                                 <div class="content-header">
-                                                    
                                                     <div class="card-body">
                                                         <h2 class="content-title card-title">Order details</h2>
                                                         <p>Details for Order ID:<%= order._id %></p>
+                                                        <div class=" mt-4">
+                                                            <a class="btn btn-outline-primary-2" href="/generate-invoice/<%= order._id %>">Invoice</a>
+                                                            <% if (order.status !== 'Cancelled' && order.status !== 'refund-initiated'&& order.status !== 'return requested' && order.status !== 'cancel requested'  ) { %>
+                                                                <% if (order.status === 'Delivered') {%>
+                                                                    <% const currentDate = new Date(); %>
+                                                                    <% const deliveryDate = new Date(order.deliveryDate); %>
+                                                                    <% const sevenDaysLater = new Date(deliveryDate); %>
+                                                                    <% sevenDaysLater.setDate(deliveryDate.getDate() + 7); %>
+                                                                    <% if (currentDate <= sevenDaysLater) { %>
+                                                                        <a class="btn btn-outline-primary-2" href="/returnOrder/<%= order._id %>"
+                                                                            onclick="return confirm('Are you sure you want to Return <%= order.items[0].product.name  %>');">
+                                                                            Return Order
+                                                                          </a>
+                                                          
+                                                              
+                                                              
+                                                                <% const remainingDays = Math.ceil((sevenDaysLater - currentDate) / (1000 * 60 * 60 * 24)); %>
+                                                                <p class="text-muted">Remaining Days to Return: <%= remainingDays %> days</p>
+                                                                <% } %>
+                                                            <% }else{ %>
+                                                                <a class="btn btn-outline-primary-2" href="/cancelOrder/<%= order._id %>"
+                                                                    onclick="return confirm('Are you sure you want to Cancel <%= order.items[0].product.name  %>');">
+                                                                    Cancel Order
+                                                                  </a>
+                                                      
+                                                            
+                                                               
+                                                                 
+                                                              
+                                                                    <% } %>
+                                                                    <% } %>
+                                                                                                              
+            
+                                                        </div>
                                                     </div>
+                                                    
                                                 </div>
                                                 <div class="card" >
                                                     <header class="card-header">
@@ -156,6 +198,9 @@
                                                     </div>
                                                     </header> <!-- card-header end// -->
                                                     <div class="card-body">
+
+
+                                                        
                                                         <div  style="display: flex; justify-content: space-between; flex-wrap: wrap;">
                                                             <div style="width: 150px;">
                                                             
@@ -849,5 +894,15 @@
             </div><!-- End .modal-content -->
         </div><!-- End .modal-dialog -->
     </div><!-- End .modal -->
+    <script>
+        function isReturnAllowed(deliveryDate) {
+  const sevenDaysInMillis = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+  const currentDate = new Date();
+  const returnDate = new Date(deliveryDate.getTime() + sevenDaysInMillis);
+  
+  return currentDate <= returnDate;
+}
+
+    </script>
     <%- include('../layouts/footer.ejs') %>
     

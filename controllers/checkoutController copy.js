@@ -6,13 +6,10 @@ const Order = require('../models/orderModel')
 const Address = require('../models/addressesModel')
 const mongoose = require('mongoose')
 const Coupon= require('../models/couponModel')
-require("dotenv").config()
-const { RAZORPAY_ID_KEY, RAZORPAY_SECRET_KEY } = process.env;
-
 
 const Razorpay = require('razorpay');
 
-const razorpayInstance = new Razorpay({
+const razorpay = new Razorpay({
   key_id: 'rzp_test_gwxVdrdkgotQGE',
   key_secret: '43YWiWwqPSvjiajhW7sjSItZ',
 });
@@ -87,6 +84,9 @@ const getCheckout = async (req, res) => {
 
 
 
+
+
+
 const postCheckout = async (req, res) => {
   const userId = req.session.user._id;
   const { address, payment } = req.body;
@@ -100,7 +100,6 @@ const postCheckout = async (req, res) => {
 
     if (!user || !cart) {
       console.error('User or cart not found.');
-      return res.status(400).send('User or cart not found');
     }
 
     const cartItems = cart.items || [];
@@ -111,12 +110,10 @@ const postCheckout = async (req, res) => {
 
       if (!product) {
         console.error('Product not found.');
-        return res.status(400).send('Product not found');
       }
 
       if (product.quantity < cartItem.quantity) {
         console.error('Not enough quantity in stock.');
-        return res.status(400).send('Not enough quantity in stock');
       }
 
       product.quantity -= cartItem.quantity;
@@ -128,70 +125,29 @@ const postCheckout = async (req, res) => {
       await product.save();
     }
 
-    let orderPaymentMethod = '';
+    const order = new Order({
+      user: userId,
+      address: address,
+      orderDate: new Date(),
+      status: 'Pending',
+      paymentMethod: payment,
+      totalAmount: totalAmount,
+      items: cartItems.map((cartItem) => ({
+        product: cartItem.product._id,
+        quantity: cartItem.quantity,
+        price: cartItem.product.discountPrice,
+      })),
+    });
 
-    if (payment === 'Cash on delivery') {
-      orderPaymentMethod = 'Cash on delivery'; 
+    await order.save();
 
-      const order = new Order({
-        user: userId,
-        address: address,
-        orderDate: new Date(),
-        status: 'Pending',
-        paymentMethod: orderPaymentMethod,
-        totalAmount: totalAmount,
-        items: cartItems.map((cartItem) => ({
-          product: cartItem.product._id,
-          quantity: cartItem.quantity,
-          price: cartItem.product.discountPrice,
-        })),
-      });
+    await Cart.deleteOne({ user: userId });
 
-      await order.save();
-
-      await Cart.deleteOne({ user: userId });
-
-      return res.redirect('/orderPlaced');
-    } else if (payment === 'Online Payment') {
-   
-
-
-
-
-
-
-
-      
-    } else {
-      console.error('Invalid payment method selected.');
-      return res.status(400).send('Invalid payment method selected');
-    }
+    res.redirect('/orderPlaced');
   } catch (error) {
     console.error('Error placing the order:', error);
-    return res.status(500).send('Error placing the order');
   }
 };
-
-
-const createRazorpayOrder = async (amount) => {
-  return new Promise((resolve, reject) => {
-    const options = {
-      amount: amount * 100, 
-      currency: 'INR',
-    };
-
-    razorpay.orders.create(options, (error, order) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(order);
-      }
-    });
-  });
-};
-
-
-
 
 
 
@@ -475,54 +431,6 @@ function calculateDiscountedTotal(total, discountPercentage) {
   }
   
 
-
-
-
-
-
-
-
-  const OnlinePayment = async(req,res)=>{
-    try {
-        const amount = req.body.amount*100
-        const options = {
-            amount: amount,
-            currency: 'INR',
-            receipt: 'razorUser@gmail.com'
-        }
-
-        razorpayInstance.orders.create(options, 
-            (err, order)=>{
-                if(!err){
-                    res.status(200).send({
-                        success:true,
-                        msg:'Order Created',
-                        order_id:order.id,
-                        amount:amount,
-                        key_id:RAZORPAY_ID_KEY,
-                        product_name:req.body.name,
-                        description:req.body.description,
-                        contact:"8567345632",
-                        name: "Sandeep Sharma",
-                        email: "sandeep@gmail.com"
-                    });
-                }
-                else{
-                    res.status(400).send({success:false,msg:'Something went wrong!'});
-                }
-            }
-        );
-
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-
-
-
-
-
 module.exports = {
   postCheckout,
   getCheckout,
@@ -534,8 +442,7 @@ module.exports = {
   userOrderDetails,
   applyCoupon,
   cancelOrder,
-  returnOrder,
-  OnlinePayment
+  returnOrder
   
 
 

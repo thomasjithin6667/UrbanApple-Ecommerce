@@ -211,41 +211,44 @@ const insertProduct = async (req, res) => {
 
 //load product list
 const loadProductList = async (req, res) => {
-  const admin = req.session.adminData
+  const admin = req.session.adminData;
   try {
-    const search = req.query.search || '';
+      const search = req.query.search || '';
+      const page = parseInt(req.query.page) || 1;
+      const perPage = 3;
+      const status = req.query.status;
+     
 
-    const productsData = await Product.find({
-      $or: [
-        { name: { $regex: new RegExp(search, 'i') } },
-        { category: { $regex: new RegExp(search, 'i') } },
-      ]
-    });
+      const filter = {
+          $or: [
+              { name: { $regex: new RegExp(search, 'i') } },
+              { category: { $regex: new RegExp(search, 'i') } },
+          ],
+      };
 
+      if (status === "blocked") {
+          filter.list = false;
+      } else if (status === "unblocked") {
+          filter.list = true;
+      } else if (status === "instock") {
+          filter.quantity = { $gt: 0 };
+        } else if (status === "outofstock") {
+          filter.quantity = 0;
+      }else {
+          
+      }
 
-    res.render('productlist', { products: productsData, admin: admin });
+      const totalProducts = await Product.countDocuments(filter);
+      const totalPages = Math.ceil(totalProducts / perPage);
+
+      const productsData = await Product.find(filter)
+          .skip((page - 1) * perPage)
+          .limit(perPage);
+
+      res.render('productlist', { products: productsData, admin: admin, totalPages, currentPage: page });
   } catch (error) {
-    console.log(error.message);
+      console.log(error.message);
   }
-}
-
-//delete product
-
-
-const deleteProduct = async (req, res) => {
-
-  try {
-    const admin = req.session.adminData
-    const id = req.query.id;
-    await Product.deleteOne({ _id: id })
-    res.redirect('/admin/productlist')
-
-  } catch (error) {
-    console.log(error.message);
-
-  }
-
-
 }
 
 //edit product
@@ -429,22 +432,22 @@ const productList = async (req, res) => {
 
     switch (priceRange) {
       case 'under25':
-        maxPrice = 25;
+        maxPrice = 20000;
         break;
       case '25to50':
-        minPrice = 25;
-        maxPrice = 50;
+        minPrice = 20000;
+        maxPrice = 40000;
         break;
       case '50to100':
-        minPrice = 50;
-        maxPrice = 100;
+        minPrice = 40000;
+        maxPrice = 60000;
         break;
       case '100to200':
-        minPrice = 100;
-        maxPrice = 200;
+        minPrice = 60000;
+        maxPrice = 80000;
         break;
       case '200above':
-        minPrice = 200;
+        minPrice = 80000;
         break;
       default:
      
@@ -457,6 +460,7 @@ const productList = async (req, res) => {
     } else if (sortBy === 'priceHighToLow') {
       sortQuery = { price: -1 };
     }
+    
 
   
 
@@ -499,22 +503,22 @@ selectedColors, });
     
         switch (priceRange) {
           case 'under25':
-            maxPrice = 25;
+            maxPrice = 20000;
             break;
           case '25to50':
-            minPrice = 25;
-            maxPrice = 50;
+            minPrice = 20000;
+            maxPrice = 40000;
             break;
           case '50to100':
-            minPrice = 50;
-            maxPrice = 100;
+            minPrice = 40000;
+            maxPrice = 60000;
             break;
           case '100to200':
-            minPrice = 100;
-            maxPrice = 200;
+            minPrice = 60000;
+            maxPrice = 80000;
             break;
           case '200above':
-            minPrice = 200;
+            minPrice = 80000;
             break;
           default:
          
@@ -647,7 +651,6 @@ module.exports = {
   loadaddProduct,
   insertProduct,
   loadProductList,
-  deleteProduct,
   loadEditProduct,
   loadShowProduct,
   editProduct,

@@ -14,8 +14,10 @@
     "bcrypt": "^5.1.1",
     "cloudinary": "^1.41.0",
     "const": "^1.0.0",
+    "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
+    "express-flash": "^0.0.2",
     "express-session": "^1.17.3",
     "mongodb": "^6.1.0",
     "mongoose": "^7.6.2",
@@ -23,6 +25,8 @@
     "nocache": "^4.0.0",
     "nodemailer": "^6.9.6",
     "nodemon": "^3.0.1",
+    "pdfkit": "^0.13.0",
+    "razorpay": "^2.9.2",
     "sharp": "^0.32.6"
   }
 }

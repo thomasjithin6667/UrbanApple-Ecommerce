@@ -22,20 +22,104 @@
             <div class="page-content">
             	<div class="checkout">
 	                <div class="container">
+                        
+                    
             			<div class="checkout-discount">
-            				<form action="#">
-        						<input type="text" class="form-control" required id="checkout-discount-input">
-            					<label for="checkout-discount-input" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
-            				</form>
+
+                          
+
             			</div><!-- End .checkout-discount -->
-            			<form action="/postCheckout/<%= user._id %>" method="post" >
+            	
 		                	<div class="row">
 		                		<div class="col-lg-9">
 		                			<h2 class="checkout-title">Billing Details</h2><!-- End .checkout-title -->
 
                                     <div class="col-lg">
+                                        <div class="card card-dashboard">
+                                            <div class="card-body">
 
 
+                                                <p>
+                                                    <a   class="btn btn-outline-primary-2 " data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                      Add new Address
+                                                    </a>
+                                                  
+                                                  </p>
+                                                  <div class="collapse" id="collapseExample">
+                                                    <form action="/addaddress?userId=<%= user._id.toString() %>" method="post">
+                                             
+    
+                                                        <label>Name</label>
+                                                        <input type="text" class="form-control"  name="name" required>
+                                                        <small class="form-text ">This will be how your name will be displayed in the account section and in reviews</small>
+                                                         
+                                                         <label class="mt-2">Address type</label>
+                                                         <div class="row mb-2">
+                                                            <div class="col">
+                                                              <div class="form-check form-check-inline" style="margin-right: 40px;">
+                                                                <input class="form-check-input " type="radio" name="type" id="flexRadioDefault1" value="home" checked />
+                                                                <label class="form-check-label " for="flexRadioDefault1"> Home </label>
+                                                              </div>
+                                                              <div class="form-check form-check-inline" style="margin-right: 40px;">
+                                                                <input class="form-check-input" type="radio" name="type" id="flexRadioDefault2" value="work" />
+                                                                <label class="form-check-label" for="flexRadioDefault2"> Work </label>
+                                                              </div>
+                                                              <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="type" id="flexRadioDefault3" value="other" />
+                                                                <label class="form-check-label" for="flexRadioDefault3"> Other </label>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                          
+        
+        
+                                                        <label>House name</label>
+                                                        <input type="text" class="form-control" name="houseName" required>
+            
+                                                        <label>Street</label>
+                                                        <input type="text" class="form-control"  name="street" >
+            
+                                                      
+                                                        <div class="row">
+                                                            <div class="col-sm-6">
+                                                                <label>City</label>
+                                                                <input type="text" class="form-control"  name="city" required > 
+                                                            </div><!-- End .col-sm-6 -->
+            
+                                                            <div class="col-sm-6">
+                                                                <label>State</label>
+                                                                <input type="text" class="form-control"  name="state" required>
+                                                            </div><!-- End .col-sm-6 -->
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-6">
+                                                                <label>Pincode</label>
+                                                                <input type="text" class="form-control" name="pinCode" required>
+                                                            </div><!-- End .col-sm-6 -->
+            
+                                                            <div class="col-sm-6">
+                                                                <label>Phone</label>
+                                                                <input type="text" class="form-control" name="phone"  required>
+                                                            </div><!-- End .col-sm-6 -->
+                                                        </div> <br>
+                                                  
+            
+                                                        <button type="submit" class="btn btn-outline-primary-2">
+                                                            
+                                                            <span>ADD ADDRESS</span>
+                                                            <i class="icon-long-arrow-right"></i>
+                                                        </button>
+                                                    </form>
+                                               
+                                                  
+                                                  </div>
+                    
+                                            </div>
+                                        </div>
+                                        
+                                        
+
+                                        <form  action="/postCheckout/<%= user._id %>" method="post" >
 
                                             <% for (let i = 0; i < addresses.length; i++) { %>
                                         <div class="card card-dashboard">
@@ -68,10 +152,6 @@
 	            	
 	        							
 
-										<div class="custom-control">
-											
-											<a href="/addaddress?userId=<%= user._id.toString() %>" class="custom-control-label" for="checkout-diff-address">Ship to a different address?</a>
-										</div><!-- End .custom-checkbox -->
 
 	                					<label>Order notes (optional)</label>
 	        							<textarea class="form-control" cols="30" rows="4" placeholder="Notes about your order, e.g. special notes for delivery"></textarea>
@@ -118,11 +198,12 @@
 		                						</tr>
 		                						<tr class="summary-total">
 		                							<td>Total:</td>
-		                							<td>₹<%= subtotalWithShipping %></td>
+		                							<td id="order-total">₹<%= subtotalWithShipping %></td>
 		                						</tr><!-- End .summary-total -->
 		                					</tbody>
 		                				</table><!-- End .table table-summary -->
                                         <% } %>
+                                        <div><p id="couponInfo" style="color: #7dc49d;"></p></div>
 
                                         <div class="payment-method">
                                             <div class="input-radio">
@@ -138,17 +219,22 @@
                                                     <span></span>
                                                     Online Payment
                                                 </label>
-                                                <div class="caption">
-                                                    <p>Complete the online payment using PayPal</p>
-                                                </div>
+                                             
                                             </div>
                                             <div id="outOfStockAlert" class="alert alert-danger" style="display: none;">
                                                 Some items in your cart are out of stock.
                                               </div>
                             
                                     </div>
+                                    <div class="caption">
+                                        <div >
+                                            <input class="form-control" type="text" name="couponCode"  placeholder="Enter your coupon code" id="couponCodeInput">
+                                            <button class="btn btn-outline-primary-2 btn-order btn-block " id="applyCouponButton"> Apply</button>
+                                        </div>
+                                        <a href="/availableCoupons">View Available Coupons</a>
+                                    </div>
 
-                                    <button type="submit "  class="btn btn-outline-primary-2 btn-order btn-block mt-5">PLACE ORDER</button>
+                                    <button type="submit "  class="btn btn-primary btn-order btn-block mt-5">PLACE ORDER</button>
 
 		                			
 		                			</div><!-- End .summary -->
@@ -522,139 +608,138 @@
             </div><!-- End .modal-content -->
         </div><!-- End .modal-dialog -->
     </div><!-- End .modal -->
+    <div style="display:inline-block">
+        <img src="https://cdn.pixabay.com/photo/2014/04/03/10/55/t-shirt-311732_960_720.png" alt="" width="100px" height="100px">
+        <p>Shirt</p>
+        <p><b>Amount:- Rs. 500</b></p>
+        <form class="pay-form">
+            <input type="hidden" name="name" value="Shirt">
+            <input type="hidden" name="amount" value="500">
+            <input type="hidden" name="description" value="Shirt Buying">
+            <input type="submit" value="Pay Now">
+        </form>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 
-    <form action="/postCheckout/<%= user._id %>" method="post" style="margin-top: 7%;">
-		<div class="section">
-			<!-- container -->
-			<div class="container">
-				<!-- row -->
-				<div class="row"> 
+<script>
 
-					<div class="col-md-7">
-						<!-- Billing Details -->
-						<div class="billing-details">
-							<div class="section-title">
-								<h3 class="title">Billing address</h3>
-							</div>
-							<div class="form-group">
-								<% for (let i = 0; i < addresses.length; i++) { %>
-								<div class="input-radio">
-									<input type="radio" required name="address" id="<%= addresses[i].name %>" value="<%= addresses[i]._id %>">
-									<label for="<%= addresses[i].name %>">
-										<span></span>
-										<%= addresses[i].type %>
-									</label>
-									<div class="caption">
-										<h5 class="card-title"><%= addresses[i].name %></h5>
-                          				<p class="card-text"><%= addresses[i].houseName %></p>
-                          				<p class="card-text"><%= addresses[i].street %></p>
-                          				<p class="card-text"><%= addresses[i].city %></p>
-                          				<p class="card-text"><%= addresses[i].pinCode %></p>
-                          				<p class="card-text"><%= addresses[i].state %></p>
-                          				<p class="card-text"><%= addresses[i].phone %></p>
-									</div>
-								</div>
-								<% } %>
-							</div>
-						</div>
-						<!-- /Billing Details -->
+		document.addEventListener('DOMContentLoaded', async function () {
+			const applyCouponButton = document.getElementById('applyCouponButton');
+			const couponCodeInput = document.getElementById('couponCodeInput');
+			const orderTotalElement = document.getElementById('order-total');
+			const couponInfo = document.getElementById('couponInfo')
+		  
+			applyCouponButton.addEventListener('click', async function (event) {
+				event.preventDefault();
+			  const couponCode = couponCodeInput.value;
+		  
+			  try {
+				const response = await fetch('/applyCoupon', {
+				  method: 'POST',
+				  headers: {
+					'Content-Type': 'application/json',
+				  },
+				  body: JSON.stringify({ couponCode }),
+				});
+		  
+				if (!response.ok) {
+				  throw new Error('Coupon application failed');
+				}
+		  
+				const data = await response.json();
+		  
+				if (data.error) {
+				  alert(data.error);
+				} else {
+				  const discountedTotal = data.discountedTotal;
+				  const normalPrice = parseFloat(orderTotalElement.innerHTML.replace("₹", ""));
+				  const diffrence = (normalPrice - discountedTotal).toFixed(0);
 
-						<!-- Shiping Details -->
-						<div class="shiping-details">
-							<div class="input-checkbox">
-								<a href="/addaddress/<%= user._id %>">Ship to a diffrent address?</a>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-5 order-details">
-						<div class="section-title text-center">
-							<h3 class="title">Your Order</h3>
-						</div>
-						<div class="order-summary">
-							<% if (cart.length !== 0) { %>
-								<div class="order-col">
-									<div><strong>PRODUCT</strong></div>
-									<div><strong>TOTAL</strong></div>
-								</div>
-								<% for (let i = 0; i < cart.length; i++) { %>
-							<div class="order-products">
-								<div class="order-col">
-									<div><span style="color:#7dc49d; font-weight: 800;"><%= cart[i].quantity %> x </span><%= cart[i].product.name %></div>
-									<div>₹<%= cart[i].product.discountPrice %></div>
-								</div>
-							</div>
-							<% } %>
-							<div class="order-col">
-								<div>Shiping</div>
-								<div><strong>₹100</strong></div>
-							</div>
-							<div class="order-col">
-								<div><strong>TOTAL</strong></div>
-								<div><strong class="order-total" id="order-total">₹<%= subtotalWithShipping %></strong></div>
-							</div>
-							<div><p id="couponInfo" style="color: #7dc49d;"></p></div>
-							<% } %>
-						</div>
-						<div class="payment-method">
-							<div class="input-radio">
-								<input type="radio" name="payment" id="cod" value="Cash on delivery">
-								<label for="cod">
-									<span></span>
-									Cash on delivery 
-								</label>
-							</div>
-							<div class="input-radio">
-								<input type="radio" name="payment" value="Online Payment" id="payment-3">
-								<label for="payment-3">
-									<span></span>
-									Online Payment
-								</label>
-								<div class="caption">
-									<p>Complete the online payment using PayPal</p>
-								</div>
-							</div>
-							<div id="outOfStockAlert" class="alert alert-danger" style="display: none;">
-								Some items in your cart are out of stock.
-							  </div>
-							<div class="input-radio">
-								<input type="radio" name="coupon"  id="coupon">
-								<label for="coupon">
-									<span></span>
-									Have a Coupon?
-								</label>
-								<div class="caption">
-									<div class="form-group">
-										<input class="input" type="text" name="couponCode" placeholder="Enter your coupon code" id="couponCodeInput">
-										<button class="btn btn-primary" style="background-color: crimson;" id="applyCouponButton"> Apply</button>
-									</div>
-									<a href="/availableCoupons">View Available Coupons</a>
-								</div>
-							</div>
-							<% if(user.walletBalance > subtotalWithShipping){ %>
-							<div class="input-radio">
-								<input type="radio" name="coupon" value="walletBalance" id="wallet">
-								<label for="wallet">
-									<span></span>
-									Use Wallet Balance (<%= user.walletBalance%>)
-								</label>
-								<div class="caption">
-									<div class="form-group">
-										<p style="color: #7dc49d;">Use your Wallet Balance (<%= user.walletBalance %>) for your purchase</p>
-								</div>
-							</div>
-						</div>
-						<% } %>
-						<button type="submit" class="primary-btn order-submit">Place order</button>
-					</div>
-					<!-- /Order Details -->
-				</div>
-				<!-- /row -->
-			</div>
-			<!-- /container -->
-		</div>
-	</form>
+				  couponInfo.innerText = `Coupon Discount Applied ₹${diffrence} off`
+				  orderTotalElement.innerText = `₹${discountedTotal}`;
+		  
+				  // Send the updated subtotal value to the server
+				  const updatedSubtotalResponse = await fetch('/updateSubtotal', {
+					method: 'POST',
+					headers: {
+					  'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({ subtotal: discountedTotal }),
+				  });
+		  
+				  if (!updatedSubtotalResponse.ok) {
+					throw new Error('Subtotal update failed');
+				  }
+		  
+				  alert(errorMessage);
+				}
+			  } catch (error) {
+				console.error('Error applying coupon:', error);
+				alert('Coupon applied successfully!');
+			  }
+			});
+		  });
 
+
+
+
+          
+$(document).ready(function(){
+	$('.pay-form').submit(function(e){
+		e.preventDefault();
+
+		var formData = $(this).serialize();
+
+		$.ajax({
+			url:"/createOrder",
+			type:"POST",
+			data: formData,
+			success:function(res){
+				if(res.success){
+					var options = {
+						"key": ""+res.key_id+"",
+						"amount": ""+res.amount+"",
+						"currency": "INR",
+						"name": ""+res.product_name+"",
+						"description": ""+res.description+"",
+						"image": "https://dummyimage.com/600x400/000/fff",
+						"order_id": ""+res.order_id+"",
+						"handler": function (response){
+							alert("Payment Succeeded");
+							// window.open("/","_self")
+						},
+						"prefill": {
+							"contact":""+res.contact+"",
+							"name": ""+res.name+"",
+							"email": ""+res.email+""
+						},
+						"notes" : {
+							"description":""+res.description+""
+						},
+						"theme": {
+							"color": "#2300a3"
+						}
+					};
+					var razorpayObject = new Razorpay(options);
+					razorpayObject.on('payment.failed', function (response){
+							alert("Payment Failed");
+					});
+					razorpayObject.open();
+				}
+				else{
+					alert(res.msg);
+				}
+			}
+		})
+
+	});
+});
+
+
+</script>
 
 
     

@@ -7,11 +7,13 @@ const adminController = require("../controllers/adminController")
 const checkoutController = require('../controllers/checkoutController')
 const productController = require('../controllers/productController')
 const categoryController = require('../controllers/categoryController')
+const couponController = require('../controllers/couponController')
 const multer = require("multer")
 const session = require("express-session")
 const config = require("../config/config")
 const auth = require("../middleware/adminAuth")
-const fs = require('fs')
+const fs = require('fs');
+const user_route = require("./userRoute");
 
 
 //session setup
@@ -90,7 +92,6 @@ admin_route.get('/block-user', auth.isLogin, adminController.blockUser)
 //product
 admin_route.get("/addproduct", auth.isLogin, productController.loadaddProduct)
 admin_route.get("/productlist", auth.isLogin, productController.loadProductList)
-admin_route.get('/delete-product', auth.isLogin, productController.deleteProduct)
 admin_route.get('/edit-product', auth.isLogin, productController.loadEditProduct)
 admin_route.get('/show-product', auth.isLogin, productController.loadShowProduct)
 admin_route.get('/unlist-product', auth.isLogin, productController.unlistProduct)
@@ -107,6 +108,13 @@ admin_route.get('/orderdetails', auth.isLogin, checkoutController.orderDetails)
 admin_route.get('/orderstatus', auth.isLogin, checkoutController.setStatus)
 
 
+//coupons
+admin_route.get('/getAddCoupon',auth.isLogin,couponController.getCoupon)
+admin_route.get('/viewCoupon',auth.isLogin,couponController.viewCoupon)
+admin_route.get('/viewCouponUsers/:couponId', auth.isLogin,couponController.viewCouponUsedUsers)
+admin_route.get('/couponstatus', auth.isLogin, couponController.unlistCoupon)
+
+
 //POST REQUESTS
 //category
 admin_route.post('/addcategory', auth.isLogin, categoryUpload.single('categoryImage'), categoryController.insertCategory);
@@ -118,6 +126,9 @@ admin_route.post('/edit-category', auth.isLogin, categoryUpload.single('category
 admin_route.post('/', adminController.verifyLogin)
 admin_route.post('/addproduct', auth.isLogin, uploadFields, productController.insertProduct);
 admin_route.post('/edit-product', auth.isLogin, uploadFields, productController.editProduct);
+
+//coupon
+admin_route.post('/addCoupon',couponController.postAddCoupon)
 
 
 

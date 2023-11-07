@@ -44,6 +44,33 @@
 
             </div>
             <div class="card">
+                <div class="row align-items-center mx-2 my-4">
+                    <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
+                      <div class="custom_select">
+                        <select class="form-select" id="filterSelect">
+                            <option value="all">Product status</option>
+                            <option value="all">All product</option>
+                            <option value="unblocked">Listed</option>
+                            <option value="blocked">Unlisted</option>
+                            <option value="instock">Instock</option>
+                            <option value="outofstock">Out of stock</option>
+                            
+                        </select>
+                    </div>
+                  </div>
+                    
+                      <div class="col-md-2 col-6">
+                          <div class="custom_select">
+                              <select class="form-select select-nice">
+                                  <option selected>Sort by Date</option>
+                                  
+                                  <option>Latest</option>
+                                  <option>Earliest</option>
+                                  
+                              </select>
+                          </div>
+                      </div>
+                  </div>
                 <div class="card-body">
                     <div class="row">
 
@@ -125,6 +152,34 @@
                     </div> <!-- .row // -->
                 </div> <!-- card body .// -->
             </div> <!-- card .// -->
+            <div class="pagination-area mt-30 mb-50">
+                <nav aria-label="Page navigation">
+                  <ul class="pagination justify-content-start">
+                    <% if (currentPage > 1) { %>
+                      <li class="page-item">
+                        <a class="page-link" href="?page=<%= currentPage - 1 %>">
+                          <i class="material-icons md-chevron_left"></i>
+                        </a>
+                      </li>
+                    <% } %>
+                
+                    <% for (let i = 1; i <= totalPages; i++) { %>
+                      <li class="page-item <% if (i === currentPage) { %>active<% } %>">
+                        <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                      </li>
+                    <% } %>
+                
+                    <% if (currentPage < totalPages) { %>
+                      <li class="page-item">
+                        <a class="page-link" href="?page=<%= currentPage + 1 %>">
+                          <i class="material-icons md-chevron_right"></i>
+                        </a>
+                      </li>
+                    <% } %>
+                  </ul>
+                </nav>
+              </div>
+              
         </section> <!-- content-main end// -->
 
         <footer class="main-footer font-xs">
@@ -142,15 +197,37 @@
             </div>
         </footer>
     </main>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-                      <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-                    <script>
-                      $(document).ready(function () {
-                   new DataTable('#products');
+    <script>
+// Get the filter select element
+const filterSelect = document.getElementById("filterSelect");
 
-                    })
-                     </script>
+filterSelect.addEventListener("change", function() {
+    const selectedOption = filterSelect.value;
+    let url = '/admin/productlist';
+
+    if (selectedOption === "blocked") {
+        url += '?status=unlisted';
+    } else if (selectedOption === "unblocked") {
+        url += '?status=listed';
+    } else if (selectedOption === "instock") {
+        url += '?status=instock';
+    } else if (selectedOption === "outofstock") {
+        url += '?status=outofstock';
+    }else if(selectedOption==="all"){
+        url += '?status=all';
+
+    }
+    console.log(selectedOption);
+
+    window.location.href = url;
+});
+
+
+
+        
+        
+        
+            </script>
     <script src="assetsB/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="assetsB/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="assetsB/js/vendors/select2.min.js"></script>

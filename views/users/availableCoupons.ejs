@@ -1,3 +1,8 @@
+
+
+
+
+
 <%- include('../layouts/header') %>
     <div class="page-wrapper">
         <%- include('../partials/ecomHeader1') %>
@@ -35,6 +40,42 @@
                                             <p>this is dashboard</p>
 
                                         </div>
+
+                                        <div class="tab-content">
+                                          <div class="tab-pane fade show active " id="tab-coupons" role="tabpanel"
+                                              aria-labelledby="tab-coupons-link">
+                                              <h4 class="text-center text-muted">Available Coupons</h4> <br>
+
+                                              <div class="row">
+                                                <% availableCoupons.forEach((coupon, index) => { %>
+                                                  <div class="col-md-6">
+                                                    <div class="card card-dashboard">
+                                                      <div class="card-body">
+                                                        <div class="text-center text-uppercase text-white off">
+                                                          <span>Flat</span>
+                                                          <% if (coupon.type === 'percentage') { %>
+                                                            <h1 class="mt-0"><%= coupon.discount %>% OFF</h1>
+                                                          <% } else { %>
+                                                            <h1 class="mt-0"><%= coupon.discount %> OFF</h1>
+                                                          <% } %>
+                                                        </div>
+                                                        <div class="px-5 mb-3">
+                                                          <div class="d-flex justify-content-center align-items-middle> 
+                                                            <p class="textToCopy" id="textToCopy<%= index %>"><%= coupon.code %></p>
+                                                            <button style=" border: none; background-color: rgba(255, 255, 255, 0);" class="copyButton" data-target="textToCopy<%= index %>"><i class="fa-solid fa-copy"></i></button>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                <% }) %>
+                                              </div>
+                                              
+                                              
+                                                 
+
+
+                                          </div>
 
                               
                                         <div class="tab-pane fade" id="tab-account" role="tabpanel"
@@ -105,85 +146,7 @@
 
                                         </div><!-- .End .tab-pane -->
 
-                                        <div class="tab-pane fade show active" id="tab-orders" role="tabpanel"
-                                            aria-labelledby="tab-orders-link">
-                                            <div class="card card-dashboard  " >
-                                              
-                                              
-                                                        <table class="table text-center " >
-                                                            <thead class="table-light">
-                                                                <tr>
-                                                             
-                                                               
-                                                                  
-                                                                    <th class="align-middle" scope="col">Date</th>
-                                                                    <th class="align-middle" scope="col">Total</th>
-                                                                    <th style="width: 150px;" class="align-middle" scope="col">Order Status</th>
-                                                                    <th class="align-middle" scope="col">Payment Method</th>
-                                                                    <th class="align-middle" scope="col">View Details</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                
-                                                                <% orders.forEach(function(order) { %>
-                                                                  
-                                                                <tr>
-                                                                
-                                                               
-                                                                 
-                                                                    <td>
-                                                                        <%= order.orderDate.toDateString() %>
-                                                                    </td>
-                                                                    <td>
-                                                                        ₹ <%= order.totalAmount %>
-                                                                    </td>
-                                                                    <td>
-                                                                        <% if (order.status === 'Pending') { %>
-                                                                            <span class="badge badge-pill badge-soft-warning"><%= order.status %></span>
-                                                                        <% } else if (order.status === 'Order Confirmed') { %>
-                                                                            <span class="badge badge-pill badge-soft-warning"><%= order.status %></span>
-                                                                        <% } else if (order.status === 'Shipped') { %>
-                                                                            <span class="badge badge-pill badge-soft-dark"><%= order.status %></span>
-                                                                        <% } else if (order.status === 'Out For Delivery') { %>
-                                                                            <span class="badge badge-pill badge-soft-dark"><%= order.status %></span>
-                                                                        <% } else if (order.status === 'Delivered') { %>
-                                                                            <span class="badge badge-pill badge-soft-success"><%= order.status %></span>
-                                                                        <% } else { %>
-                                                                            <span class="badge badge-pill badge-soft-danger"><%= order.status %></span>
-                                                                        <% } %>
-                                                                        
-                                                                        
-                                                                        
-                                                                    </td>
-                                                                    <td>
-                                                                        <i class="material-icons md-payment font-xxl text-muted mr-5"></i><%= order.paymentMethod %>
-                                                                    </td>
-                                                                    
-                                                                        
-                                                                        <td >
-                                                                            <a class="btn float-end btn-dark rounded font-xs" style="font-size: 10px;" href="/userorderdetails?orderId=<%= order._id.toString() %>">Details</a>
-                                                                        </td>
-                                                                    
-                                                                </tr>
-                                                                <% }); %>
-                                                            
-                                                    
-                                                          
-                                                            </tbody>
-                                                        </table>
-                                              
-    
-    
-                                                    
-                        
-                                              
-                                            </div>
-
-
-
-                                            
-
-                                        </div><!-- .End .tab-pane -->
+                          
 
                                         <div class="tab-pane fade" id="tab-track" role="tabpanel"
                                             aria-labelledby="tab-track-link">
@@ -765,5 +728,27 @@
             </div><!-- End .modal-content -->
         </div><!-- End .modal-dialog -->
     </div><!-- End .modal -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+document.querySelectorAll('.copyButton').forEach(button => {
+  button.addEventListener("click", () => {
+    const targetId = button.getAttribute("data-target");
+    const textToCopy = document.getElementById(targetId);
+    
+    const range = document.createRange();
+    range.selectNode(textToCopy);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    
+    document.execCommand("copy");
+    
+    window.getSelection().removeAllRanges();
+    
+    alert("Coupon code copied to clipboard: " + textToCopy.textContent);
+  });
+});
+
+    </script>
+    
     <%- include('../layouts/footer.ejs') %>
     

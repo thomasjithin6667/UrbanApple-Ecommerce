@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer')
 const Product = require('../models/productModel')
 const Category = require('../models/categoryModel');
+const Coupon = require('../models/couponModel')
 
 const securePassword = async (password) => {
     try {
@@ -341,43 +342,7 @@ const userLogout = async (req, res) => {
 
 
 
-//load Cart page
 
-const loadCart = async (req, res) => {
-    try {
-
-        const userData = await User.findById({ _id: req.session.user_id })
-        res.render('cart', { user: userData })
-    } catch (error) {
-        console.log(error.message)
-
-    }
-}
-
-
-//load wishlist page
-
-const loadWishlist = async (req, res) => {
-    try {
-        const userData = await User.findById({ _id: req.session.user_id })
-        res.render('wishlist', { user: userData })
-    } catch (error) {
-        console.log(error.message)
-
-    }
-}
-
-//load checkOut page
-
-const loadCheckout = async (req, res) => {
-    try {
-        const userData = await User.findById({ _id: req.session.user_id })
-        res.render('checkout', { user: userData })
-    } catch (error) {
-        console.log(error.message)
-
-    }
-}
 
 
 const forgotPassword = async (req, res) => {
@@ -729,7 +694,6 @@ const resendOTP = async (req, res) => {
 module.exports = {
     loadRegister,
     loadHome,
-
     insertUser,
     OTPVerification,
     loadOTPpage,
@@ -737,10 +701,6 @@ module.exports = {
     verifyLogin,
     loadUserProfile,
     userLogout,
-
-    loadCart,
-    loadWishlist,
-    loadCheckout,
     forgotPassword,
     sentPasswordOTPVerificationEmail,
     forgotPasswordOTP,
@@ -754,7 +714,6 @@ module.exports = {
     userforgotPasswordOTP,
     loadBlog,
     loadContact,
-
-    resendOTP
+     resendOTP
 
 }

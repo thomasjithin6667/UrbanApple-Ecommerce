@@ -19,7 +19,7 @@ try{
 
 
 const isAuthenticated = (req, res, next) => {
-    if (!req.session.user) {
+    if (!req.session.user_id) {
 
         req.session.originalUrl = '/userproductlist';
           return res.redirect('/login');
@@ -32,7 +32,7 @@ const isAuthenticated = (req, res, next) => {
 
 
 
-const isLogout= async(req,res,next)=>{
+const isHome= async(req,res,next)=>{
     try{
 
         if(req.session.user_id){
@@ -49,6 +49,25 @@ const isLogout= async(req,res,next)=>{
     
     }
 
+
+    const isLogout= async(req,res,next)=>{
+        try{
+    
+            if(req.session.user_id){
+               
+                res.redirect('/');
+            }else{
+    
+                next();
+            }
+        
+        }catch(error){
+            console.log(error.message);
+        }
+        
+        }
+    
+    
 
 
     
@@ -74,5 +93,6 @@ module.exports={
     isLogin,
     isLogout,
     isAuthenticated,
-    isLogoutStore
+    isLogoutStore,
+    isHome
 }

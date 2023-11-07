@@ -12,6 +12,9 @@ const addressController = require('../controllers/addressController')
 const cartController = require('../controllers/cartController')
 const checkoutController = require('../controllers/checkoutController')
 const productController = require('../controllers/productController')
+const wishlistController = require('../controllers/wishlistController')
+const couponController = require('../controllers/couponController')
+const pdfController = require('../controllers/pdfController')
 
 //session setup
 user_route.use(session({
@@ -52,11 +55,11 @@ const upload = multer({ storage: storage });
 //GET REQUESTS
 user_route.get('/register', userController.loadRegister);
 
-user_route.get('/', auth.isLogout, userController.loadHome)
+user_route.get('/', auth.isHome, userController.loadHome)
 user_route.get('/home', auth.isLogin, userController.loadHome)
 
 user_route.get('/otp-page', userController.loadOTPpage)
-user_route.get('/login', auth.isLogout, userController.loginLoad)
+user_route.get('/login', userController.loginLoad)
 user_route.get('/userProfile', auth.isLogin, userController.loadUserProfile)
 user_route.get('/logout', auth.isLogin, userController.userLogout)
 user_route.get('/forgotpassword', userController.forgotPassword)
@@ -79,16 +82,31 @@ user_route.get('/cart', auth.isLogin, cartController.getcart)
 
 
 //wishlist
-user_route.get('/wishlist', auth.isLogin, userController.loadWishlist)
+user_route.get('/wishlist', auth.isLogin,wishlistController.getWishlist)
+user_route.get('/addToWishlist/:productId', auth.isLogin,wishlistController.addToWishlist)
+user_route.get('/addToCartFromWishlist/:productId', auth.isLogin,wishlistController.addToCartFromWishlist)
+user_route.get('/removeItemFromWishlist/:productId', auth.isLogin,wishlistController.removeFromWishlist)
+
 
 //checkout
 user_route.get('/checkout', auth.isLogin, checkoutController.getCheckout)
 user_route.get('/orderPlaced', auth.isLogin, checkoutController.orderPlaced)
+user_route.get('/cancelOrder/:orderId',checkoutController.cancelOrder)
+user_route.get('/returnOrder/:orderId',checkoutController.returnOrder)
 
 //blogpage
 user_route.get('/blog', userController.loadBlog)
+
+
 //contact
 user_route.get('/contact', userController.loadContact)
+
+
+//coupon
+user_route.get('/availableCoupons', couponController.getAvailableCoupons)
+
+//Invoice
+user_route.get('/generate-invoice/:orderId',pdfController.generateInvoice)
 
 
 
@@ -114,12 +132,16 @@ user_route.post('/editaddress', auth.isLogin, addressController.editAddress);
 //cart
 user_route.post('/add-to-cart/:productId', auth.isAuthenticated, cartController.addtocart);
 user_route.post('/removeItemFromCart/:productId', auth.isLogin, cartController.deleteCart)
+user_route.put('/updateQuantity/:productId',cartController.updateQuantity)
 
 //checkout
 user_route.post('/postCheckout/:userId', auth.isLogin, checkoutController.postCheckout)
+user_route.post('/createOrder', checkoutController.OnlinePayment);
 //orders
 user_route.get('/userorderlist', auth.isLogin, checkoutController.userOrderlist)
 user_route.get('/userorderdetails', auth.isLogin, checkoutController.userOrderDetails)
+//coupon
+user_route.post('/applyCoupon',checkoutController.applyCoupon)
 
 
 

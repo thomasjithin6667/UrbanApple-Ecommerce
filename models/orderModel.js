@@ -15,6 +15,7 @@ const orderSchema = new mongoose.Schema({
   },
   deliveryDate: {
     type: Date,
+    default:null
   },
   status: {
     type: String,
@@ -22,7 +23,10 @@ const orderSchema = new mongoose.Schema({
   },
   totalAmount : Number,
   paymentMethod: String,
- 
+  paymentStatus: String, 
+  paymentTransactionId: String, 
+  paymentDate: Date, 
+  paymentAmount: Number, 
   items: [
     {
       product: {
