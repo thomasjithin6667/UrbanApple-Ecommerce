@@ -241,11 +241,46 @@ const getcart = async (req, res) => {
   };
 
 
+
+
+  const updateCartCount = async (req, res) => {
+    try {
+      const userId = req.session.user_id;
+      const productId = req.query.productId;
+      const newQuantity = parseInt(req.query.quantity);
+  
+      const existingCart = await Cart.findOne({ user: userId });
+      if (existingCart) {
+        const existingCartItem = existingCart.items.find(
+          (item) => item.product.toString() === productId
+        );
+  
+        if (existingCartItem) {
+          existingCartItem.quantity = newQuantity;
+          existingCart.total = existingCart.items.reduce(
+            (total, item) => total + (item.quantity || 0),
+            0
+          );
+  
+          await existingCart.save();
+        }
+  
+        res.json({ success: true });
+      } else {
+        res.json({ success: false, error: "Cart not found" });
+      }
+    } catch (error) {
+      console.error("Error updating cart:", error);
+      res.json({ success: false, error: "Internal server error" });
+    }
+  };
+
 module.exports = {
     addtocart,
     getcart,
     deleteCart,
-    updateQuantity 
+    updateQuantity ,
+    updateCartCount
  
 }
 

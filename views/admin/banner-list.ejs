@@ -1,0 +1,178 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:32:35 GMT -->
+
+<head>
+    <meta charset="utf-8">
+    <title>Admin Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/images/icons/apple-touch-icon.png" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/icons/favicon-16x16.png">
+    <!-- Template CSS -->
+    <link href="assetsB/css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <%- include('../partials/ecomAdminAside') %>
+        <main class="main-wrap">
+            <%- include('../partials/ecomAdminHeader') %>
+                <section class="content-main">
+                    <div class="content-header">
+                        <div>
+                            <h2 class="content-title card-title">Banners</h2>
+                            <p>Add, edit or delete a banners</p>
+                            <div style="height: 15px;" class="div">
+                                <% if (typeof message !=='undefined' ){ %>
+                                    <% if (typeof error==='undefined' ) { %>
+                                        <p style="color: rgb(0, 95, 219);">
+                                            <%= message %>
+                                        </p>
+                                        <% } else { %>
+                                            <p style="color: red;">
+                                                <%= error.message %>
+                                            </p>
+                                            <% } %>
+                                                <% } %>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                      
+            <div class="card">
+                <div class="row align-items-center mx-2 my-4">
+                    <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
+                      <div class="custom_select">
+                        <select class="form-select" id="filterSelect">
+                            <option value="all">Category status</option>
+                            <option value="all">All categories</option>
+                            <option value="unblocked">Listed</option>
+                            <option value="blocked">Unlisted</option>
+                            
+                        </select>
+                    </div>
+                  </div>
+                    
+                      <div class="col-md-2 col-6">
+                          <div class="custom_select">
+                              <select class="form-select select-nice">
+                                  <option selected>Sort by Date</option>
+                                  
+                                  <option>Latest</option>
+                                  <option>Earliest</option>
+                                  
+                              </select>
+                          </div>
+                      </div>
+                  </div>
+                <div class="card-body">
+                    <div class="row">
+
+                        <div class="col-md">
+                            <div class="table">
+
+
+             
+                                    <table  class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>image</th>
+                                                <th>Name</th>
+                                                <th>Description</th>
+                                                <th style="width: 70px;">Status</th>
+                                                <th class="text-end">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                 
+                                                <tr>
+                                                    <td>
+                                                        <img src=
+                                                            alt="Category Image" style="width: 45px; "
+                                                             />
+                                                    </td>
+                                                    <td>
+                                                  
+                                                    </td>
+                                                    <td>
+                                             
+                                                    </td>
+                                                    <td style="width: 70px;">
+                                                  
+                                                    </td>
+                                                    <td class="text-end">
+                                                        <div class="dropdown">
+                                                            <a href="#" data-bs-toggle="dropdown"
+                                                                class="btn btn-light rounded btn-sm font-sm"> <i
+                                                                    class="material-icons md-more_horiz"></i> </a>
+                                                            <div class="dropdown-menu">
+                                                                <a class="dropdown-item" >
+                                                                    
+                                                                   </a>
+                                                                <a class="dropdown-item" href=>Edit info</a>
+                                                          
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                             
+                                        </tbody>
+                                    </table>
+                                 
+
+                            </div>
+                        </div> <!-- .col// -->
+                    </div> <!-- .row // -->
+                </div> <!-- card body .// -->
+            </div>
+             
+
+
+
+                </section> <!-- content-main end// -->
+
+                <footer class="main-footer font-xs">
+                    <div class="row pb-30 pt-15">
+                        <div class="col-sm-6">
+                            <script>
+                                document.write(new Date().getFullYear())
+                            </script> ©, Evara - HTML Ecommerce Template .
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-sm-end">
+                                All rights reserved
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+        </main>
+        <script src="assetsB/js/vendors/jquery-3.6.0.min.js"></script>
+        <script src="assetsB/js/vendors/bootstrap.bundle.min.js"></script>
+        <script src="assetsB/js/vendors/select2.min.js"></script>
+        <script src="assetsB/js/vendors/perfect-scrollbar.js"></script>
+        <script src="assetsB/js/vendors/jquery.fullscreen.min.js"></script>
+        <script src="assetsB/js/vendors/chart.js"></script>
+        <script src="/public/assets/js/validation.js"></script>
+        <!-- Main Script -->
+        <script src="assetsB/js/main.js" type="text/javascript"></script>
+        <script src="assetsB/js/custom-chart.js" type="text/javascript"></script>
+</body>
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:32:57 GMT -->
+
+</html>

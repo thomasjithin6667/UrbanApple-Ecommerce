@@ -135,7 +135,7 @@
 
 
 
-                                       
+                                        <form class="pay-form" method="post">
                                             <input type="hidden" name="name" value="Shirt">
                                             <input type="hidden" name="amount" value="500">
                                             <input type="hidden" name="description" value="Shirt Buying">
@@ -270,7 +270,10 @@
                                                         </label>
 
                                                     </div>
-                                                   
+                                                    <div id="outOfStockAlert" class="alert alert-danger"
+                                                        style="display: none;">
+                                                        Some items in your cart are out of stock.
+                                                    </div>
 
                                                 </div>
                                                 <div class="caption">
@@ -283,7 +286,7 @@
                                                     <a href="/availableCoupons">View Available Coupons</a>
                                                 </div>
 
-                                                <button 
+                                                <button type="submit "
                                                     class="btn btn-primary btn-order btn-block mt-5">PLACE
                                                     ORDER</button>
 
@@ -291,7 +294,7 @@
                                     </div><!-- End .summary -->
                                 </aside><!-- End .col-lg-3 -->
                             </div><!-- End .row -->
-              
+                            </form>
                         </div><!-- End .container -->
                     </div><!-- End .checkout -->
                 </div><!-- End .page-content -->
@@ -629,62 +632,51 @@
                     }
                 } catch (error) {
                     console.error('Error applying coupon:', error);
-                    alert('Error applying coupon');
+                    alert('Coupon applied successfully!');
                 }
             });
         });
 
 
-        document.addEventListener('DOMContentLoaded', function () {
-        const codButton = document.getElementById('cod');
-        const applyCouponButton = document.getElementById('applyCouponButton');
 
-        codButton.addEventListener('click', function () {
-            placeOrder('Cash on delivery');
-        });
+        document.addEventListener("DOMContentLoaded", function(){
+    const codButton=document.getElementById("codButton");
+    const razorpayButton=document.getElementById("razorpayButton");
 
-        applyCouponButton.addEventListener('click', function () {
-            const couponCode = document.getElementById('couponCodeInput').value;
-            placeOrder('Online Payment', couponCode);
-        });
+    codButton.addEventListener("click", function (event){
+        event.preventDefault();
 
-        function placeOrder(paymentMethod, couponCode = null) {
-            const selectedAddress = document.querySelector('input[name="address"]:checked');
+        const selectedAddress = document.getElementById("selected_address").value;
+        const userCart = document.getElementById("userCart").value;
 
-            if (!selectedAddress) {
-                alert('Please select an address.');
-                return;
-            }
+        const requestBody = {
+        selected_address: selectedAddress,
+        userCart: userCart,
+      };
 
-            const addressId = selectedAddress.value;
-
-            const requestData = {
-                addressId: addressId,
-                paymentMethod: paymentMethod,
-                couponCode: couponCode
-            };
-
-            fetch('/cashondelivery', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(requestData),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                  
-                    window.location.href = '/orderPlaced';
-                } else {
-                    alert('Error occurred while placing order');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error occurred while placing order');
-            });
+            // Send the data to your server using the Fetch API
+            fetch("/codOrder", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      })
+      .then((response)=>{
+        if(!response){
+console.log("An error happened");
         }
+        else{
+            Swal.fire({
+  position: "top-center",
+  icon: "success",
+  title: "Order placed",
+  showConfirmButton: false,
+  timer: 1500
+});
+window.location.href="/orderPlaced";
+        }
+      });
     });
 
 
@@ -696,7 +688,6 @@
         const requestBody = {
         selected_address: selectedAddress,
         userCart: userCart,
-        
       };
             // Send the data to your server using the Fetch API
             fetch("/razorpayOrder", {
@@ -761,12 +752,7 @@
         }
     });
 });
-
-
-
-
-
-
+});
 
     </script>
 

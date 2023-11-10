@@ -172,7 +172,7 @@ const loadEditCategory = async (req, res) => {
 //edit category
 const editCategory = async (req, res) => {
     try {
-        const admin = req.session.adminData
+        const admin = req.session.adminData;
         const categoryId = req.body.category_id;
         const category = await Category.findById(categoryId);
         const updatedCategoryName = req.body.category;
@@ -180,22 +180,32 @@ const editCategory = async (req, res) => {
         const duplicateCategory = await Category.findOne({ _id: { $ne: categoryId }, category: { $regex: new RegExp(`^${updatedCategoryName}$`, 'i') } });
 
         if (duplicateCategory) {
-            res.render('edit-category', {categories:category,admin:admin,message: "Category with the same name already exists" });
+            res.render('edit-category', { categories: category, admin: admin, message: "Category with the same name already exists" });
+            return; 
         }
-
-        
 
         if (!category) {
-            res.render('edit-category', {categories:category,admin:admin, message: "Category not found" });
+            res.render('edit-category', { categories: category, admin: admin, message: "Category not found" });
+            return; 
         }
 
-        const updateFields = {
-            category: updatedCategoryName,
-            description: req.body.description,
-        };
+        const updateFields = {};
 
+    
+        if (req.body.category) {
+            updateFields.category = updatedCategoryName;
+        }
+        if (req.body.description) {
+            updateFields.description = req.body.description;
+        }
         if (req.file) {
             updateFields.image = req.file.filename;
+        }
+
+        if (Object.keys(updateFields).length === 0) {
+           
+            res.redirect('/admin/categorylist');
+            return; 
         }
 
         await Category.findByIdAndUpdate(categoryId, { $set: updateFields });

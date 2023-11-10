@@ -108,6 +108,10 @@ user_route.get('/availableCoupons', couponController.getAvailableCoupons)
 //Invoice
 user_route.get('/generate-invoice/:orderId',pdfController.generateInvoice)
 
+//wallet
+user_route.get('/wallet',userController.loadWallet)
+
+
 
 
 
@@ -132,16 +136,23 @@ user_route.post('/editaddress', auth.isLogin, addressController.editAddress);
 //cart
 user_route.post('/add-to-cart/:productId', auth.isAuthenticated, cartController.addtocart);
 user_route.post('/removeItemFromCart/:productId', auth.isLogin, cartController.deleteCart)
+user_route.put('/updateCart',cartController.updateCartCount)
 user_route.put('/updateQuantity/:productId',cartController.updateQuantity)
 
 //checkout
-user_route.post('/postCheckout/:userId', auth.isLogin, checkoutController.postCheckout)
+user_route.post('/postCheckouts', auth.isLogin, checkoutController.postCheckout)
 user_route.post('/createOrder', checkoutController.OnlinePayment);
+user_route.post('/razorpayOrder',checkoutController.razorpayOrder)
+user_route.post('/cashondelivery',checkoutController.cashOnDelivery)
 //orders
 user_route.get('/userorderlist', auth.isLogin, checkoutController.userOrderlist)
 user_route.get('/userorderdetails', auth.isLogin, checkoutController.userOrderDetails)
 //coupon
 user_route.post('/applyCoupon',checkoutController.applyCoupon)
+
+
+
+
 
 
 

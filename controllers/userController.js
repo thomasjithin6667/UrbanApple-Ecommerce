@@ -46,13 +46,64 @@ const loadRegister = async (req, res) => {
 
 }
 
+// const insertUser = async (req, res) => {
+//     try {
+//         const userExist = await User.findOne({ email: req.body.email });
+
+//         if (userExist) {
+//             res.render('registration', { message: "User already exists" });
+//         } else {
+//             const spassword = await securePassword(req.body.password);
+//             const user = new User({
+//                 name: req.body.name,
+//                 email: req.body.email,
+//                 mobile: req.body.mno,
+//                 password: spassword,
+//                 is_Admin: 0
+//             });
+
+//             const userData = await user.save();
+//             req.session.id2 = userData._id
+
+
+//             sentOTPVerificationEmail(req, res, req.body.email, userData._id);
+
+//             if (userData) {
+
+
+//                 res.render('otp-page', { user: userData });
+//             } else {
+//                 res.render('registration', { message: "Registration Failed" });
+//             }
+//         }
+//     } catch (error) {
+//         console.log(error.message);
+//     }
+// }
+
+
+
 const insertUser = async (req, res) => {
     try {
         const userExist = await User.findOne({ email: req.body.email });
+        req.session.referralCode= req.body.referralCode;
+        referralCode=req.session.referralCode
 
         if (userExist) {
             res.render('registration', { message: "User already exists" });
         } else {
+
+            const referrer = await User.findOne({ referralCode });
+            if (!referrer) {
+                return res.status(400).json({ message: 'Invalid referral code.' });
+            }
+    
+            if (referrer.referredUsers.includes(req.body.email)) {
+                return res.status(400).json({ message: 'Referral code has already been used by this email.' });
+            }
+
+
+
             const spassword = await securePassword(req.body.password);
             const user = new User({
                 name: req.body.name,
@@ -245,9 +296,30 @@ const OTPVerification = async (req, res) => {
                         const errorMessage = "Invalid code passed. Check your inbox";
                         return res.redirect(`/otp-page?error=${errorMessage}`);
                     } else {
+                        if(req.session.referralCode){
+                            await User.updateOne({ _id: userId }, { is_verified: 1 ,walletBalance:50});
+                            const referrer = await User.findOne({ referralCode });
+                            const user= await User.findOne({_id: userId})
+                            referrer.referredUsers.push(user.email);
+                            referrer.walletBalance += 100;
+                            await referrer.save();
+                            
+                        }else{
+                            await User.updateOne({ _id: userId }, { is_verified: 1 });
+
+
+                        }
+                        delete req.session.referralCode
                         delete req.session.otp
-                        await User.updateOne({ _id: userId }, { is_verified: 1 });
+                    
+                        
                         await UserOTPVerification.deleteMany({ userId });
+
+                       
+                 
+                        
+
+
                         res.render("otp-sucssespage")
                     }
                 }
@@ -627,6 +699,33 @@ const loadEditUser = async (req, res) => {
 }
 
 
+
+//load wallet page
+const loadWallet = async (req, res) => {
+
+    try {
+
+        const userData = await User.findById({ _id: req.session.user_id })
+
+        res.render('userWallet', { user: userData });
+
+
+
+    } catch (error) {
+
+        console.log(error.message);
+
+    }
+
+
+
+}
+
+
+
+
+
+
 const updateProfile = async (req, res) => {
 
     try {
@@ -714,6 +813,7 @@ module.exports = {
     userforgotPasswordOTP,
     loadBlog,
     loadContact,
-     resendOTP
+     resendOTP,
+     loadWallet
 
 }

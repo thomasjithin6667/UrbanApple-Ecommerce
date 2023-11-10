@@ -620,7 +620,9 @@ const productView = async (req, res) => {
 //delete the productImages individually
 const deleteProductImage = async (req, res) => {
   try {
+    const admin = req.session.adminData
     const productId = req.query.productId;
+    const categoriesData = await Category.find({});
     const imageIndex = parseInt(req.query.imageIndex);
     console.log(productId);
 
@@ -632,7 +634,8 @@ const deleteProductImage = async (req, res) => {
 
     await product.save();
 
-    return res.json({ message: 'Image deleted successfully' });
+ 
+    res.render('edit-product',{products:product,admin:admin,category:categoriesData})
   } catch (error) {
     return res.status(500).json({ message: 'Error deleting image', error: error.message });
   }

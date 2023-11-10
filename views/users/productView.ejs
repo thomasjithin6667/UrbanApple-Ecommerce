@@ -104,15 +104,20 @@
 
 
 
-                                        <div class="details-filter-row details-row-size">
-                                            <label for="qty">Qty:</label>
-                                            <div class="product-details-quantity">
-                                                <input type="number" id="qty" class="form-control" value="1" min="1"
-                                                    max="10" step="1" data-decimals="0" required>
-                                            </div><!-- End .product-details-quantity -->
-                                        </div><!-- End .details-filter-row -->
+                                        
 
 
+                                         
+                                        <% if(product.quantity !== 0){ %>
+                                            <div class="details-filter-row details-row-size">
+                                                <label for="qty">Qty:</label>
+                                                <div class="product-details-quantity">
+                                                    <input type="number" id="qty" class="form-control" value="1" min="1"
+                                                        max="10" step="1" data-decimals="0" required>
+                                                </div><!-- End .product-details-quantity -->
+                                            </div><!-- End .details-filter-row -->       
+
+                                           
 
 
                                         <div class="product-details-action">
@@ -124,8 +129,19 @@
                                                 <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add
                                                         to Wishlist</span></a>
 
-                                            </div><!-- End .details-action-wrapper -->
-                                        </div><!-- End .product-details-action -->
+                                            </div>
+                                        </div>
+                                            <%} else { %>
+                                                <div class="my-5" style="display: flex; align-items: center; color: red;">
+                                                    <p style="color: red; font-size: 14px;">Product out of stock</p>
+                                                </div>
+
+                                                <% } %>
+                                                
+
+
+                                        
+
 
                                         <div class="product-details-footer">
                                             <div class="product-cat">

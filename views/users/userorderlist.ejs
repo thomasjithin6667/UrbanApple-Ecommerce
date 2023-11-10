@@ -4,13 +4,7 @@
 
 
             <main class="main">
-                <div class="page-header text-center"
-                    style="background-image: url(https://i.postimg.cc/cHFQdYpq/Screenshot-2023-10-18-154232.png);background-position: 0px -60px ;">
-                    <div class="container">
-                        <h1 style="color: rgb(86, 86, 86);" class="page-title">welcome <%= user.name %>
-                        </h1>
-                    </div><!-- End .container -->
-                </div><!-- End .page-header -->
+
                 <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
                     <div class="container">
                         <ol class="breadcrumb">
@@ -139,17 +133,17 @@
                                                                     </td>
                                                                     <td>
                                                                         <% if (order.status === 'Pending') { %>
-                                                                            <span class="badge badge-pill badge-soft-warning"><%= order.status %></span>
+                                                                            <span class="text-warning"><%= order.status %></span>
                                                                         <% } else if (order.status === 'Order Confirmed') { %>
-                                                                            <span class="badge badge-pill badge-soft-warning"><%= order.status %></span>
+                                                                            <span class="text-warning"><%= order.status %></span>
                                                                         <% } else if (order.status === 'Shipped') { %>
-                                                                            <span class="badge badge-pill badge-soft-dark"><%= order.status %></span>
+                                                                            <span class="text-dark"><%= order.status %></span>
                                                                         <% } else if (order.status === 'Out For Delivery') { %>
-                                                                            <span class="badge badge-pill badge-soft-dark"><%= order.status %></span>
+                                                                            <span class="text-dark"><%= order.status %></span>
                                                                         <% } else if (order.status === 'Delivered') { %>
-                                                                            <span class="badge badge-pill badge-soft-success"><%= order.status %></span>
+                                                                            <span class="text-success"><%= order.status %></span>
                                                                         <% } else { %>
-                                                                            <span class="badge badge-pill badge-soft-danger"><%= order.status %></span>
+                                                                            <span class="text-danger"><%= order.status %></span>
                                                                         <% } %>
                                                                         
                                                                         

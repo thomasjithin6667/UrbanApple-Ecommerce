@@ -3,39 +3,37 @@ const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        require: true
+        required: true
     },
     image: {
         type: String,
-        require: true,
-        default:"userporfile.png"
+        required: true,
+        default: "userprofile.png"
     },
     email: {
         type: String,
-        require: true,
+        required: true,
     },
     mobile: {
         type: String,
-        require: true,
+        required: true,
     },
     password: {
         type: String,
-        require: true
+        required: true
     },
     is_verified: {
         type: Number,
         default: 0,
     },
-
     is_Admin: {
         type: Number,
         required: true,
         default: 0
     },
-  
     isBlocked: {
         type: Boolean,
-        require: true,
+        required: true,
         default: false,
     },
     createdDate: {
@@ -46,8 +44,27 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
-
+    referralCode: {
+        type: String,
+        default: generateRandomReferralCode,
+        unique: true, 
+    },
+    referredUsers: [{
+        type: String,
+        unique: true,
+    }],
 });
 
+function generateRandomReferralCode() {
+
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const codeLength = 6;
+    let referralCode = '';
+    for (let i = 0; i < codeLength; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        referralCode += characters.charAt(randomIndex);
+    }
+    return referralCode;
+}
 
 module.exports = mongoose.model('User', userSchema);

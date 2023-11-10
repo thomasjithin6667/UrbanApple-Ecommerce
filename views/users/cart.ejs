@@ -60,37 +60,25 @@
 												</div><!-- End .product -->
 											</td>
 											<td class="price-col">₹<%= cart[i].product.discountPrice %></td>
-
-                                            <td >
-                                       
-                                                  <div class="d-flex">
-
-                                                
-                                                    <button class="text-muted"  style="border: none; background-color: white;" onclick="decrementQuantity('<%= cart[i].product._id %>')">
-                                                      <i class="fas fa-minus"></i>
-                                                    </button>
-                          
-                                                    <input disabled class="text-center" id="quantity_<%= cart[i].product._id %>" min="0" name="quantity"
-                                                      value="<%= cart[i].quantity %>" max="2" style="width: 50px; height:30px;"
-                                                      data-product-id="<%= cart[i].product._id %>" />
-                          
-                                                    <button  class="text-muted"  style="border: none; background-color: white;" onclick="incrementQuantity('<%= cart[i].product._id %>')">
-                                                      <i class="fas fa-plus"></i>
-                                                    </button>
-                                                  </div>
-                                                
-                                            </td>
+                      <td class="quantity-col">
+                        <div class="cart-product-quantity">
+                            <input type="number" class="form-control" value="<%= cart[i].quantity %>" min="1" max="3" step="1" data-decimals="0" required onchange="updateCart('<%= cart[i].product._id %>', this.value)">
+                        </div>
+                    </td>
 
 
 
 										
-											<td class="total-col">₹<%= productotal[i] %></td>
+											<td class="total-col"> <% if (outOfStockError && cart[i].product.quantity < cart[i].quantity) { %>
+                        <label style="color: red;"> Out of Stock</label>
+                    <% } else { %>
+                      ₹<%= productotal[i] %>                    <% } %></td>
                                             
 
 
 
 
-											<td class="remove-col"><button class="btn-remove">
+											<td class="remove-col"><button  onsubmit="return confirm('Are you sure you want to Return <%= cart[i].product.name  %>');" class="btn-remove">
                                                 <form action="/removeItemFromCart/<%= cart[i].product._id %>" method="post">
                                                     <button type="submit"style="background: none;
                                                                             color: inherit;
@@ -124,8 +112,17 @@
                                         <table class="table table-summary">
                                             <tbody>
                                                 <tr class="summary-subtotal">
+                                                  <% if (outOfStockError ==true) { %>
+                                                  
                                                     <td>Subtotal:</td>
-                                                    <td>₹<%= subtotal %></td>
+                                                    <td>.............</td>
+          
+                                                <% } else { %>
+                                               
+                                                  <td>Subtotal:</td>
+                                                  <td>₹<%= subtotal %></td>     
+                                                        <% } %>
+          
                                                 </tr><!-- End .summary-subtotal -->
                                                 <tr class="summary-shipping">
                                                     <td>Shipping:</td>
@@ -160,12 +157,33 @@
                                                 </tr><!-- End .summary-shipping-estimate -->
     
                                                 <tr class="summary-total">
+                                                  <% if (outOfStockError ==true) { %>
+                                                  
                                                     <td>Total:</td>
-                                                    <td>₹<%= subtotalWithShipping %></td>
+                                                    <td>.............</td>
+          
+                                                <% } else { %>
+                                               
+                                                  <td>Total:</td>
+                                                    <td>₹<%= subtotalWithShipping %></td>   
+                                                        <% } %>
+                                                   
                                                 </tr><!-- End .summary-total -->
                                             </tbody>
                                         </table>
-                                        <a href="/checkout" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
+                                        <% if (outOfStockError ==true) { %>
+                                          <label style="color: red;">Some products in cart are Out of Stock</label>
+                                        
+                                          <button class="btn btn-block btn-outline-primary-2 disabled" disabled>PROCEED TO CHECKOUT</button>
+
+                                      <% } else { %>
+                                        <label style="visibility: hidden;">Some products in cart are Out of Stock</label>
+                                        <a href="/checkout" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>              <% } %>
+
+
+
+
+                                        
                                     </div><!-- End .summary -->
     
                                     <a href="/productlist" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
@@ -265,7 +283,7 @@
 
 
     
-
+<!-- 
 
     <script>
       // Function to update quantity via AJAX
@@ -347,7 +365,47 @@
       }
     });
     
-    </script>
+    </script> -->
+
+
+
+
+
+<script>
+  function updateCart(productId, newQuantity) {
+        fetch(`/updateCart?productId=${productId}&quantity=${newQuantity}`, {
+            method: 'PUT',
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                console.error('Failed to update cart:', data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error updating cart:', error);
+        });
+    }
+
+    function removeCartItem(productId) {
+    fetch(`/removeCartItem?productId=${productId}`, {
+        method: 'DELETE',
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            console.error('Failed to remove cart item:', data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error removing cart item:', error);
+    });
+}
+</script>
     
 
   

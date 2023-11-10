@@ -8,6 +8,7 @@ const checkoutController = require('../controllers/checkoutController')
 const productController = require('../controllers/productController')
 const categoryController = require('../controllers/categoryController')
 const couponController = require('../controllers/couponController')
+const bannerController = require('../controllers/bannerController')
 const multer = require("multer")
 const session = require("express-session")
 const config = require("../config/config")
@@ -81,6 +82,22 @@ const uploadFields = upload.fields([
 ]);
 
 
+//multer middleware for banner
+const bannerStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, '../public/assets/images/bannerImages'));
+  },
+  filename: function (req, file, cb) {
+    const name = Date.now() + '_' + file.originalname;
+    cb(null, name);
+  }
+});
+
+const bannerUpload = multer({ storage: bannerStorage });
+
+module.exports = bannerUpload;
+
+
 //GET REQUESTS
 //admin
 admin_route.get('/', adminController.loadAdminLogin)
@@ -115,6 +132,11 @@ admin_route.get('/viewCouponUsers/:couponId', auth.isLogin,couponController.view
 admin_route.get('/couponstatus', auth.isLogin, couponController.unlistCoupon)
 
 
+//banner
+admin_route.get('/banner-add',auth.isLogin,bannerController.loadAddBanner);
+admin_route.get('/banner-list',auth.isLogin,bannerController.loadBannerList);
+
+
 //POST REQUESTS
 //category
 admin_route.post('/addcategory', auth.isLogin, categoryUpload.single('categoryImage'), categoryController.insertCategory);
@@ -129,6 +151,9 @@ admin_route.post('/edit-product', auth.isLogin, uploadFields, productController.
 
 //coupon
 admin_route.post('/addCoupon',couponController.postAddCoupon)
+
+//banner
+admin_route.post('/banner-add', auth.isLogin, bannerUpload.single('image'), bannerController.addBanner);
 
 
 

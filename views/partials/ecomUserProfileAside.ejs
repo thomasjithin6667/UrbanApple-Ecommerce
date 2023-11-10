@@ -12,6 +12,9 @@
                 aria-selected="false">Account Details</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link" href="/wallet">Wallet</a>
+        </li>
+        <li class="nav-item">
            
             <a class="nav-link" 
             href="/availableCoupons" 
@@ -21,13 +24,9 @@
         <li class="nav-item">
             <a class="nav-link" 
                 href="/userorderlist"
-                aria-selected="false">Order History</a>
+                aria-selected="false">Orders</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" id="tab-track-link" data-toggle="tab"
-                href="#tab-track" role="tab" aria-controls="tab-track"
-                aria-selected="false">Track order</a>
-        </li>
+     
         <li class="nav-item">
             <a class="nav-link" 
                 href="/address?userId=<%= user._id.toString() %>" 
@@ -46,11 +45,7 @@
                 href="#tab-wishlist" role="tab" aria-controls="tab-wishlist"
                 aria-selected="false">Whislist</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" id="tab-wallet-link" data-toggle="tab"
-                href="#tab-wallet" role="tab" aria-controls="tab-wallet"
-                aria-selected="false">Wallet</a>
-        </li>
+    
 
         <li class="nav-item">
             <a class="nav-link" href="/logout">Sign Out</a>

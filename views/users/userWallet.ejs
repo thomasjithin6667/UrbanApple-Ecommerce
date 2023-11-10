@@ -24,22 +24,9 @@
 
                                 <div class="col-md-8 col-lg-10">
                                     <div class="tab-content">
-                                        <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel"
+                                        <div class="tab-pane fade  id="tab-dashboard" role="tabpanel"
                                             aria-labelledby="tab-dashboard-link">
-                                            <p>Hello, <strong><%=user.name%></strong>! Welcome back</p> 
-                                            <div class="div">
-                                            <div class="card card-dashboard">
-                                                <div class="card-body">
-                                                    <h3 class="card-title">Referral code</h3><!-- End .card-title --> <br>
-                                                    <p><strong><%=user.referralCode%></strong> Share your code by clicking here.</p><br>
-                                                </div>
-                                            </div>
-                                           
-
-
-                                           
-                                                
-                                            </div>
+                                            <p>this is dashboard</p>
 
                                         </div><!-- .End .tab-pane -->
 
@@ -74,7 +61,7 @@
                                                     </div> <!-- col.// -->
                                                     <aside class="col-lg-2">
                                                         <figure class="text-lg-center">
-                                                            <img  class="img-lg mb-3 img-avatar " src="/assets/images/userImages/<%=user.image%>" alt="User Photo">
+                                                            <img  class="img-lg mb-3 img-avatar " src="assets/images/userImages/<%=user.image%>" alt="User Photo">
                                                           
                                                         </figure>
                                                     </aside> <!-- col.// -->
@@ -299,9 +286,71 @@
                   
                                             </div><!-- End .container -->
                                         </div><!-- .End .tab-pane -->
-                                        <div class="tab-pane fade" id="tab-wallet" role="tabpanel"
+                                        <div class="tab-pane fade show active" id="tab-wallet" role="tabpanel"
                                             aria-labelledby="tab-wallet-link">
-                                            <p>Wallet</p>
+                                         
+                                            <div class="col-md-6 mt-5 ml-5">
+                                                <div class="card card-dashboard ">
+                                                  <div class="card-body ">
+                                                    <div class="text-center ">
+                                                 
+                                                       <h3 > <i class="fa-solid fa-wallet"></i> Wallet Balance:</h3>
+                                                  
+                                                    </div>
+                                                    <div class=" text-center  mb-3">
+                                                        <h5>   ₹ <%=user.walletBalance %></h5>
+                                                     
+                                                        
+                                                     
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+
+
+                                            <div class="row mt-5 ml-5">
+                                                <div class="col-lg-3">
+                                                    <div class="card card-body mb-4">
+                                                        <article class="icontext">
+                                                            <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
+                                                            <div class="text">
+                                                                <h6 class="mb-1 card-title"><i class="fa-solid fa-money-check"></i> Revenue</h6>
+                                                                <span>$13,456.5</span>
+                                                                <span class="text-sm">
+                                                                    Shipping fees are not included
+                                                                </span>
+                                                            </div>
+                                                        </article>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <div class="card card-body mb-4">
+                                                        <article class="icontext">
+                                                            <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-success material-icons md-local_shipping"></i></span>
+                                                            <div class="text">
+                                                                <h6 class="mb-1 card-title"> <i class="fa-solid fa-cart-shopping"></i> Orders</h6> <span>53.668</span>
+                                                                <span class="text-sm">
+                                                                    Excluding orders in transit
+                                                                </span>
+                                                            </div>
+                                                        </article>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <div class="card card-body mb-4">
+                                                        <article class="icontext">
+                                                            <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-qr_code"></i></span>
+                                                            <div class="text">
+                                                                <h6 class="mb-1 card-title"> <i class="fa-solid fa-gift"></i> Products</h6> <span>9.856</span>
+                                                                <span class="text-sm">
+                                                                    In 19 Categories in <br> transit
+                                                                </span>
+                                                            </div>
+                                                        </article>
+                                                    </div>
+                                                </div>
+                                    
+                                            </div>
                                         </div><!-- .End .tab-pane -->
                                         
                                     </div>
