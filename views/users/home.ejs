@@ -83,7 +83,7 @@
                             <% categories.forEach((category) => { %>
                                 <% if (category.isListed) { %>
                                     <div class="col-6 col-sm-4 col-lg-2">
-                                        <a href="category.html" class="cat-block">
+                                        <a href="/productlist?sortBy=priceLowToHigh&qty=1&category=<%= category.category %>&price=all" class="cat-block">
                                             <figure>
                                                 <span>
                                                     <img src="assets/images/categoryImages/<%= category.image %>" alt="Category image">

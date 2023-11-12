@@ -351,6 +351,28 @@
                                                 </div>
                                     
                                             </div>
+
+
+                                            <div class="card mt-3">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Recent Transactions</h5>
+                                                    <ul class="list-group">
+                                                        <% transaction.forEach(transaction => { %>
+                                                        <li class="list-group-item">
+                                                            <strong>Transaction ID:</strong> <%= transaction._id %><br>
+                                                            <strong>Description:</strong> <%= transaction.description %><br>
+                                                            <strong>Date:</strong> <%= transaction.date.toDateString()%>
+                                                            <strong>Time:</strong> <%= transaction.date.toLocaleTimeString()%>
+                                                            <% if (transaction.type === 'credit') { %>
+                                                            <span class="badge badge-success float-right">₹<%= transaction.amount.toFixed(2) %></span>
+                                                            <% } else if (transaction.type === 'debit') { %>
+                                                            <span class="badge badge-danger float-right">-₹<%= transaction.amount.toFixed(2) %></span>
+                                                            <% } %>
+                                                        </li>
+                                                        <% }); %>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </div><!-- .End .tab-pane -->
                                         
                                     </div>

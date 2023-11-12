@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     image: {
         type: String,
         required: true,
-        default: "userprofile.png"
+        default:"1699808607818_userporfile.png"
     },
     email: {
         type: String,

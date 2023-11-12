@@ -29,7 +29,12 @@
                                         </ul>
                                         <p class="text-primary">Expected Delivery: Within 2-4 days</p>
                                         <p>A confirmation email has been sent to <strong><%=user.email%></strong></p>
-                                        <a href="/home" class="btn btn-primary btn-lg m-4">Continue Shopping</a>
+                                        <div class="d-flex">
+                                        <a href="/home"  class="btn btn-outline-primary-2 m-4" >Continue Shopping</a>
+                                        <a class="btn btn-outline-primary-2 m-4"  href="/userorderdetails?orderId=<%= order._id.toString() %>">Order Details</a>
+                                        <a class="btn btn-outline-primary-2 m-4" href="/generate-invoice/<%= order._id %>">Invoice</a>
+                                    </div>
+
                                     </div>
                                 </div>
                             </div>

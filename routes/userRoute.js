@@ -144,6 +144,7 @@ user_route.post('/postCheckouts', auth.isLogin, checkoutController.postCheckout)
 user_route.post('/createOrder', checkoutController.OnlinePayment);
 user_route.post('/razorpayOrder',checkoutController.razorpayOrder)
 user_route.post('/cashondelivery',checkoutController.cashOnDelivery)
+user_route.post('/walletpayment',checkoutController.walletPayment)
 //orders
 user_route.get('/userorderlist', auth.isLogin, checkoutController.userOrderlist)
 user_route.get('/userorderdetails', auth.isLogin, checkoutController.userOrderDetails)

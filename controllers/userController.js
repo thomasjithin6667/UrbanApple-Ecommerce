@@ -5,6 +5,7 @@ const nodemailer = require('nodemailer')
 const Product = require('../models/productModel')
 const Category = require('../models/categoryModel');
 const Coupon = require('../models/couponModel')
+const Transaction = require('../models/transactionModel')
 
 const securePassword = async (password) => {
     try {
@@ -46,63 +47,32 @@ const loadRegister = async (req, res) => {
 
 }
 
-// const insertUser = async (req, res) => {
-//     try {
-//         const userExist = await User.findOne({ email: req.body.email });
-
-//         if (userExist) {
-//             res.render('registration', { message: "User already exists" });
-//         } else {
-//             const spassword = await securePassword(req.body.password);
-//             const user = new User({
-//                 name: req.body.name,
-//                 email: req.body.email,
-//                 mobile: req.body.mno,
-//                 password: spassword,
-//                 is_Admin: 0
-//             });
-
-//             const userData = await user.save();
-//             req.session.id2 = userData._id
-
-
-//             sentOTPVerificationEmail(req, res, req.body.email, userData._id);
-
-//             if (userData) {
-
-
-//                 res.render('otp-page', { user: userData });
-//             } else {
-//                 res.render('registration', { message: "Registration Failed" });
-//             }
-//         }
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// }
-
 
 
 const insertUser = async (req, res) => {
     try {
         const userExist = await User.findOne({ email: req.body.email });
-        req.session.referralCode= req.body.referralCode;
-        referralCode=req.session.referralCode
+        req.session.referralCode = req.body.referralCode || null; 
+        const referralCode = req.session.referralCode;
 
         if (userExist) {
             res.render('registration', { message: "User already exists" });
         } else {
+            let referrer;
 
-            const referrer = await User.findOne({ referralCode });
-            if (!referrer) {
-                return res.status(400).json({ message: 'Invalid referral code.' });
+            if (referralCode) {
+                referrer = await User.findOne({ referralCode });
+
+                if (!referrer) {
+                   
+                    res.render('registration', { message: 'Invalid referral code.' });
+                }
+
+                if (referrer.referredUsers.includes(req.body.email)) {
+                  
+                    res.render('registration', { message:  'Referral code has already been used by this email.'  });
+                }
             }
-    
-            if (referrer.referredUsers.includes(req.body.email)) {
-                return res.status(400).json({ message: 'Referral code has already been used by this email.' });
-            }
-
-
 
             const spassword = await securePassword(req.body.password);
             const user = new User({
@@ -114,14 +84,11 @@ const insertUser = async (req, res) => {
             });
 
             const userData = await user.save();
-            req.session.id2 = userData._id
-
+            req.session.id2 = userData._id;
 
             sentOTPVerificationEmail(req, res, req.body.email, userData._id);
 
             if (userData) {
-
-
                 res.render('otp-page', { user: userData });
             } else {
                 res.render('registration', { message: "Registration Failed" });
@@ -130,7 +97,7 @@ const insertUser = async (req, res) => {
     } catch (error) {
         console.log(error.message);
     }
-}
+};
 
 
 
@@ -219,10 +186,9 @@ const sentOTPVerificationEmail = async (req, res, email, _id) => {
     try {
         const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
         req.session.otp = otp;
-        console.log(otp);
-
-        console.log("this is pto" + req.session.otp);
-        console.log("this is emial" + email);
+    
+        console.log("the otp is  " + req.session.otp);
+        console.log("for the email " + email);
 
 
         const mailOptions = {
@@ -279,7 +245,7 @@ const OTPVerification = async (req, res) => {
 
             if (userOTPVerificationRecords.length <= 0) {
                 await UserOTPVerification.deleteMany({ userId });
-                const errorMessage = "invalid code. Please request again";
+                const errorMessage = "Invalid code. Please request again.";
                 return res.redirect(`/otp-page?error=${errorMessage}`);
             } else {
                 const { expiresAt } = userOTPVerificationRecords[0];
@@ -296,31 +262,43 @@ const OTPVerification = async (req, res) => {
                         const errorMessage = "Invalid code passed. Check your inbox";
                         return res.redirect(`/otp-page?error=${errorMessage}`);
                     } else {
-                        if(req.session.referralCode){
-                            await User.updateOne({ _id: userId }, { is_verified: 1 ,walletBalance:50});
-                            const referrer = await User.findOne({ referralCode });
-                            const user= await User.findOne({_id: userId})
+                        if (req.session.referralCode) {
+                            await User.updateOne({ _id: userId }, { is_verified: 1, walletBalance: 50 });
+                            const referrer = await User.findOne({ referralCode: req.session.referralCode });
+                            const user = await User.findOne({ _id: userId });
                             referrer.referredUsers.push(user.email);
                             referrer.walletBalance += 100;
                             await referrer.save();
-                            
-                        }else{
-                            await User.updateOne({ _id: userId }, { is_verified: 1 });
 
+                            const referredUserTransaction = new Transaction({
+                                user: referrer._id,  
+                                amount: 100,
+                                type: 'Credit',  
+                                date: Date.now(),
+                                description: 'Referral Bonus',
+                            });
+                            const referrerTransaction = new Transaction({
+                                user: userId,
+                                amount:50,
+                                type: 'Credit',  
+                                date: Date.now(),
+                                description: 'Referral Bonus',
+                            });
+                            await referredUserTransaction.save();
+                            await referrerTransaction.save();
 
-                        }
-                        delete req.session.referralCode
-                        delete req.session.otp
                     
-                        
+
+                        } else {
+                            await User.updateOne({ _id: userId }, { is_verified: 1 });
+                        }
+
+                        delete req.session.referralCode;
+                        delete req.session.otp;
+
                         await UserOTPVerification.deleteMany({ userId });
 
-                       
-                 
-                        
-
-
-                        res.render("otp-sucssespage")
+                        res.render("otp-successpage");
                     }
                 }
             }
@@ -330,6 +308,7 @@ const OTPVerification = async (req, res) => {
         return res.redirect(`/otp-page?error=${errorMessage}`);
     }
 };
+
 
 
 //login user methods
@@ -706,8 +685,9 @@ const loadWallet = async (req, res) => {
     try {
 
         const userData = await User.findById({ _id: req.session.user_id })
+        const transaction = await Transaction.find({user : req.session.user_id}).sort({date : -1});
 
-        res.render('userWallet', { user: userData });
+        res.render('userWallet', { user: userData,transaction:transaction});
 
 
 

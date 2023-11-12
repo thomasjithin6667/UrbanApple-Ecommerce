@@ -254,25 +254,32 @@
 
                                                 <div class="payment-method">
                                                     <div class="input-radio">
-                                                        <input type="radio" name="payment" id="cod"
-                                                            value="Cash on delivery" required>
+                                                        <input type="radio" name="payment" id="cod" value="Cash on delivery" required>
                                                         <label for="cod">
                                                             <span></span>
                                                             Cash on delivery
                                                         </label>
                                                     </div>
                                                     <div class="input-radio">
-                                                        <input type="radio" name="payment" value="Online Payment"
-                                                            id="payment-3">
-                                                        <label for="payment-3">
+                                                        <input type="radio" name="payment" value="Online Payment" id="OnlinePayment">
+                                                        <label for="OnlinePayment">
                                                             <span></span>
                                                             Online Payment
                                                         </label>
-
                                                     </div>
-                                                   
 
-                                                </div>
+                                                  
+                                                    <div class="input-radio">
+                                                        <% if (user.walletBalance >= subtotalWithShipping) { %>
+                                                            <input type="radio" name="payment" value="Wallet Payment" id="WalletPayment">
+                                                            <label for="WalletPayment">
+                                                                <span></span>
+                                                                Pay via Wallet
+                                                            </label>
+                                                        <% } %>
+                                                    </div>
+                                                    
+                                                </div> <br>
                                                 <div class="caption">
                                                     <div>
                                                         <input class="form-control" type="text" name="couponCode"
@@ -282,10 +289,14 @@
                                                     </div>
                                                     <a href="/availableCoupons">View Available Coupons</a>
                                                 </div>
+                                                <button id="placeOrderButton" class="btn btn-primary btn-order btn-block mt-5">PLACE ORDER</button>
+                                                <button id="razorPayButton" class="btn btn-primary btn-order btn-block mt-5">ONLINE PAYMENT</button>
 
-                                                <button 
-                                                    class="btn btn-primary btn-order btn-block mt-5">PLACE
-                                                    ORDER</button>
+
+                                                <% if (user.walletBalance >= subtotalWithShipping) { %>
+                                                    <button id="walletButton" class="btn btn-primary btn-order btn-block mt-5">WALLET PAY</button>
+                                                <% } %>
+                                              
 
 
                                     </div><!-- End .summary -->
@@ -573,194 +584,286 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
+ 
 
     <script>
 
-        document.addEventListener('DOMContentLoaded', async function () {
-            const applyCouponButton = document.getElementById('applyCouponButton');
-            const couponCodeInput = document.getElementById('couponCodeInput');
-            const orderTotalElement = document.getElementById('order-total');
-            const couponInfo = document.getElementById('couponInfo')
 
-            applyCouponButton.addEventListener('click', async function (event) {
-                event.preventDefault();
-                const couponCode = couponCodeInput.value;
+const codRadio = document.getElementById('cod');
+const onlinePaymentRadio = document.getElementById('OnlinePayment');
+const walletPaymentRadio = document.getElementById('WalletPayment');
 
-                try {
-                    const response = await fetch('/applyCoupon', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ couponCode }),
-                    });
+const placeOrderButton = document.getElementById('placeOrderButton');
+const razorPayButton = document.getElementById('razorPayButton');
+const walletButton = document.getElementById('walletButton');
 
-                    if (!response.ok) {
-                        throw new Error('Coupon application failed');
-                    }
+// Function to show/hide buttons based on the selected radio button
+function updateButtonsVisibility() {
+    placeOrderButton.style.display = codRadio.checked ? 'block' : 'none';
+    razorPayButton.style.display = onlinePaymentRadio.checked ? 'block' : 'none';
 
-                    const data = await response.json();
+    // Check if the walletPaymentRadio exists before accessing its properties
+    if (walletPaymentRadio) {
+        walletButton.style.display = walletPaymentRadio.checked ? 'block' : 'none';
+    }
+}
 
-                    if (data.error) {
-                        alert(data.error);
-                    } else {
-                        const discountedTotal = data.discountedTotal;
-                        const normalPrice = parseFloat(orderTotalElement.innerHTML.replace("₹", ""));
-                        const diffrence = (normalPrice - discountedTotal).toFixed(0);
+// Attach the update function to the change event of the radio buttons
+codRadio.addEventListener('change', updateButtonsVisibility);
+onlinePaymentRadio.addEventListener('change', updateButtonsVisibility);
 
-                        couponInfo.innerText = `Coupon Discount Applied ₹${diffrence} off`
-                        orderTotalElement.innerText = `₹${discountedTotal}`;
+// Check if walletPaymentRadio exists before adding the event listener
+if (walletPaymentRadio) {
+    walletPaymentRadio.addEventListener('change', updateButtonsVisibility);
+}
 
-              
-                        const updatedSubtotalResponse = await fetch('/updateSubtotal', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ subtotal: discountedTotal }),
-                        });
+// Call the function initially to set the initial state
+updateButtonsVisibility();
+        
+document.addEventListener('DOMContentLoaded', function () {
+    const placeOrderButton = document.getElementById('placeOrderButton');
+    const applyCouponButton = document.getElementById('applyCouponButton');
+    const couponCodeInput = document.getElementById('couponCodeInput');
+    const orderTotalElement = document.getElementById('order-total');
+    const couponInfo = document.getElementById('couponInfo');
+    const codButton = document.getElementById('cod');
 
-                        if (!updatedSubtotalResponse.ok) {
-                            throw new Error('Subtotal update failed');
-                        }
+    razorPayButton.addEventListener('click', function () {
+    const couponCode = couponCodeInput.value;
+    placeOnline('Pay online', couponCode);
+});
+   
 
-                        alert(errorMessage);
-                    }
-                } catch (error) {
-                    console.error('Error applying coupon:', error);
-                    alert('Error applying coupon');
-                }
-            });
+applyCouponButton.addEventListener('click', async function (event) {
+    event.preventDefault();
+    const couponCode = couponCodeInput.value;
+
+    if (couponCode.trim() === '') {
+        alert('Please enter a coupon code');
+        return; 
+    }
+
+    try {
+        const response = await fetch('/applyCoupon', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ couponCode }),
         });
 
-
-        document.addEventListener('DOMContentLoaded', function () {
-        const codButton = document.getElementById('cod');
-        const applyCouponButton = document.getElementById('applyCouponButton');
-
-        codButton.addEventListener('click', function () {
-            placeOrder('Cash on delivery');
-        });
-
-        applyCouponButton.addEventListener('click', function () {
-            const couponCode = document.getElementById('couponCodeInput').value;
-            placeOrder('Online Payment', couponCode);
-        });
-
-        function placeOrder(paymentMethod, couponCode = null) {
-            const selectedAddress = document.querySelector('input[name="address"]:checked');
-
-            if (!selectedAddress) {
-                alert('Please select an address.');
-                return;
-            }
-
-            const addressId = selectedAddress.value;
-
-            const requestData = {
-                addressId: addressId,
-                paymentMethod: paymentMethod,
-                couponCode: couponCode
-            };
-
-            fetch('/cashondelivery', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(requestData),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                  
-                    window.location.href = '/orderPlaced';
-                } else {
-                    alert('Error occurred while placing order');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error occurred while placing order');
-            });
+        if (!response.ok) {
+            throw new Error('Coupon application failed');
         }
-    });
+
+        const data = await response.json();
+
+        if (data.errorMessage) {
+            alert('Coupon error: ' + data.errorMessage);
+        } else {
+           
+            const discountedTotal = data.discountedTotal;
+            const normalPrice = parseFloat(orderTotalElement.innerHTML.replace("₹", ""));
+            const difference = (normalPrice - discountedTotal).toFixed(0);
+
+            couponInfo.innerText = `Coupon Discount Applied ₹${difference} off`;
+            orderTotalElement.innerText = `₹${discountedTotal}`;
+            alert("Coupon applied successfully");
+        }
+    } catch (error) {
+        console.error('Error applying coupon:', error);
+        alert('Error applying coupon');
+    }
+});
+
+
+    placeOrderButton.addEventListener('click', function () {
+    const couponCode = couponCodeInput.value;
+    placeOrder('Cash on delivery', couponCode);
+});
+
+    
+    function placeOrder(paymentMethod, couponCode ) {
+        const selectedAddress = document.querySelector('input[name="address"]:checked');
+
+        if (!selectedAddress) {
+            alert('Please select an address.');
+            return;
+        }
+
+        const address = selectedAddress.value;
+
+        const requestData = {
+            address: address,
+            paymentMethod: paymentMethod,
+            couponCode: couponCode
+        };
+
+        fetch('/cashondelivery', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = '/orderPlaced';
+            } else {
+                alert('Error occurred while placing order');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error occurred while placing order');
+        });
+    }
+
+
 
 
 //razorpay button
-    razorpayButton.addEventListener("click", function (event){
-        event.preventDefault();
-        const selectedAddress = document.getElementById("selected_address").value;
-        const userCart = document.getElementById("userCart").value;
-        const requestBody = {
-        selected_address: selectedAddress,
-        userCart: userCart,
-        
-      };
-            // Send the data to your server using the Fetch API
-            fetch("/razorpayOrder", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-    })
-      .then((response)=>{
-        if(response.ok){
-            return response.json();
-        }else{
-            console.log("An error happened");        
-        }
-    })
-    .then((data)=>{
-        if (data && data.order) {
-            const order=data.order;
-            const orderId = order.id;
-            const amount= order.amount;
-            console.log(orderId);
-            var options = {
-        "key": "rzp_test_hF6WGmggeA2qso", // Enter the Key ID generated from the Dashboard
-        "amount": amount*100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-        "currency": "INR",
-        "name": "Joe",
-        "description": "Test Transaction",
-        "image": "",
-        "order_id": orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-        "handler": function (response){
-            alert(response.razorpay_payment_id);
-            alert(response.razorpay_order_id);
-            alert(response.razorpay_signature)
-        },
-        "prefill": {
-            "name": "Joe",
-            "email": "joestephenk10@example.com",
-            "contact": "9207149607"
-        },
-        "notes": {
-            "address": "Razorpay Corporate Office"
-        },
-        "theme": {
-            "color": "#3399cc"
-        }
-    };
-    var rzp1 = new Razorpay(options);
-    rzp1.on('payment.failed', function (response){
-            alert(response.error.code);
-            alert(response.error.description);
-            alert(response.error.source);
-            alert(response.error.step);
-            alert(response.error.reason);
-            alert(response.error.metadata.order_id);
-            alert(response.error.metadata.payment_id);
-    });
-    document.getElementById('razorpayButton').onclick = function(e){
-        rzp1.open();
-        e.preventDefault();
+
+
+function placeOnline(paymentMethod, couponCode) {
+
+
+
+
+
+    const selectedAddress = document.querySelector('input[name="address"]:checked');
+
+    if (!selectedAddress) {
+        alert('Please select an address.');
+        return;
     }
+
+    const address = selectedAddress.value;
+
+    const requestData = {
+        address: address,
+        paymentMethod: paymentMethod,
+        couponCode: couponCode
+    };
+
+    fetch('/razorpayOrder', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData),
+    })
+    .then((response) => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Network response was not ok');
         }
+    })
+    .then((data) => {
+    if (data && data.order) {
+        const order = data.order;
+        const orderId = order.id;
+        const amount = order.amount;
+
+        var options = {
+            key: "rzp_test_gwxVdrdkgotQGE",
+            amount: amount * 100,
+            currency: "INR",
+            name: "Applestore",
+            description: "Test Transaction",
+            image: "",
+            order_id: orderId,
+            handler: function (response) {
+                console.log(response);
+                if (response.razorpay_payment_id) {
+                    alert('Payment successful!');
+                    window.location.href = '/orderPlaced';
+
+                } else {
+                    alert(response.error.code);
+                    alert(response.error.description);
+                    alert(response.error.source);
+                    alert(response.error.step);
+                    alert(response.error.reason);
+                    alert(response.error.metadata.order_id);
+                    alert(response.error.metadata.payment_id);
+                }
+            },
+            prefill: {
+                name: "AppleStore",
+                email: "Applestore@gmail.com",
+                contact: "9656816629"
+            },
+            notes: {
+                address: "Razorpay Corporate Office"
+            },
+            theme: {
+                color: "#3399cc"
+            }
+        };
+
+        var rzp1 = new Razorpay(options);
+
+        document.getElementById('razorPayButton').onclick = function (e) {
+            rzp1.open();
+            e.preventDefault();
+        };
+    }
+})
+
+    .catch((error) => {
+        console.log('Fetch error:', error.message);
     });
+}
+
 });
+
+
+
+walletButton.addEventListener('click', function () {
+    const couponCode = couponCodeInput.value;
+    placeOrderWallet('wallet', couponCode);
+});
+
+    
+    function placeOrderWallet(paymentMethod, couponCode ) {
+        const selectedAddress = document.querySelector('input[name="address"]:checked');
+
+        if (!selectedAddress) {
+            alert('Please select an address.');
+            return;
+        }
+
+        const address = selectedAddress.value;
+
+        const requestData = {
+            address: address,
+            paymentMethod: paymentMethod,
+            couponCode: couponCode
+        };
+
+        fetch('/walletpayment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = '/orderPlaced';
+            } else {
+                alert('Error occurred while placing order');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error occurred while placing order');
+        });
+    }
 
 
 

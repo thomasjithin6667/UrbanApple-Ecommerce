@@ -55,7 +55,7 @@
     
                         <div class="m-4">
                             <label for="image1">Image 1:</label>
-                            <img id="imgView<%= 0 %>" src="public/assets/images/productImages/<%= products.productImages[0] %>" alt=""><br>
+                            <img id="imgView<%= 0 %>" src="public/assets/images/productImages/<%= products.productImages[0] %>" alt="" class="border rounded mt-3"><br>
                             <div class="d-flex justify-content-around">
                             <label class="edit-icon" for="fileInput1">
                           
@@ -71,7 +71,7 @@
                         <br>
                         <div class="m-4 ">
                         <label for="image2">Image 2:</label>
-                        <img id="imgView<%= 1 %>" src="public/assets/images/productImages/<%= products.productImages[1] %>" alt="">
+                        <img id="imgView<%= 1 %>" src="public/assets/images/productImages/<%= products.productImages[1] %>" alt="" class="border rounded mt-3">
                         <div class="d-flex justify-content-around">
                             <label class="edit-icon" for="fileInput2">
                           
@@ -82,12 +82,12 @@
                             </label>
                         </div>
 
-                        <input id="fileInput2"  class="form-control hidden" name="image2"  type="file" onchange="viewImage(event,1)" value="<%= products.productImages[1] %>">
+                        <input id="fileInput2"  class="form-control hidden" name="image2"  type="file" onchange="viewImage(event,1)" value="<%= products.productImages[1] %>" >
                     </div>
                         <br>
                         <div class="m-4 ">
                         <label for="image3">Image 3:</label>
-                        <img id="imgView<%= 2 %>" src="public/assets/images/productImages/<%= products.productImages[2] %>" alt="">
+                        <img id="imgView<%= 2 %>" src="public/assets/images/productImages/<%= products.productImages[2] %>" alt="" class="border rounded mt-3">
                         <div class="d-flex justify-content-around">
                             <label class="edit-icon" for="fileInput3">
                           
@@ -102,7 +102,7 @@
                         <br>
                         <div class="m-4 ">
                         <label for="image4">Image 4:</label>
-                        <img id="imgView<%= 3 %>" src="public/assets/images/productImages/<%= products.productImages[3] %>" alt="">
+                        <img id="imgView<%= 3 %>" src="public/assets/images/productImages/<%= products.productImages[3] %>" alt="" class="border rounded mt-3">
                         <div class="d-flex justify-content-around">
                             <label class="edit-icon" for="fileInput4">
                           

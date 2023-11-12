@@ -40,6 +40,90 @@
                 <% if (typeof message !== 'undefined' && message) { %>
                     <p style="color: rgb(0, 125, 209);" id="message"><%= message %></p>
                 <% } %>
+
+
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>Media</h5>
+                    </div>
+                    <div class="card-body d-flex">
+    
+                        <div class="m-4">
+                            <label for="image1">Image 1:</label>
+                            <img id="imgView<%= 0 %>" src="../../public/assets/images/productImages/placeholder.jpg" alt="" class="border rounded mt-3"><br>
+                            <div class="d-flex justify-content-around">
+                            <label class="edit-icon text-primary" for="fileInput1">
+                          
+                                <i class="fa fa-pencil" ></i> Add
+                            </label>
+                          
+                            <div class="edit-icon text-danger" onclick="deleteImage(event, 0)">
+                                <a href="#" class="text-muted"> <i class="fa fa-close" aria-hidden="true"></i> Delete</a>
+                            </div>
+    
+                        </div>
+                            <input id="fileInput1" class="form-control hidden" name="image1" type="file" onchange="viewImage(event, 0)" value="">
+                        </div>
+                        <br>
+                        <div class="m-4 ">
+                        <label for="image2">Image 2:</label>
+                        <img id="imgView<%= 1 %>" src="../../public/assets/images/productImages/placeholder.jpg"alt="" class="border rounded mt-3">
+                        <div class="d-flex justify-content-around">
+                            <label class="edit-icon text-primary" for="fileInput2">
+                          
+                                <i class="fa fa-pencil" aria-hidden="true"></i> Add
+                            </label>
+                            <div class="edit-icon text-danger" onclick="deleteImage(event, 1)">
+                                <a href="#" class="text-muted"> <i class="fa fa-close" aria-hidden="true"></i> Delete</a>
+                            </div>
+                        </div>
+    
+                        <input id="fileInput2"  class="form-control hidden" name="image2"  type="file" onchange="viewImage(event,1)" value="">
+                    </div>
+                        <br>
+                        <div class="m-4 ">
+                        <label for="image3">Image 3:</label>
+                        <img id="imgView<%= 2 %>" src="../../public/assets/images/productImages/placeholder.jpg" alt="" class="border rounded mt-3">
+                        <div class="d-flex justify-content-around">
+                            <label class="edit-icon text-primary" for="fileInput3">
+                          
+                                <i class="fa fa-pencil" aria-hidden="true"></i> Add
+                            </label>
+                            <div class="edit-icon text-danger" onclick="deleteImage(event, 2)">
+                                <a href="#" class="text-muted"> <i class="fa fa-close" aria-hidden="true"></i> Delete</a>
+                            </div>
+                        </div>
+                        <input id="fileInput3" class="form-control hidden" name="image3"  type="file" onchange="viewImage(event,2)" value="">
+                    </div>
+                        <br>
+                        <div class="m-4  ">
+                        <label for="image4">Image 4:</label>
+                        <img id="imgView<%= 3 %>" src="../../public/assets/images/productImages/placeholder.jpg" alt="" class="border rounded mt-3">
+                        <div class="d-flex justify-content-around">
+                            <label class="edit-icon text-primary" for="fileInput4">
+                          
+                                <i class="fa fa-pencil" aria-hidden="true"></i> Add
+                            </label>
+                            <div class="edit-icon text-danger" onclick="deleteImage(event, 3)">
+                                <a href="#" class="text-muted"> <i class="fa fa-close" aria-hidden="true"></i> Delete</a>
+                            </div>
+                        </div>
+                        <input id="fileInput4" class="form-control hidden" name="image4"  type="file" onchange="viewImage(event,3)" value="">
+                    </div>
+                        <br>
+    
+                        
+    
+                        
+                
+                    </div>
+           
+                    
+                    
+                </div>
+            
+                
               
      
         
@@ -47,7 +131,7 @@
 
                 <div class="col-lg-6">
                     <div class="card mb-4">
-                        <div class="card-body">
+                        <div class="card-body mb-50">
                             <h5 class="my-2">Product Info</h5>
                             <div class="mb-4">
                                 <label for="product_title" class="form-label">Product title</label>
@@ -70,113 +154,105 @@
                             </div>
                         </div>
                     </div> <!-- card end// -->
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <h5 class="my-2">Product Specifications</h5>
-                            
-                            <div class="row gx-3 ">
-                                <div class="  mb-3  col-lg-6">
-                                    <label for="product_title" class="form-label">Battery</label>
-                                    <input type="text" placeholder="Type here" class="form-control" name="battery">
-                                </div>
-                               
-                                <div class="  mb-3  col-lg-6">
-                                    <label for="product_size" class="form-label">Ram</label>
-                                    <input type="text" placeholder="Type here" class="form-control" name="ram">
-                                </div>
-                            </div>
-                             
-                            <div class="row gx-3 ">
-                                <div class="  mb-3  col-lg-6">
-                                    <label for="product_title" class="form-label">Rom</label>
-                                    <input type="text" placeholder="Type here" class="form-control" name="rom">
-                                </div>
-                               
-                                <div class="  mb-3  col-lg-6">
-                                    <label for="product_size" class="form-label">Expandable</label>
-                                    <input type="text" placeholder="Type here" class="form-control" name="expandable">
-                                </div>
-                            </div>
-                             
-                            <div class="row gx-3 ">
-                                <div class="  mb-3  col-lg-6">
-                                    <label for="product_title" class="form-label">RearCam</label>
-                                    <input type="text" placeholder="Type here" class="form-control" name="rearCam">
-                                </div>
-                               
-                                <div class="  mb-3  col-lg-6">
-                                    <label for="product_size" class="form-label">FrontCam</label>
-                                    <input type="text" placeholder="Type here" class="form-control" name="frontCam">
-                                </div>
-                            </div>
-                          
-                            <div class="mb-4">
-                                <label for="product_brand" class="form-label">Processor</label>
-                                <input type="text" placeholder="Type here" class="form-control" name="processor">
-                            </div>
-                        </div>
-                    </div> <!-- card end// -->
+
                    
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <div class="mb-4">
-                                    <label class="form-label">Price</label>
-                                    <input type="number" placeholder="Type here" class="form-control" name="price">
-                                    <div class="error"></div>
-                                </div>
-                                <div class="mb-4">
-                                    <label class="form-label">Discount Price</label>
-                                    <input type="number" placeholder="Type here" class="form-control" name="discountPrice">
-                                    <div class="error"></div>
-                                </div>
-                              
-                  
-                                <hr>
-                                <h5 class="mb-3">Categories</h5>
-                           
-    
-                                <%
-                                if(category)
-                                if(category.length>0){
-                                    for(let i=0;i<category.length;i++){
-                                        %>
-                                <div class="form-check">
-                                    <input class="form-check-input" name="category" type="radio" value="<%= category[i].category %>" id="product-cat">
-                                    <label class="form-check-label"  for="product-cat"><%= category[i].category %></label>
-                                </div>
-                                <% } }%>
-                                
-                       
-                                
-                             
-                            </div>
-                           
-                        </div> <!-- card end// -->
+
                    
                
                 </div>
                 <div class="col-lg-6">
-                    <div class="card mb-4">
-                        <div class="card-body ">
-                            
-                            <div class="images-container ">
-                                
-                            </div>
-                            <button type="button" class="btn btn-md rounded font-sm hover-up" onclick="addImage()">Add Image</button>
     
-                            
-                              
-                              
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <label class="form-label">Price</label>
+                                <input type="number" placeholder="Type here" class="form-control" name="price">
+                                <div class="error"></div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Discount Price</label>
+                                <input type="number" placeholder="Type here" class="form-control" name="discountPrice">
+                                <div class="error"></div>
+                            </div>
                           
+              
+                            <hr>
+                            <h5 class="mb-3">Categories</h5>
+                       
+    
+                            <%
+                            if(category)
+                            if(category.length>0){
+                                for(let i=0;i<category.length;i++){
+                                    %>
+                            <div class="form-check">
+                                <input class="form-check-input" name="category" type="radio" value="<%= category[i].category %>" id="product-cat">
+                                <label class="form-check-label"  for="product-cat"><%= category[i].category %></label>
+                            </div>
+                            <% } }%>
                             
-     
-           
+                   
+                            
+                         
                         </div>
-                    </div>
+                       
+                    </div> <!-- card end// -->
+    
+
+
                 
             </div> 
             
          
+            </div>
+            <div class="row">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="my-2">Product Specifications</h5>
+                        
+                        <div class="row gx-3 ">
+                            <div class="  mb-3  col-lg-6">
+                                <label for="product_title" class="form-label">Battery</label>
+                                <input type="text" placeholder="Type here" class="form-control" name="battery">
+                            </div>
+                           
+                            <div class="  mb-3  col-lg-6">
+                                <label for="product_size" class="form-label">Ram</label>
+                                <input type="text" placeholder="Type here" class="form-control" name="ram">
+                            </div>
+                        </div>
+                         
+                        <div class="row gx-3 ">
+                            <div class="  mb-3  col-lg-6">
+                                <label for="product_title" class="form-label">Rom</label>
+                                <input type="text" placeholder="Type here" class="form-control" name="rom">
+                            </div>
+                           
+                            <div class="  mb-3  col-lg-6">
+                                <label for="product_size" class="form-label">Expandable</label>
+                                <input type="text" placeholder="Type here" class="form-control" name="expandable">
+                            </div>
+                        </div>
+                         
+                        <div class="row gx-3 ">
+                            <div class="  mb-3  col-lg-6">
+                                <label for="product_title" class="form-label">RearCam</label>
+                                <input type="text" placeholder="Type here" class="form-control" name="rearCam">
+                            </div>
+                           
+                            <div class="  mb-3  col-lg-6">
+                                <label for="product_size" class="form-label">FrontCam</label>
+                                <input type="text" placeholder="Type here" class="form-control" name="frontCam">
+                            </div>
+                        </div>
+                      
+                        <div class="mb-4">
+                            <label for="product_brand" class="form-label">Processor</label>
+                            <input type="text" placeholder="Type here" class="form-control" name="processor">
+                        </div>
+                    </div>
+                </div> <!-- card end// -->
+
             </div>
             <div>
                            
@@ -212,36 +288,54 @@
 </body>
                     
 <script>
-    let imageCount = 0;
+    // let imageCount = 0;
 
-    function addImage() {
-        imageCount++;
-        const container = document.querySelector('.images-container');
-        const imageDiv = document.createElement('div');
-        imageDiv.classList.add('mb-4');
-        imageDiv.innerHTML = `
-            <label class="form-label">Image ${imageCount}</label>
-            <div class="image-container">
-                <img src="" alt="" id="image-preview${imageCount}">
-            </div>
-            <input class="form-control" name="image${imageCount}" type="file" onchange="displayImage(${imageCount}, this)">
-        `;
-        container.appendChild(imageDiv);
-    }
+    // function addImage() {
+    //     imageCount++;
+    //     const container = document.querySelector('.images-container');
+    //     const imageDiv = document.createElement('div');
+    //     imageDiv.classList.add('mb-4');
+    //     imageDiv.innerHTML = `
+    //         <label class="form-label">Image ${imageCount}</label>
+    //         <div class="image-container">
+    //             <img src="" alt="" id="image-preview${imageCount}">
+    //         </div>
+    //         <input class="form-control" name="image${imageCount}" type="file" onchange="displayImage(${imageCount}, this)">
+    //     `;
+    //     container.appendChild(imageDiv);
+    // }
 
-    function displayImage(imageNumber, input) {
-        const preview = document.getElementById(`image-preview${imageNumber}`);
+    // function displayImage(imageNumber, input) {
+    //     const preview = document.getElementById(`image-preview${imageNumber}`);
 
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                preview.src = e.target.result;
-            };
-            reader.readAsDataURL(input.files[0]);
-        } else {
-            preview.src = '';
-        }
-    }
+    //     if (input.files && input.files[0]) {
+    //         const reader = new FileReader();
+    //         reader.onload = function (e) {
+    //             preview.src = e.target.result;
+    //         };
+    //         reader.readAsDataURL(input.files[0]);
+    //     } else {
+    //         preview.src = '';
+    //     }
+    // }
+
+
+    function viewImage(event, imageIndex) {
+    const imgView = document.getElementById(`imgView${imageIndex}`);
+    imgView.src = URL.createObjectURL(event.target.files[0]);
+}
+
+function deleteImage(event, imageIndex) {
+
+    const imgView = document.getElementById(`imgView${imageIndex}`);
+    imgView.src = "../../public/assets/images/productImages/placeholder.jpg";
+
+
+    const fileInput = document.getElementById(`fileInput${imageIndex + 1}`);
+    fileInput.value = "";
+}
+
+    
 </script>
 
 

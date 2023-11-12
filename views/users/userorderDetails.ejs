@@ -118,7 +118,7 @@
                                                         <p>Details for Order ID:<%= order._id %></p>
                                                         <div class=" mt-4">
                                                             <a class="btn btn-outline-primary-2" href="/generate-invoice/<%= order._id %>">Invoice</a>
-                                                            <% if (order.status !== 'Cancelled' && order.status !== 'refund-initiated'&& order.status !== 'return requested' && order.status !== 'cancel requested'  ) { %>
+                                                            <% if (order.status !== 'Cancelled' && order.status !== 'refund-initiated'&& order.status !== 'return requested' && order.status !== 'Cancel requested'  ) { %>
                                                                 <% if (order.status === 'Delivered') {%>
                                                                     <% const currentDate = new Date(); %>
                                                                     <% const deliveryDate = new Date(order.deliveryDate); %>
@@ -181,7 +181,7 @@
                                                                     <p><span class="text-danger"><%= order.status %></span></p>
                                                                 <% } %>        
                                                                 <div class="mt-5">                                                                                                                    
-                                                            <b> Payment Status:</b><span><P> <%= order.paymentMethod === 'Cash on delivery' ? 'Payment Pending' : 'Payment Done' %></P></span> 
+                                                            <b> Payment Status:</b><span><P> <%= order.paymentStatus %></P></span> 
                                                         </div>  
                                                                
                                                           
