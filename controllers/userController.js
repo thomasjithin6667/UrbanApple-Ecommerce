@@ -273,14 +273,14 @@ const OTPVerification = async (req, res) => {
                             const referredUserTransaction = new Transaction({
                                 user: referrer._id,  
                                 amount: 100,
-                                type: 'Credit',  
+                                type: 'credit',  
                                 date: Date.now(),
                                 description: 'Referral Bonus',
                             });
                             const referrerTransaction = new Transaction({
                                 user: userId,
                                 amount:50,
-                                type: 'Credit',  
+                                type: 'credit',  
                                 date: Date.now(),
                                 description: 'Referral Bonus',
                             });

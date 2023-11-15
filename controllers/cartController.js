@@ -8,48 +8,6 @@ const Wishlist=require('../models/wishlistModel')
 
 
 
-//add to cart
-// const addtocartd = async (req, res) => {
-//     try {
-//         const userId = req.session.user._id;
-//         const productId = req.params.productId;
-//         const {qty} = req.body;
-
-//         const existingCart = await Cart.findOne({user: userId});
-//         let newCart = {}
-
-//         if (existingCart) {
-//             const existingCartItem = existingCart.items.find(item => item.product.toString() === productId);
-
-//             if (existingCartItem){
-//                 existingCartItem.quantity += parseInt(qty);
-//             } else {
-//                 existingCart.items.push({product: productId, quantity: parseInt(qty)});
-//             }
-
-//             existingCart.total = existingCart.items.reduce((total, item) => total + (item.quantity || 0), 0)
-
-//             await existingCart.save();
-//         } else {
-//             newCart = new Cart({
-//                 user: userId,
-//                 items: [{product: productId, quantity: parseInt(qty)}],
-//                 total: parseInt(qty,10),
-//             });
-
-//             await newCart.save()
-//         }
-
-//         req.session.cartLength = (existingCart || newCart).items.length
-
-//         res.redirect('/productlist')
-//     } catch (error) {
-//         console.error('Error adding product to cart:', error);
-     
-//     }
-// };
-
-
 
 const addtocart = async (req, res) => {
     try {

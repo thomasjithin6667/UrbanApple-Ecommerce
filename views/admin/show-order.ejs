@@ -159,8 +159,8 @@
                                                     <dl class="dlist">
                                                         <dt class="text-muted">Status:</dt>
                                                         <dd>
-                                                            <span class="badge rounded-pill <%= order.paymentMethod === 'Cash on delivery' ? 'alert-warning text-warning' : 'alert-success text-success' %>">
-                                                                <%= order.paymentMethod === 'Cash on delivery' ? 'Payment Pending' : 'Payment Done' %>
+                                                            <span class="badge rounded-pill <%= order.paymentStatus === 'Payment Pending' ? 'alert-warning text-warning' : 'alert-success text-success' %>">
+                                                                <%= order.paymentStatus %>
                                                             </span>
                                                       
                                                         </dd>
