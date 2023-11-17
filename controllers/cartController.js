@@ -77,10 +77,6 @@ const calculateSubtotal = (cart) => {
 };
 
 
-  
-
-
-
 //To load the cart
 const getcart = async (req, res) => {
     const userId = req.session.user_id;
@@ -143,12 +139,19 @@ const getcart = async (req, res) => {
         const cartItemIndex = userCart.items.findIndex((item) =>
             item.product.equals(productId)
         );
+
+        
   
         if (cartItemIndex === -1) {
             return res.status(404).json({error: 'Product not found in cart.'});
         }
   
         userCart.items.splice(cartItemIndex, 1);
+
+
+         userCart.items.reduce(
+        (total, item) => total - (item.quantity || 0),
+        0)
         await userCart.save();
   
        
@@ -197,8 +200,6 @@ const getcart = async (req, res) => {
         res.status(500).json({ error: 'An error occurred while updating quantity.' });
     }
   };
-
-
 
 
   const updateCartCount = async (req, res) => {

@@ -135,6 +135,14 @@ admin_route.get('/couponstatus', auth.isLogin, couponController.unlistCoupon)
 //banner
 admin_route.get('/banner-add',auth.isLogin,bannerController.loadAddBanner);
 admin_route.get('/banner-list',auth.isLogin,bannerController.loadBannerList);
+admin_route.get('/banner-edit',auth.isLogin,bannerController.loadEditBanner);
+
+
+//salereport
+
+admin_route.get('/sales-report',auth.isLogin,adminController.getSalesReport)
+
+
 
 
 //POST REQUESTS
@@ -154,6 +162,7 @@ admin_route.post('/addCoupon',couponController.postAddCoupon)
 
 //banner
 admin_route.post('/banner-add', auth.isLogin, bannerUpload.single('image'), bannerController.addBanner);
+admin_route.post('/banner-edit', auth.isLogin, bannerUpload.single('image'), bannerController.editBanner);
 
 
 

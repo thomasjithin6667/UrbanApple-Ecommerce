@@ -235,6 +235,8 @@ const setStatus = async (req, res) => {
 
     if (orderStatus === "Delivered") {
       update.$set.deliveryDate = Date.now();
+      update.$set.paymentStatus=''
+
     } else if (orderStatus === "Cancelled" || orderStatus === "Returned") {
       const orderData = await Order.findOne({ _id: orderId })
         .populate('user')

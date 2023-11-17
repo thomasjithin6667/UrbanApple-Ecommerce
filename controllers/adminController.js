@@ -1,9 +1,65 @@
-const User = require('../models/userModel');
-const Category = require('../models/categoryModel');
-const Product = require('../models/productModel')
+
 const bcrypt = require('bcrypt');
+const User = require('../models/userModel');
+const Product = require('../models/productModel')
+const Category = require('../models/categoryModel');
+const Cart = require('../models/cartModel');
+const Order = require('../models/orderModel')
+const Address = require('../models/addressesModel')
+const mongoose = require('mongoose')
+const Coupon = require('../models/couponModel')
+const Transaction = require('../models/transactionModel')
+const Razorpay = require('razorpay');
 
 
+
+const loadDashboard = async (req, res) => {
+    try {
+      const [totalRevenue, totalUsers, totalOrders, totalProducts,totalCategories, orders, monthlyEarnings, newUsers] = await Promise.all([
+        Order.aggregate([
+          { $match: { paymentStatus: "Payment Successful" } },
+          { $group: { _id: null, totalAmount: { $sum: "$totalAmount" } } },
+        ]),
+        User.countDocuments({ isBlocked: false, is_verified: true }),
+        Order.countDocuments(),
+        Product.countDocuments(),
+        Category.countDocuments(),
+        Order.find().limit(10).sort({ orderDate: -1 }),
+        Order.aggregate([
+          {
+            $match: {
+              paymentStatus: "Payment Successful",
+              orderDate: { $gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1) },
+            },
+          },
+          { $group: { _id: null, monthlyAmount: { $sum: "$totalAmount" } } },
+        ]),
+        User.aggregate([
+          { $match: { isBlocked: false, is_verified: true } },
+          { $sort: { date: -1 } },  
+          { $limit: 5 },
+        ])
+            ]);
+  
+      const adminData = req.session.adminData;
+      const totalRevenueValue = totalRevenue.length > 0 ? totalRevenue[0].totalAmount : 0;
+      const monthlyEarningsValue = monthlyEarnings.length > 0 ? monthlyEarnings[0].monthlyAmount : 0;
+  
+      res.render('adminDashboard', {
+        admin: adminData,
+        orders,
+        newUsers,
+        totalRevenue: totalRevenueValue,
+        totalOrders,
+        totalProducts,
+        totalCategories,
+        totalUsers,
+        monthlyEarnings: monthlyEarningsValue,
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
 
 //load admin loginpage
@@ -63,18 +119,7 @@ const verifyLogin = async (req, res) => {
 
 
 
-//load user dashboard
-const loadDashboard = async (req, res) => {
-    try {
-        
-
-        const admin=  req.session.adminData
-        res.render('adminDashboard',{admin:admin})
-    } catch (error) {
-        console.log(error.message)
-    }
-}
-//admin logout
+// //admin logout
 const logout = async (req, res) => {
     try {
         req.session.destroy();
@@ -257,6 +302,34 @@ const blockUser = async (req, res) => {
   };
 
 
+  
+// load sales report
+
+
+const getSalesReport = async (req, res) => {
+  try {
+    const admin = req.session.adminData
+
+    const orders = await Order.find({})
+      .populate('user')
+      .populate({
+        path: 'address',
+        model: 'Address',
+      })
+      .populate({
+        path: 'items.product',
+        model: 'Product',
+      })
+      .sort({ orderDate: -1 });
+    res.render('salesReport', { orders, admin: admin });
+
+  } catch (error) {
+    console.error('Error fetching order details:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
 
 
 module.exports = {
@@ -266,5 +339,6 @@ module.exports = {
     logout,
     loadUserlist,
     blockUser,
+    getSalesReport
 }
 

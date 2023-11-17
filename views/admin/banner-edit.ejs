@@ -1,0 +1,180 @@
+
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:32:35 GMT -->
+<head>
+    <meta charset="utf-8">
+    <title>Admin Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/images/icons/apple-touch-icon.png" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/images/icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/images/icons/favicon-16x16.png">
+    <!-- Template CSS -->
+    <link href="assetsB/css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <%- include('../partials/ecomAdminAside') %>
+    <main class="main-wrap">
+        <%- include('../partials/ecomAdminHeader') %>
+        <section class="content-main">
+                    
+         
+            <div class="content-header">
+               
+                <div>
+                    <h2 class="content-title card-title">Edit Banner  -<%=banner.category %> </h2>
+                    <p>Add, edit or delete a banner</p>
+                </div>
+             
+            </div>
+            <% if(typeof message !=='undefined' ){ %>
+                <p style="color: rgb(18, 91, 194);">
+                    <%=message%>
+                </p>
+                <% } %>
+
+           <div class="row">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Media</h5>
+                </div>
+                <div class="card-body d-flex">
+                    
+
+                    <div class="m-4">
+                      
+                        <img id="imgView<%= 0 %>" src="public/assets/images/bannerImages/<%= banner.image %>" alt=""><br>
+                    
+                    </div>
+
+            
+                </div>
+                
+                
+            </div>
+
+           </div>
+
+            <div class="div d-flex">
+
+            
+            <div class="card  "  >
+                
+                <div class="card-body ">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <form enctype="multipart/form-data" action="/admin/banner-edit?id=<%=banner._id %>" method="post">
+                                <div class="form-group">
+                                    <label for="title" class="form-label">Title</label>
+                                    <input type="text" name="title" id="title" class="form-control" required>
+
+
+                                </div> <br>
+                                <div class="form-group">
+
+                                    <label for="link" class="form-label">Link</label>
+                                    <input type="text" name="link" id="link" class="form-control" required>
+
+                                </div> <br>
+                                <div class="form-group">
+
+                                    <label for="subtitle" class="form-label">Subtitle</label>
+                                    <input type="text" name="subtitle" id="subtitle" class="form-control"
+                                        required>
+
+                                </div> <br>
+                
+
+                        </div>
+                        <div class="col-md-6">
+                       
+                                <div class="form-group">
+                                    <label for="position" class="form-label">Position</label>
+                                    <input type="text" name="position" id="position" class="form-control"
+                                        required>
+
+
+                                </div> <br>
+                                <div class="form-group">
+
+                                
+                                <label class="form-label">Product</label>
+               
+
+                                <select name="product" class="form-select">
+                                    <option value="" selected disabled>Select a product</option>
+                                    <% if (product && product.length > 0) { %>
+                                        <% for (let i = 0; i < product.length; i++) { %>
+                                            <option value="<%= product[i]._id %>"><%= product[i].name %></option>
+                                        <% } %>
+                                    <% } else { %>
+                                        <option value="" disabled>No products available</option>
+                                    <% } %>
+                                </select>
+                                
+                            </div> <br>
+                          
+                                <div class="form-group">
+
+
+                                    <label for="image">Banner Image:</label>
+                                    <input type="file" name="image" id="image" class="form-control" >
+
+                                </div> <br> <br>
+                               
+
+                        </div>
+                      
+                    </div> 
+                    
+                </div> 
+               
+                
+            </div> <!-- card .// -->
+         
+        </div>
+        <button type="submit" class="btn btn-primary">Update Banner</button>
+    </form>
+        </section> <!-- content-main end// -->
+    
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                    document.write(new Date().getFullYear())
+                    </script> ©, Evara - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+    <script src="assetsB/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="assetsB/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="assetsB/js/vendors/select2.min.js"></script>
+    <script src="assetsB/js/vendors/perfect-scrollbar.js"></script>
+    <script src="assetsB/js/vendors/jquery.fullscreen.min.js"></script>
+    <script src="assetsB/js/vendors/chart.js"></script>
+    <!-- Main Script -->
+    <script src="assetsB/js/main.js" type="text/javascript"></script>
+    <script src="assetsB/js/custom-chart.js" type="text/javascript"></script>
+</body>
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:32:57 GMT -->
+</html>

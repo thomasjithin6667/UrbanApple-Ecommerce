@@ -91,26 +91,32 @@
                                         <thead>
                                             <tr>
                                                 <th>image</th>
-                                                <th>Name</th>
-                                                <th>Description</th>
+                                                <th>title</th>
+                                          
+                                                <th>Start Date</th>
                                                 <th style="width: 70px;">Status</th>
                                                 <th class="text-end">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            <% banner.forEach(banners => { %>
                                  
                                                 <tr>
                                                     <td>
-                                                        <img src=
-                                                            alt="Category Image" style="width: 45px; "
-                                                             />
+                                                
+                                                            
+                                                          
+                                                             <img src="assets/images/bannerImages/<%=banners.image %>" style="width: 45px; "/>
                                                     </td>
                                                     <td>
+                                                        <%= banners.title %>
                                                   
                                                     </td>
+                                               
                                                     <td>
-                                             
+                                                        <%= banners.createdAt.toDateString() %>
                                                     </td>
+                                                  
                                                     <td style="width: 70px;">
                                                   
                                                     </td>
@@ -123,13 +129,13 @@
                                                                 <a class="dropdown-item" >
                                                                     
                                                                    </a>
-                                                                <a class="dropdown-item" href=>Edit info</a>
+                                                                <a class="dropdown-item" href="/admin/banner-edit?id=<%=banners._id %>">Edit info</a>
                                                           
                                                             </div>
                                                         </div>
                                                     </td>
                                                 </tr>
-                                             
+                                                <% }); %>
                                         </tbody>
                                     </table>
                                  

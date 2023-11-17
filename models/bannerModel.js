@@ -5,8 +5,14 @@ const bannerSchema = new mongoose.Schema({
   image: String,
   link: String,
   subtitle: String,
-  position: String,
-
+  product: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Product'
+},  
+createdAt: {
+  type: Date,
+  default: Date.now,
+},
   isListed : {
     type : Boolean,
     default : true
