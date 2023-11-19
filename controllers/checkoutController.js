@@ -235,9 +235,9 @@ const setStatus = async (req, res) => {
 
     if (orderStatus === "Delivered") {
       update.$set.deliveryDate = Date.now();
-      update.$set.paymentStatus=''
+      update.$set.paymentStatus='Payment Successful'
 
-    } else if (orderStatus === "Cancelled" || orderStatus === "Returned") {
+    } else if (orderStatus === "Cancelled" || orderStatus === "Return Confirmed") {
       const orderData = await Order.findOne({ _id: orderId })
         .populate('user')
         .populate({
@@ -257,10 +257,20 @@ const setStatus = async (req, res) => {
       }
 
       update.$set.cancelledDate = Date.now();
+      if(orderData.paymentMethod=="Wallet Payment" || orderData.paymentMethod=="Online Payment" && orderData.paymentStatus == "Payment Successful"){
+        update.$set.paymentStatus='Payment Refuned'
+      }
+      else{
+       
+        update.$set.paymentStatus='Payment Declined'
+      }
+     
 
       const transactionCredit = new Transaction({
         user: orderData.user._id,
         amount: orderData.totalAmount,
+        orderId:orderData._id,
+        paymentMethod:"Wallet Payment",
         type: 'credit',
         description: `Credited to wallet for order: ${orderId}`,
       });
@@ -384,7 +394,7 @@ const cancelOrder = async (req, res) => {
           model: 'Product',
         });
 
-      // Update status to 'Cancelled'
+
       await Order.findByIdAndUpdate(orderId, { status: 'Cancelled' }, { new: true });
 
       for (const item of cancelledOrder.items) {
@@ -688,6 +698,7 @@ const walletPayment = async (req, res) => {
       orderDate: new Date(),
       status: 'Pending',
       paymentMethod: 'Wallet Payment',
+      paymentStatus:'Payment Successful',
       totalAmount: totalAmount,
       items: cartItems.map(cartItem => ({
         product: cartItem.product._id,
@@ -702,6 +713,8 @@ const walletPayment = async (req, res) => {
     const transactiondebit = new Transaction({
       user: userId,
       amount : totalAmount,
+      orderId:order._id,
+      paymentMethod: 'Wallet Payment',
       type: 'debit', 
       description : `Debited from wallet for order : ${order._id}`
     });
@@ -750,6 +763,16 @@ const updatePaymentStatus = async (req, res) => {
     recentOrder.paymentDate = new Date();
 
     const updatedOrder = await recentOrder.save();
+
+    const transactionCredit = new Transaction({
+      user: recentOrder.user._id,
+      amount: recentOrder.totalAmount,
+      orderId:recentOrder._id,
+      paymentMethod:"Online Payment",
+      type: 'debit',
+      description: `Debited from Bank account for order: ${recentOrder._id}`,
+    });
+    await transactionCredit.save();
 
     return res.status(200).json({ message: 'Payment status updated successfully' });
   } catch (error) {

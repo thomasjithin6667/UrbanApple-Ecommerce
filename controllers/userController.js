@@ -685,7 +685,7 @@ const loadWallet = async (req, res) => {
     try {
 
         const userData = await User.findById({ _id: req.session.user_id })
-        const transaction = await Transaction.find({user : req.session.user_id}).sort({date : -1});
+        const transaction = await Transaction.find({user : req.session.user_id,paymentMethod:"Wallet Payment"}).sort({date : -1});
 
         res.render('userWallet', { user: userData,transaction:transaction});
 

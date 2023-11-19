@@ -118,7 +118,7 @@
                                                         <p>Details for Order ID:<%= order._id %></p>
                                                         <div class=" mt-4">
                                                             <a class="btn btn-outline-primary-2" href="/generate-invoice/<%= order._id %>">Invoice</a>
-                                                            <% if (order.status !== 'Cancelled' && order.status !== 'refund-initiated'&& order.status !== 'return requested' && order.status !== 'Cancel requested'  ) { %>
+                                                            <% if (order.status !== 'Cancelled' && order.status !== 'Return Confirmed'&& order.status !== 'return requested' && order.status !== 'Cancel requested'  ) { %>
                                                                 <% if (order.status === 'Delivered') {%>
                                                                     <% const currentDate = new Date(); %>
                                                                     <% const deliveryDate = new Date(order.deliveryDate); %>

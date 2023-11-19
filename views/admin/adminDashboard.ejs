@@ -114,6 +114,7 @@
                             <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-qr_code"></i></span>
                             <div class="text">
                                 <h6 class="mb-1 card-title">Categories</h6> <span><%=totalCategories%></span>
+                               
                                 <span class="text-sm">
                                     Based in your local time.
                                 </span>
@@ -128,9 +129,15 @@
                     <div class="card mb-4">
                         <article class="card-body">
                             <h5 class="card-title">Sale statistics</h5>
-                            <canvas id="myChart" height="120px"></canvas>
+                            <button class="btn btn-sm btn-light font-sm rounded" onclick="displayChart('Weekly')">Weekly</button>
+                            <button class="btn btn-sm btn-light font-sm rounded" onclick="displayChart('Monthly')">Monthly</button>
+                            <button class="btn btn-sm btn-light font-sm rounded" onclick="displayChart('Yearly')">Yearly</button>
+                            <canvas id="myChartWeekly" height="120px"></canvas>
+                            <canvas id="myChartMonthly" height="120px" style="display: none;"></canvas>
+                            <canvas id="myChartYearly" height="120px" style="display: none;"></canvas>
                         </article>
                     </div>
+                    
                    
                 
                     
@@ -439,4 +446,188 @@
 
 
 </html>
+
+<script>
+
+  var monthlyMonths = <%- JSON.stringify(monthlyMonths) %>;
+  var monthlyOrderCounts = <%- JSON.stringify(monthlyOrderCounts) %>;
+  var dailyDays = <%- JSON.stringify(dailyDays) %>;
+  var dailyOrderCounts = <%- JSON.stringify(dailyOrderCounts) %>;
+  var yearlyYears = <%- JSON.stringify(yearlyYears) %>;
+  var yearlyOrderCounts = <%- JSON.stringify(yearlyOrderCounts) %>;
+  
+
+
+
+</script>
+
+
+<script>
+
+
+//graph for weekly sales
+
+    (function ($) {
+    "use strict";
+    if ($('#myChartWeekly').length) {
+        var ctx = document.getElementById('myChartWeekly').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'line',
+
+            data: {
+                labels: dailyDays,
+                datasets: [{
+                        label: 'Weekly',
+                        tension: 0.3,
+                        fill: true,
+                        backgroundColor: 'rgba(44, 120, 220, 0.2)',
+                        borderColor: 'rgba(44, 120, 220)',
+                        data: dailyOrderCounts
+                    }
+
+                ]
+            },
+         
+            options: {
+                plugins: {
+                legend: {
+                    labels: {
+                    usePointStyle: true,
+                    
+                    },
+                }
+                }
+            }
+        });
+    } 
+
+
+    
+})(jQuery);
+
+
+</script>
+<script>
+
+
+//graph for monthly sales
+
+    (function ($) {
+    "use strict";
+
+    if ($('#myChartMonthly').length) {
+        var ctx = document.getElementById('myChartMonthly').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'line',
+        
+        
+            data: {
+                labels: monthlyMonths,
+                datasets: [
+                    {
+                        label: 'Monthly',
+                        tension: 0.3,
+                        fill: true,
+                        backgroundColor: 'rgba(4, 209, 130, 0.2)',
+                        borderColor: 'rgb(4, 209, 130)',
+                        data: monthlyOrderCounts
+                    }
+
+                ]
+            },
+          
+            options: {
+                plugins: {
+                legend: {
+                    labels: {
+                    usePointStyle: true,
+                    
+                    },
+                }
+                }
+            }
+        });
+    } 
+
+
+    
+})(jQuery);
+
+
+</script>
+<script>
+
+
+//graph for yearly sales
+
+    (function ($) {
+    "use strict";
+
+    if ($('#myChartYearly').length) {
+        var ctx = document.getElementById('myChartYearly').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'line',
+        
+     
+            data: {
+                labels: yearlyYears,
+                datasets: [
+                 
+                    {
+                        label: 'Yearly',
+                        tension: 0.3,
+                        fill: true,
+                        backgroundColor: 'rgba(380, 200, 230, 0.2)',
+                        borderColor: 'rgb(380, 200, 230)',
+                        data: yearlyOrderCounts 
+                    }
+
+                ]
+            },
+            options: {
+                plugins: {
+                legend: {
+                    labels: {
+                    usePointStyle: true,
+                    
+                    },
+                }
+                }
+            }
+        });
+    } 
+
+
+    
+})(jQuery);
+
+
+</script>
+<script>
+    // Functions to display respective charts
+function displayChart(chartType) {
+    if (chartType === 'Weekly') {
+        showChart('myChartWeekly');
+        hideChart('myChartMonthly');
+        hideChart('myChartYearly');
+    } else if (chartType === 'Monthly') {
+        hideChart('myChartWeekly');
+        showChart('myChartMonthly');
+        hideChart('myChartYearly');
+    } else if (chartType === 'Yearly') {
+        hideChart('myChartWeekly');
+        hideChart('myChartMonthly');
+        showChart('myChartYearly');
+    }
+}
+
+function showChart(chartId) {
+    document.getElementById(chartId).style.display = 'block';
+}
+
+function hideChart(chartId) {
+    document.getElementById(chartId).style.display = 'none';
+}
+
+</script>
 

@@ -9,6 +9,7 @@ const productController = require('../controllers/productController')
 const categoryController = require('../controllers/categoryController')
 const couponController = require('../controllers/couponController')
 const bannerController = require('../controllers/bannerController')
+const transactionController = require('../controllers/transactionController')
 const multer = require("multer")
 const session = require("express-session")
 const config = require("../config/config")
@@ -141,6 +142,9 @@ admin_route.get('/banner-edit',auth.isLogin,bannerController.loadEditBanner);
 //salereport
 
 admin_route.get('/sales-report',auth.isLogin,adminController.getSalesReport)
+
+//transaction
+admin_route.get('/transactions', auth.isLogin,transactionController.loadTransaction)
 
 
 
