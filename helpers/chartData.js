@@ -10,6 +10,7 @@ sevenDaysAgo.setDate(currentDate.getDate() - 7);
 const dailyOrders = await Order.aggregate([
   {
     $match: {
+        paymentStatus:"Payment Successful",
       orderDate: { $gte: sevenDaysAgo, $lte: currentDate } 
     }
   },
@@ -53,6 +54,7 @@ sevenMonthsAgo.setMonth(sevenMonthsAgo.getMonth() - 7);
 const monthlyOrders = await Order.aggregate([
   {
     $match: {
+        paymentStatus:"Payment Successful",
       orderDate: { $gte: sevenMonthsAgo, $lte: currentDate }
     }
   },
@@ -95,6 +97,7 @@ sevenYearsAgo.setFullYear(currentDate.getFullYear() - 7);
 const yearlyOrders = await Order.aggregate([
   {
     $match: {
+        paymentStatus:"Payment Successful",
       orderDate: { $gte: sevenYearsAgo, $lte: currentDate } 
     }
   },
