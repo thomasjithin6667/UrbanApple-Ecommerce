@@ -129,14 +129,15 @@
                     <div class="card mb-4">
                         <article class="card-body">
                             <h5 class="card-title">Sale statistics</h5>
-                            <button class="btn btn-sm btn-light font-sm rounded" onclick="displayChart('Weekly')">Weekly</button>
-                            <button class="btn btn-sm btn-light font-sm rounded" onclick="displayChart('Monthly')">Monthly</button>
-                            <button class="btn btn-sm btn-light font-sm rounded" onclick="displayChart('Yearly')">Yearly</button>
+                            <button class="btn btn-xs   btn btn-sm btn-light font-xs rounded" onclick="displayChart('Weekly', this)">Weekly</button>
+                            <button class="btn btn-sm btn-light font-xs rounded" onclick="displayChart('Monthly', this)">Monthly</button>
+                            <button class="btn btn-sm btn-light font-xs rounded" onclick="displayChart('Yearly', this)">Yearly</button>
                             <canvas id="myChartWeekly" height="120px"></canvas>
                             <canvas id="myChartMonthly" height="120px" style="display: none;"></canvas>
                             <canvas id="myChartYearly" height="120px" style="display: none;"></canvas>
                         </article>
                     </div>
+                    
                     
                    
                 
@@ -605,7 +606,9 @@
 </script>
 <script>
     // Functions to display respective charts
-function displayChart(chartType) {
+    function displayChart(chartType, button) {
+    highlightButton(button);
+
     if (chartType === 'Weekly') {
         showChart('myChartWeekly');
         hideChart('myChartMonthly');
@@ -628,6 +631,15 @@ function showChart(chartId) {
 function hideChart(chartId) {
     document.getElementById(chartId).style.display = 'none';
 }
+
+function highlightButton(button) {
+
+    const buttons = document.querySelectorAll('.btn');
+    buttons.forEach(btn => btn.classList.remove('btn-xs'));
+
+    button.classList.add('btn-xs');
+}
+
 
 </script>
 
