@@ -91,9 +91,11 @@
                                         <thead>
                                             <tr>
                                                 <th>image</th>
+                                                <th>Banner Type</th>
                                                 <th>title</th>
                                           
                                                 <th>Start Date</th>
+                                                <th>End Date</th>
                                                 <th style="width: 70px;">Status</th>
                                                 <th class="text-end">Actions</th>
                                             </tr>
@@ -109,13 +111,21 @@
                                                              <img src="assets/images/bannerImages/<%=banners.image %>" style="width: 45px; "/>
                                                     </td>
                                                     <td>
+                                                        <%= banners.bannerType%>
+                                                  
+                                                    </td>
+                                                    <td>
                                                         <%= banners.title %>
                                                   
                                                     </td>
                                                
                                                     <td>
-                                                        <%= banners.createdAt.toDateString() %>
+                                                        <%= banners.startDate.toDateString() %>
                                                     </td>
+                                                    <td>
+                                                        <%= banners.endDate.toDateString() %>
+                                                    </td>
+                                                  
                                                   
                                                     <td style="width: 70px;">
                                                   

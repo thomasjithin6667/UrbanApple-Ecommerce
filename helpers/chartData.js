@@ -33,7 +33,8 @@ for (let i = 6; i >= 0; i--) {
   dayIndex.setDate(currentDate.getDate() - i); 
   const foundDay = dailyOrders.find(order => order._id === (dayIndex.getDay() === 0 ? 7 : dayIndex.getDay())); 
   const count = foundDay ? foundDay.count : 0; 
-  const dayName = dayNames[dayIndex.getDay() === 0 ? 6 : dayIndex.getDay() - 1]; 
+  const dayNameIndex = dayIndex.getDay() === 0 ? 6 : dayIndex.getDay() - 1; 
+  const dayName = dayNames[dayNameIndex]; 
   dailyDataArray.push({ day: dayName, count }); 
 }
 

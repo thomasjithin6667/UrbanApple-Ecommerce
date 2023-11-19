@@ -11,35 +11,41 @@ const Banner = require('../models/bannerModel')
 const addBanner = async (req, res) => {
   try {
     const productData =await Product.find({})
+    const categoryData=await Category.find({})
       const admin=  req.session.adminData
-      const { title, link, subtitle, position, isListed, product} = req.body;
+      const { bannerType,title, link, category,subtitle, product,startDate,endDate,offer} = req.body;
      
       
       if (!req.file) {
       
-          return res.render('banner-add', { admin:admin,message: 'Banner image is required',product:productData });
+          return res.render('banner-add', { admin:admin,message: 'Banner image is required',product:productData ,category:categoryData});
       }
 
       const image = req.file.filename;
 
       const newBanner = new Banner({
+        bannerType,
           title,
           image,
           link,
+          category,
+          product,
+          startDate,
+          endDate,
           subtitle,
-          position,
-          isListed: isListed || true,
-          product
+          offer
+        
+        
       });
 
      await newBanner.save();
-      return res.render('banner-add', { admin:admin,message: "Banner added succesfully",product:productData  });
+      return res.render('banner-add', { admin:admin,message: "Banner added succesfully",product:productData ,category:categoryData });
   } catch (error) {
       console.error(error);
       const admin=  req.session.adminData
       const productData =await Product.find({})
    
-      return res.render('banner-add', { admin:admin, error: 'An error occurred while adding the banner',product:productData  });
+      return res.render('banner-add', { admin:admin, error: 'An error occurred while adding the banner',product:productData ,category:categoryData });
   }
 };
 
@@ -49,7 +55,7 @@ const editBanner = async (req, res) => {
     const { id } = req.query; // Assuming the banner ID is passed as a query parameter
     const productData = await Product.find({});
     const admin = req.session.adminData;
-    const { title, link, subtitle, position, isListed, product } = req.body;
+    const { title, link, subtitle, position, isListed, product,offer } = req.body;
 
     if (!req.file) {
       return res.render('banner-edit', {
@@ -70,6 +76,7 @@ const editBanner = async (req, res) => {
         link,
         subtitle,
         position,
+        offer,
         isListed: isListed || true,
         product
       },
@@ -98,8 +105,9 @@ const editBanner = async (req, res) => {
 const loadAddBanner=  async(req, res)=>{
     const admin=  req.session.adminData
     const product =await Product.find({})
+    const categoryData=await Category.find({})
 
-    res.render('banner-add',{admin:admin,product:product})
+    res.render('banner-add',{admin:admin,product:product,category:categoryData})
 }
 
 

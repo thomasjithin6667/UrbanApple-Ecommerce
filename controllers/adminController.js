@@ -27,7 +27,7 @@ const loadDashboard = async (req, res) => {
       Order.countDocuments(),
       Product.countDocuments(),
       Category.countDocuments(),
-      Order.find().limit(10).sort({ orderDate: -1 }),
+      Order.find().limit(10).sort({ orderDate: -1 }).populate('user'),
       Order.aggregate([
         {
           $match: {
@@ -37,11 +37,7 @@ const loadDashboard = async (req, res) => {
         },
         { $group: { _id: null, monthlyAmount: { $sum: "$totalAmount" } } },
       ]),
-      User.aggregate([
-        { $match: { isBlocked: false, is_verified: true } },
-        { $sort: { date: -1 } },
-        { $limit: 5 },
-      ])
+      User.find({isBlocked: false, is_verified: true }).sort({date:-1}).limit(5)
     ]);
 
     const adminData = req.session.adminData;
@@ -58,6 +54,7 @@ const loadDashboard = async (req, res) => {
 
     // Get yearly data
     const yearlyDataArray = await chartData.getYearlyDataArray();
+    console.log('Daily Orders for Last 7 Days:', dailyDataArray);
 
 
 
