@@ -15,7 +15,8 @@
   <div class="tab-content mt-3">
     <div aria-labelledby="signin-tab-2">
       <p>We have sent a verification code to your Given email</p>
-      <small id="timer">OTP will expire in 2:00</small>
+      <span><br> OTP is only valid for <span style="color: red; font-size: 15px;" id="timer"> 2:00/span> minutes.</span>
+   
     </div><!-- End .deal-top -->
   
     <form action="/otpVerification" method="post">
@@ -26,24 +27,30 @@
         <input name="otp4" id='input4' type='text' maxLength="1" size="1" pattern="\d" inputmode="numeric" />
       </div>
       <input type="hidden" name="fullOTP" id="fullOTP" />
+      <div style="height: 40px;">
+        <% if (typeof errorMessage !== 'undefined') { %>
+          <p style="color: rgb(200, 3, 3); ">
+            <%= errorMessage %>
+          </p>
+        <% } %>
+
+      </div>
   
-      <% if (typeof errorMessage !== 'undefined') { %>
-        <p style="color: rgb(200, 3, 3); height: 30px;">
-          <%= errorMessage %>
-        </p>
-      <% } %>
+      
   
       <div>
         <button type="submit" class="btn btn-outline-primary-2">
           <span>VERIFY OTP</span>
           <i class="icon-long-arrow-right"></i>
         </button>
+      </form>
   
-        <button id="resendButton" class="btn btn-outline-dark-2" onclick="disableResend()">
-          RESEND OTP
-        </button>
+      
+          <a  id="resendButton" class="btn btn-outline-dark-2" href="/resendOtp"> RESEND OTP</a>
+         
+      
       </div>
-    </form>
+   
   </div>
   
   <script>
@@ -51,8 +58,9 @@
       const timer = document.getElementById('timer');
       const resendButton = document.getElementById('resendButton');
       const inputs = document.querySelectorAll('input[type="text"]');
-      let duration = 120; // Duration in seconds (2 minutes)
-      let resendCooldown = 30; // Resend cooldown in seconds (30 seconds)
+      let duration = 120; 
+      let resendCooldown = 30; 
+      
   
       const updateTimer = () => {
         const minutes = Math.floor(duration / 60);
@@ -64,10 +72,12 @@
   
         if (duration > 0) {
           duration--;
-          setTimeout(updateTimer, 1000); // Update timer every second
+          setTimeout(updateTimer, 1000); 
+          
         } else {
           timer.textContent = 'OTP has expired';
-          // You might want to add additional handling when the OTP expires
+
+          
         }
       };
   
@@ -76,15 +86,15 @@
           resendCooldown--;
           resendButton.disabled = true;
           resendButton.textContent = `RESEND OTP (${resendCooldown}s)`;
-          setTimeout(updateResendCooldown, 1000); // Update cooldown timer every second
+          setTimeout(updateResendCooldown, 1000);
         } else {
           resendButton.disabled = false;
           resendButton.textContent = 'RESEND OTP';
         }
       };
   
-      updateTimer(); // Start the OTP timer
-      updateResendCooldown(); // Start the resend cooldown timer
+      updateTimer(); 
+      updateResendCooldown(); 
 
 
       
@@ -95,7 +105,7 @@
             if (index < inputs.length - 1) {
               inputs[index + 1].focus();
             } else {
-              this.value = this.value.substring(0, 1); // Restricts entry to one character
+              this.value = this.value.substring(0, 1); 
             }
           }
         });
@@ -103,7 +113,7 @@
         input.addEventListener('keydown', function (e) {
           if (e.key === 'Backspace' && index > 0 && this.value === '') {
             inputs[index - 1].focus();
-            inputs[index].value = ''; // Clears the current input value on Backspace
+            inputs[index].value = ''; 
           }
         });
       });
@@ -113,8 +123,7 @@
     
   
     function disableResend() {
-      // This function can be used to trigger additional actions when the resend button is clicked
-      // For now, it's just set to disable the button, and the cooldown timer will handle re-enabling it
+
       document.getElementById('resendButton').disabled = true;
     }
     const inputFields = [
@@ -139,6 +148,7 @@
     </div><!-- End .form-box -->
   </div><!-- End .container -->
 </div>
+
 
 
 

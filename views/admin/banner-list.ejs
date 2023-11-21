@@ -58,8 +58,8 @@
                     <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
                       <div class="custom_select">
                         <select class="form-select" id="filterSelect">
-                            <option value="all">Category status</option>
-                            <option value="all">All categories</option>
+                            <option value="all">Banner status</option>
+                            <option value="all">All banners</option>
                             <option value="unblocked">Listed</option>
                             <option value="blocked">Unlisted</option>
                             
@@ -96,7 +96,7 @@
                                           
                                                 <th>Start Date</th>
                                                 <th>End Date</th>
-                                                <th style="width: 70px;">Status</th>
+                                                <th style="width: 90px;">Status</th>
                                                 <th class="text-end">Actions</th>
                                             </tr>
                                         </thead>
@@ -108,7 +108,7 @@
                                                 
                                                             
                                                           
-                                                             <img src="assets/images/bannerImages/<%=banners.image %>" style="width: 45px; "/>
+                                                             <img src="assets/images/bannerImages/<%=banners.image %>" style="width:180px; "/>
                                                     </td>
                                                     <td>
                                                         <%= banners.bannerType%>
@@ -125,21 +125,37 @@
                                                     <td>
                                                         <%= banners.endDate.toDateString() %>
                                                     </td>
-                                                  
-                                                  
-                                                    <td style="width: 70px;">
-                                                  
+                                                    <td style="width: 90px;">
+                                                         
+                                                        <% if (banners.isListed) { %><span class="badge badge-pill badge-soft-primary">Listed</span><% } else { %><span class="badge badge-pill badge-soft-danger">Unlisted</span>
+                                                            <% } %>
                                                     </td>
+                                                  
+                                                  
+                                                  
                                                     <td class="text-end">
-                                                        <div class="dropdown">
+                                                        <div class="dropdown ">
                                                             <a href="#" data-bs-toggle="dropdown"
                                                                 class="btn btn-light rounded btn-sm font-sm"> <i
                                                                     class="material-icons md-more_horiz"></i> </a>
                                                             <div class="dropdown-menu">
                                                                 <a class="dropdown-item" >
+                                                                    <% if (banners.isListed) { %>
+                                                                        <a href="/admin/unlist-banner?id=<%= banners._id.toString() %>">
+                                                                         
+                                                                           <p class="text-danger ms-4 font-xs">Unlist</p>
+                                                                         
+                                                                        </a>
+                                                                      <% } else { %>
+                                                                        <a href="/admin/unlist-banner?id=<%= banners._id.toString() %>">
+                                                                          
+                                                                            <p class="text-primary ms-4 font-xs">List</p>
+                                                                         
+                                                                        </a>
+                                                                      <% } %>
                                                                     
                                                                    </a>
-                                                                <a class="dropdown-item" href="/admin/banner-edit?id=<%=banners._id %>">Edit info</a>
+                                                                <a class="dropdown-item font-xs" href="/admin/banner-edit?id=<%=banners._id %>">Edit info</a>
                                                           
                                                             </div>
                                                         </div>

@@ -1,19 +1,16 @@
-
+//=====================================================================================================================================//
+//ADMIN CONTROLLER
+//=====================================================================================================================================//
 const bcrypt = require('bcrypt');
 const User = require('../models/userModel');
 const Product = require('../models/productModel')
 const Category = require('../models/categoryModel');
-const Cart = require('../models/cartModel');
 const Order = require('../models/orderModel')
-const Address = require('../models/addressesModel')
-const mongoose = require('mongoose')
-const Coupon = require('../models/couponModel')
-const Transaction = require('../models/transactionModel')
-const Razorpay = require('razorpay');
 const chartData = require('../helpers/chartData')
+const  dateUtils = require('../helpers/dateUtil')
 
-
-
+//=====================================================================================================================================//
+//function to load admin dashboard
 const loadDashboard = async (req, res) => {
   try {
 
@@ -85,7 +82,7 @@ const loadDashboard = async (req, res) => {
   }
 };
 
-
+//=====================================================================================================================================//
 //load admin loginpage
 const loadAdminLogin = async (req, res) => {
   try {
@@ -95,8 +92,9 @@ const loadAdminLogin = async (req, res) => {
     console.log(error.message);
 
   }
-}
+};
 
+//=====================================================================================================================================//
 //Verify admin login 
 const verifyLogin = async (req, res) => {
   try {
@@ -139,11 +137,8 @@ const verifyLogin = async (req, res) => {
   }
 };
 
-
-
-
-
-// //admin logout
+//=====================================================================================================================================//
+//admin logout
 const logout = async (req, res) => {
   try {
     req.session.destroy();
@@ -153,40 +148,10 @@ const logout = async (req, res) => {
   } catch (error) {
     console.log(error.message);
   }
-}
+};
 
-//load user list
-
-// const loadUserlist = async (req, res) => {
-//     const admin=  req.session.adminData
-
-//     try {
-//         var search = "";
-
-//         if (req.query.search) {
-//             search = req.query.search;
-//         }
-
-
-//         const usersData = await User.find({
-//             is_Admin: 0,
-//             $or: [
-//                 { name: { $regex: '.*' + search + '.*', $options: 'i' } },
-//                 { email: { $regex: '.*' + search + '.*', $options: 'i' } },
-//                 { mobile: { $regex: '.*' + search + '.*', $options: 'i' } },
-//             ]
-//         })
-
-//         res.render('userlist', { users: usersData ,admin:admin})
-
-//     } catch (error) {
-//         console.log(error.message);
-
-//     }
-
-// }
-
-
+//=====================================================================================================================================//
+//function to load adminside userlist
 const loadUserlist = async (req, res) => {
   const admin = req.session.adminData;
 
@@ -229,75 +194,8 @@ const loadUserlist = async (req, res) => {
   }
 }
 
-
-
-
-
-
-
-
-
-
-//block and unblock user
-
-// const blockUser = async (req, res) => {
-//     try {
-//         const id = req.query.id;
-
-//         const user = await User.findById(id);
-
-//         if (!user) {
-//             return res.status(404).send('User not found');
-//         }
-
-
-//         if (req.session.user_id === user._id) {
-
-//             return res.redirect('/login');
-//         }
-
-
-//         user.isBlocked = !user.isBlocked;
-//         await user.save();
-
-//         res.redirect('/admin/userlist');
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// }
-
-
-// const blockUser = async (req, res) => {
-//     try {
-//         const id = req.query.id;
-
-//         const user = await User.findById(id);
-
-//         if (!user) {
-//             return res.status(404).send('User not found');
-//         }
-
-//         // Check if the user is currently logged in and their session exists.
-//         if (req.session.user_id === user._id) {
-//             // Destroy the user's session to log them out.
-//             req.session.destroy((err) => {
-//                 if (err) {
-//                     console.error('Error destroying session:', err);
-//                 }
-//             });
-//         }
-
-//         user.isBlocked = !user.isBlocked;
-//         await user.save();
-
-//         res.redirect('/admin/userlist');
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// }
-
-
-
+//=====================================================================================================================================//
+//toggle function to block and unblock users
 const blockUser = async (req, res) => {
   try {
     const id = req.query.id;
@@ -325,35 +223,84 @@ const blockUser = async (req, res) => {
   }
 };
 
-
-
-// load sales report
-
-
-const getSalesReport = async (req, res) => {
+//=====================================================================================================================================//
+//function to get sales report page
+const getSalesReport  = async (req, res) => {
   try {
     const admin = req.session.adminData
 
-    const orders = await Order.find({ paymentStatus: "Payment Successful" })
-      .populate('user')
+    let query = { paymentStatus: "Payment Successful" };
+
+    if (req.query.paymentMethod) {
+      if (req.query.paymentMethod === "Online Payment") {
+        query.paymentMethod = "Online Payment";
+      } else if (req.query.paymentMethod === "Wallet") {
+        query.paymentMethod = "Wallet";
+      } else if (req.query.paymentMethod === "Cash On Delivery") {
+        query.paymentMethod = "Cash On Delivery";
+      }
+
+    }
+    if (req.query.status) {
+      if (req.query.status === "Daily") {
+        query.orderDate = dateUtils.getDailyDateRange();
+      } else if (req.query.status === "Weekly") {
+        query.orderDate = dateUtils.getWeeklyDateRange();
+      } else if (req.query.status === "Yearly") {
+        query.orderDate = dateUtils.getYearlyDateRange();
+      }
+    }
+
+  
+
+    const orders = await Order.find(query)
+      .populate("user")
       .populate({
-        path: 'address',
-        model: 'Address',
+        path: "address",
+        model: "Address",
       })
       .populate({
-        path: 'items.product',
-        model: 'Product',
+        path: "items.product",
+        model: "Product",
       })
       .sort({ orderDate: -1 });
-    res.render('salesReport', { orders, admin: admin });
 
+    // total revenue
+    const totalRevenue = orders.reduce(
+      (acc, order) => acc + order.totalAmount,
+      0
+    );
+
+    // all returned orders
+    const returnedOrders = orders.filter(
+      (order) => order.status === "Returned"
+    );
+
+  
+    const totalSales = orders.length;
+
+    // total Sold Products
+    const totalProductsSold = orders.reduce(
+      (acc, order) => acc + order.items.length,
+      0
+    );
+
+    res.render("salesReport", {
+      orders,
+      admin,
+      totalRevenue,
+      returnedOrders,
+      totalSales,
+      totalProductsSold,
+      req
+     
+    });
   } catch (error) {
-    console.error('Error fetching order details:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.log(error.message);
   }
 };
 
-
+//=====================================================================================================================================//
 
 
 module.exports = {
@@ -366,3 +313,5 @@ module.exports = {
   getSalesReport
 }
 
+//=====================================================================================================================================//
+//=====================================================================================================================================//

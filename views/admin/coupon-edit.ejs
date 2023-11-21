@@ -29,8 +29,8 @@
                 <section class="content-main">
                     <div class="content-header">
                         <div>
-                            <h2 class="content-title card-title">Add Coupon </h2>
-                            <p>Add, edit or delete a Product coupons</p>
+                            <h2 class="content-title card-title">Edit Coupon </h2>
+                            <p>Add, edit or delete a Product coupon</p>
                             <div style="height: 15px;" class="div">
                                 <% if (typeof message !=='undefined' ){ %>
                                     <% if (typeof error==='undefined' ) { %>
@@ -58,31 +58,40 @@
                                 <div class="col-md">
                            
 
-                                    <form id="couponForm" action="/admin/addCoupon" method="post">
+                                    <form id="couponForm" action="/admin/editCoupon?couponId=<%= coupon._id %>" method="post">
                                         <div class="form-group">
                                             <label   class="form-label mt-3" for="couponCode">Coupon Code</label>
-                                            <input type="text" class="form-control" id="couponCode" name="couponCode" required>
+                                            <input type="text" value="<%= coupon.code %>" class="form-control" id="couponCode" name="couponCode" required>
                                         </div>
                                         <div class="form-group">
                                             <label  class="form-label mt-3"  for="discount">Discount (%)</label>
-                                            <input type="number" class="form-control" id="discount" name="discount" required>
+                                            <input type="number" value="<%= coupon.discount %>" class="form-control" id="discount" name="discount" required>
                                         </div>
                                         <div class="form-group">
                                             <label  class="form-label mt-3"  for="limit">Limit</label>
-                                            <input type="number" class="form-control" id="limit" name="limit" required>
+                                            <input type="number" value="<%= coupon.limit %>" class="form-control" id="limit" name="limit" required>
                                         </div>
+                                        
                                         <div class="form-group">
-                                            <label   class="form-label mt-3" for="DiscountType">Discount Type</label>
-                                            <select class="form-control" id="DiscountType" name="DiscountType" required>
-                                                <option value="fixed">Fixed</option>
-                                                <option value="percentage">Percentage</option>
+                                            <label class="form-label mt-3" for="discountType">Discount Type:</label>
+                                            <select class="form-select" id="discountType" name="discountType" >
+                                                <option value="fixed" <%= coupon.type === 'fixed' ? 'selected' : '' %>>Fixed</option>
+                                                <option value="percentage" <%= coupon.type === 'percentage' ? 'selected' : '' %>>Percentage</option>
                                             </select>
                                         </div>
                                         <div class="form-group">
                                             <label  class="form-label mt-3"  for="expiryDate">Expiry Date</label>
-                                            <input type="date" class="form-control" id="expiryDate" name="expiryDate" required>
+                                            <input value="<%= endDate %>"  type="date" class="form-control" id="expiryDate" name="expiryDate" required>
                                         </div>
-                                        <button type="submit" class="btn btn-primary mt-50">Add Coupon</button>
+                                        <div class="form-group">
+                                            <label  class="form-label mt-3"  for="limit">Min Cart Amount</label>
+                                            <input  value="<%= coupon.maxRedeemableAmt %>"  type="number" class="form-control" id="limit" name="minCartAmt" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label  class="form-label mt-3"  for="limit">Max Redeemable Amount</label>
+                                            <input value="<%= coupon.minCartAmt %>"  type="number" class="form-control" id="limit" name="maxRedeemableAmt" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary mt-50">Edit Coupon</button>
                                     </form>
 
 
@@ -125,3 +134,5 @@
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:32:57 GMT -->
 
 </html>
+
+

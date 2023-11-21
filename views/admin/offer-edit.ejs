@@ -1,0 +1,230 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:32:35 GMT -->
+
+<head>
+    <meta charset="utf-8">
+    <title>Admin Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/images/icons/apple-touch-icon.png" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/icons/favicon-16x16.png">
+    <!-- Template CSS -->
+    <link href="assetsB/css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <%- include('../partials/ecomAdminAside') %>
+        <main class="main-wrap">
+            <%- include('../partials/ecomAdminHeader') %>
+                <section class="content-main">
+                    <div class="content-header">
+                        <div>
+                            <h2 class="content-title card-title">Edit Offer</h2>
+                            <p>Add, edit or delete an Offer</p>
+                            <div style="height: 15px;" class="div">
+                                <% if (typeof message !=='undefined' ){ %>
+                                    <% if (typeof error==='undefined' ) { %>
+                                        <p style="color: rgb(0, 95, 219);">
+                                            <%= message %>
+                                        </p>
+                                        <% } else { %>
+                                            <p style="color: red;">
+                                                <%= error %>
+                                            </p>
+                                            <% } %>
+                                                <% } %>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <form action="/admin/offer-edit?id=<%=offer._id %>" method="POST">
+
+
+
+
+
+
+                        <div class="card col">
+                            <div class="card-body ">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label class="form-label" for="name">Name:</label>
+                                        <input value="<%=offer.name %>" class="form-control" type="text" id="name" name="name" required><br>
+
+                                        <label class="form-label" for="discountOn">Discount On:</label>
+                                        <select class="form-select" id="discountOn" name="discountOn" >
+                                            <option value="product" <%= offer.discountOn === 'product' ? 'selected' : '' %>>Product</option>
+                                            <option value="category" <%= offer.discountOn === 'category' ? 'selected' : '' %>>Category</option>
+                                        </select><br>
+                                        
+                                        <div id="categorySelect">
+
+                                            <label class="form-label">Category</label>
+    
+    
+                                            <select name="discountedCategory" class="form-select">
+                                                <option value="" selected disabled>Select a category</option>
+                                                <% if (category && category.length> 0) { %>
+                                                    <% for (let i=0; i < category.length; i++) { %>
+                                                        <option value="<%= category[i]._id%>">
+                                                            <%=category[i].category %>
+                                                        </option>
+                                                        <% } %>
+                                                            <% } else { %>
+                                                                <option value="" disabled>No products available</option>
+                                                                <% } %>
+                                            </select><br>
+                                            </div>
+    
+                                        
+    
+    
+                                            <div id="productSelect">
+                                            <label class="form-label" class="form-label">Product</label>
+    
+    
+                                            <select name="discountedProduct" class="form-select">
+                                              
+                                                <option value="" selected disabled>Select a product</option>
+                                                <% if (product && product.length> 0) { %>
+                                                    <% for (let i=0; i < product.length; i++) { %>
+                                                        <% if (offer.discountedProduct.name==product[i].name) { %>
+                                                            <option value="<%= product[i]._id %>" selected>
+                                                                <%= product[i].name %>
+                                                            </option>
+                                                            <% } else { %>
+                                                                <option value="<%= product[i]._id %>">
+                                                                    <%= product[i].name %>
+                                                                </option>
+                                                                <% } %>
+                                                                    <% } %>
+                                                                        <% } else { %>
+                                                                            <option value="" disabled>No products
+                                                                                available</option>
+                                                                            <% } %>
+                                            </select><br>
+                                            </div>
+
+                                            <label class="form-label" for="discountType">Discount Type:</label>
+                                            <select class="form-select" id="discountType" name="discountType" >
+                                                <option value="percentage" <%= offer.discountType === 'percentage' ? 'selected' : '' %>>Percentage</option>
+                                                <option value="fixed Amount" <%= offer.discountType === 'fixed Amount' ? 'selected' : '' %>>Fixed Amount</option>
+                                            </select><br>
+
+                           
+
+
+
+
+
+
+
+
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        
+                                        <label class="form-label" for="discountValue">Discount Value:</label>
+                                        <input class="form-control" type="number" id="discountValue" name="discountValue" value="<%= offer.discountValue %>" required><br>
+
+                                        <label class="form-label" for="maxRedeemableAmt">Max Redeemable Amount:</label>
+                                        <input class="form-control" type="number" id="maxRedeemableAmt" name="maxRedeemableAmt" value="<%= offer.maxRedeemableAmt %>" required><br>
+
+                                        <label class="form-label" for="startDate">Start Date:</label>
+                                        <input class="form-control" value="<%= startDate %>" type="date" id="startDate" name="startDate"
+                                            required><br>
+
+                                        <label class="form-label" for="endDate">End Date:</label>
+                                        <input class="form-control" value="<%= endDate %>" type="date" id="endDate" name="endDate"
+                                            required><br>
+
+                                      
+                                  
+                                  
+                                    </div>
+
+
+
+
+                                </div>
+                                <button type="submit" class="btn btn-primary">Edit Offer</button>
+                    </form>
+                    </div> <!-- card body .// -->
+                    </div> <!-- card .// -->
+
+
+
+
+                </section> <!-- content-main end// -->
+
+                <footer class="main-footer font-xs">
+                    <div class="row pb-30 pt-15">
+                        <div class="col-sm-6">
+                            <script>
+                                document.write(new Date().getFullYear())
+                            </script> ©, Evara - HTML Ecommerce Template .
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-sm-end">
+                                All rights reserved
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+        </main>
+        <script src="assetsB/js/vendors/jquery-3.6.0.min.js"></script>
+        <script src="assetsB/js/vendors/bootstrap.bundle.min.js"></script>
+        <script src="assetsB/js/vendors/select2.min.js"></script>
+        <script src="assetsB/js/vendors/perfect-scrollbar.js"></script>
+        <script src="assetsB/js/vendors/jquery.fullscreen.min.js"></script>
+        <script src="assetsB/js/vendors/chart.js"></script>
+        <script src="/public/assets/js/validation.js"></script>
+        <!-- Main Script -->
+        <script src="assetsB/js/main.js" type="text/javascript"></script>
+        <script src="assetsB/js/custom-chart.js" type="text/javascript"></script>
+</body>
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:32:57 GMT -->
+
+</html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#discountOn').on('change', function() {
+            var selectedValue = $(this).val();
+
+            if (selectedValue === 'category') {
+                $('#productSelect').hide();
+                $('#categorySelect').show();
+            } else if (selectedValue === 'product') {
+                $('#categorySelect').hide();
+                $('#productSelect').show();
+            }
+        });
+
+        // Initialize visibility based on initial selection
+        var initialSelectedValue = $('#discountOn').val();
+        if (initialSelectedValue === 'category') {
+            $('#productSelect').hide();
+            $('#categorySelect').show();
+        } else if (initialSelectedValue === 'product') {
+            $('#categorySelect').hide();
+            $('#productSelect').show();
+        }
+    });
+</script>

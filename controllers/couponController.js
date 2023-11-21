@@ -1,50 +1,75 @@
+//=====================================================================================================================================//
+//COUPON CONTROLLER
+//=====================================================================================================================================//
+//module imports
+
 const User = require('../models/userModel');
-const UserOTPVerification = require('../models/userOTPModel')
-const bcrypt = require('bcrypt');
-const nodemailer = require('nodemailer')
-const Product = require('../models/productModel')
-const Category = require('../models/categoryModel');
 const Coupon = require('../models/couponModel')
 
-
-
-
-
+//=====================================================================================================================================//
+//function to get add coupon form
 const getCoupon = (req, res)=>{
   const admin=  req.session.adminData
-    res.render('couponAdd',{admin:admin})
-  }
+    res.render('coupon-add',{admin:admin})
+  };
 
+//=====================================================================================================================================//
+//function to get coupon list in adminside
  const viewCoupon =async (req, res)=>{
     try{
       const admin=  req.session.adminData
       const coupons = await Coupon.find()
-      res.render('viewCoupon',{coupons,admin:admin})
+      res.render('coupon-list',{coupons,admin:admin})
     }catch(err){
       console.log("Error occoured while fetching coupons", err);
     }
-  }
+  };
 
- const postAddCoupon = async (req, res) =>{
-    const {couponCode, discount, expiryDate, limit, DiscountType} = req.body;
-    try{
+//=====================================================================================================================================//
+//function to add coupon on the admin side
+  const postAddCoupon = async (req, res) => {
+    const admin = req.session.adminData;
+    let { couponCode, discount, expiryDate, limit, DiscountType,maxRedeemableAmt,minCartAmt} = req.body;
     
-      const newCoupon = new Coupon ({
-        code : couponCode,
-        discount : discount,
-        limit : limit,
-        type : DiscountType,
-        expiry : expiryDate
-      })
-      await Coupon.insertMany(newCoupon);
-      res.redirect('viewCoupon')
-    }catch(err){
+
+    couponCode = couponCode.replace(/\s/g, '');
+  
+    console.log(req.body);
+    console.log(couponCode);
+  
+    try {
+      if (!couponCode) {
+        return res.render('coupon-add', { message: "Coupon code cannot be empty", admin: admin });
+      }
+  
+
+      const existingCoupon = await Coupon.findOne({ code: { $regex: new RegExp('^' + couponCode, 'i') } });
+  
+      if (existingCoupon) {
+        return res.render('coupon-add', { message: "Coupon code already exists", admin: admin });
+      }
+  
+      const newCoupon = new Coupon({
+        code: couponCode,
+        discount: discount,
+        limit: limit,
+        type: DiscountType,
+        expiry: expiryDate,
+        maxRedeemableAmt:maxRedeemableAmt,
+        minCartAmt:minCartAmt
+
+      });
+  
+      await newCoupon.save();
+      res.redirect('/admin/viewCoupon');
+    } catch (err) {
       console.log("Error adding coupon", err);
+      res.status(500).send("Error adding coupon");
     }
-  }
+  };
 
-
-
+//=====================================================================================================================================//  
+//function to display coupon details on admin side  
  const viewCouponUsedUsers = async (req, res)=>{
     try{
       const admin=  req.session.adminData
@@ -58,10 +83,10 @@ const getCoupon = (req, res)=>{
     }catch(err){
       console.log("Error finding the coupon code", err);
     } 
-  }
+  };
 
-
-
+//=====================================================================================================================================//
+  //function to get available coupon on the user side
    const getAvailableCoupons = async (req, res)=>{
     try {
       const currentDate = new Date();
@@ -79,11 +104,9 @@ const getCoupon = (req, res)=>{
       res.status(500).json({ error: 'Internal server error' });
     }
   };
-  
 
-
-  //list and unlist category
-
+//=====================================================================================================================================//  
+//toggle function to list and unlist coupon  
 const unlistCoupon = async (req, res) => {
   try {
       const id = req.query.id;
@@ -104,9 +127,83 @@ const unlistCoupon = async (req, res) => {
 
 
   }
-}
+};
 
+//=====================================================================================================================================//
+//function to edit coupon
+const editCoupon = async (req, res) => {
+  const admin = req.session.adminData;
+  const { couponId } = req.query;
+  console.log(couponId);
+  const coupon = await Coupon.findOne({ _id: couponId });
+  const endDate = new Date(coupon.expiry).toISOString().split('T')[0]
+  try {
+  
+    let { couponCode, discount, expiryDate, limit, DiscountType,maxRedeemableAmt,minCartAmt } = req.body;
 
+    couponCode = couponCode.trim();
+
+    if (!couponCode) {
+      return res.render('coupon-edit', { message: "Coupon code cannot be empty", admin ,coupon,endDate});
+    }
+
+    const existingCoupon = await Coupon.findOne({ _id: couponId });
+
+    if (!existingCoupon) {
+      return res.render('coupon-edit', { message: "Coupon not found", admin,coupon,endDate });
+    }
+
+    if (couponCode) {
+      existingCoupon.code = couponCode;
+    }
+    if (discount) {
+      existingCoupon.discount = discount;
+    }
+    if (expiryDate) {
+      existingCoupon.expiry = expiryDate;
+    }
+    if (limit) {
+      existingCoupon.limit = limit;
+    }
+    if (DiscountType) {
+      existingCoupon.type = DiscountType;
+    }
+    if (maxRedeemableAmt) {
+      existingCoupon.maxRedeemableAmt = maxRedeemableAmt;
+    }
+    if (minCartAmt) {
+      existingCoupon.minCartAmt = minCartAmt;
+    }
+   
+
+    await existingCoupon.save();
+    res.redirect('/admin/viewCoupon');
+  } catch (err) {
+    console.error("Error editing coupon", err);
+    res.status(500).send("Error editing coupon");
+  }
+};
+
+//=====================================================================================================================================//
+//function to get edit coupon page
+const getEditCoupon= async(req, res)=>{
+  try {
+    const admin=  req.session.adminData
+    const { couponId } = req.query;
+    const coupon = await Coupon.findOne({ _id: couponId });
+    const endDate = new Date(coupon.expiry).toISOString().split('T')[0]
+  
+      res.render('coupon-edit',{admin:admin,coupon:coupon,endDate })
+    
+  } catch (error) {
+    console.log(error.message);
+    
+  }
+  
+
+  }
+
+//=====================================================================================================================================//  
 
 
 
@@ -116,6 +213,10 @@ const unlistCoupon = async (req, res) => {
      postAddCoupon,
      viewCouponUsedUsers,
      getAvailableCoupons,
-     unlistCoupon
+     unlistCoupon,
+     editCoupon,
+     getEditCoupon
  
 }
+//=====================================================================================================================================//
+//=====================================================================================================================================//

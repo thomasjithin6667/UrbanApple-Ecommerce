@@ -1,5 +1,8 @@
+//=====================================================================================================================================//
+//CHECKOUT CONTROLLER
+//=====================================================================================================================================//
+//module imports
 const User = require('../models/userModel');
-const Product = require('../models/productModel')
 const Category = require('../models/categoryModel');
 const Cart = require('../models/cartModel');
 const Order = require('../models/orderModel')
@@ -18,25 +21,41 @@ const razorpay = new Razorpay({
   key_secret: '43YWiWwqPSvjiajhW7sjSItZ',
 });
 
+//=====================================================================================================================================//
+//calculate subtotal in cart
 const calculateSubtotal = (cart) => {
   let subtotal = 0;
   for (const cartItem of cart) {
-    subtotal += cartItem.product.discountPrice * cartItem.quantity;
+      const isDiscounted = cartItem.product.discountStatus &&
+          new Date(cartItem.product.startDate) <= new Date() &&
+          new Date(cartItem.product.endDate) >= new Date();
+
+      // Use discountPrice if available and within the discount period, else use regular price
+      const priceToConsider = isDiscounted ? cartItem.product.discountPrice : cartItem.product.price;
+
+      subtotal += priceToConsider * cartItem.quantity;
   }
   return subtotal;
 };
 
-
+//=====================================================================================================================================//
+//calculate product total in cart
 const calculateProductTotal = (cart) => {
   const productTotals = [];
   for (const cartItem of cart) {
-    const total = cartItem.product.discountPrice * cartItem.quantity;
-    productTotals.push(total);
+      const isDiscounted = cartItem.product.discountStatus &&
+          new Date(cartItem.product.startDate) <= new Date() &&
+          new Date(cartItem.product.endDate) >= new Date();
+
+      const priceToConsider = isDiscounted ? cartItem.product.discountPrice : cartItem.product.price;
+
+      const total = priceToConsider * cartItem.quantity;
+      productTotals.push(total);
   }
   return productTotals;
 };
 
-
+//=====================================================================================================================================//
 //get  the checkout details
 const getCheckout = async (req, res) => {
   const userId = req.session.user_id;
@@ -86,33 +105,8 @@ const getCheckout = async (req, res) => {
   }
 };
 
-
-
-
-
-const createRazorpayOrder = async (amount) => {
-  return new Promise((resolve, reject) => {
-    const options = {
-      amount: amount * 100,
-      currency: 'INR',
-    };
-
-    razorpay.orders.create(options, (error, order) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(order);
-      }
-    });
-  });
-};
-
-
-
-
-
-
-
+//=====================================================================================================================================//
+//function to redirect after placing order
 const orderPlaced = async (req, res) => {
   try {
     const mostRecentOrder = await Order.findOne().sort({ orderDate: -1 }).populate('address user');
@@ -129,9 +123,8 @@ const orderPlaced = async (req, res) => {
   }
 };
 
-
-
-
+//=====================================================================================================================================//
+//function to get orderlist in adminside
 const orderList = async (req, res) => {
   try {
     const admin = req.session.adminData
@@ -155,9 +148,8 @@ const orderList = async (req, res) => {
   }
 };
 
-
-
-//get order details in the admin side  
+//=====================================================================================================================================//
+//get order details in the adminside  
 const orderDetails = async (req, res) => {
   try {
     const admin = req.session.adminData
@@ -185,9 +177,7 @@ const orderDetails = async (req, res) => {
   }
 };
 
-
-
-
+//=====================================================================================================================================//
 //get the order list of the user
 const userOrderlist = async (req, res) => {
   try {
@@ -217,12 +207,7 @@ const userOrderlist = async (req, res) => {
   }
 };
 
-
-
-
-
-
-
+//=====================================================================================================================================//
 //change status in  the admin side
 const setStatus = async (req, res) => {
   try {
@@ -287,8 +272,7 @@ const setStatus = async (req, res) => {
   }
 };
 
-
-
+//=====================================================================================================================================//
 //get order details in the admin side  
 const userOrderDetails = async (req, res) => {
   try {
@@ -314,8 +298,8 @@ const userOrderDetails = async (req, res) => {
   }
 };
 
-
-
+//=====================================================================================================================================//
+//function to apply coupon
 const applyCoupon = async (req, res) => {
   try {
     const { couponCode } = req.body;
@@ -361,6 +345,8 @@ const applyCoupon = async (req, res) => {
   }
 };
 
+//=====================================================================================================================================//
+//function to calulaate discount total
 function calculateDiscountedTotal(total, discountPercentage) {
   if (discountPercentage < 0 || discountPercentage > 100) {
     throw new Error('Discount percentage must be between 0 and 100.');
@@ -370,10 +356,10 @@ function calculateDiscountedTotal(total, discountPercentage) {
   const discountedTotal = total - discountAmount;
 
   return discountedTotal;
-}
+};
 
-
-
+//=====================================================================================================================================//
+//function to cancel order
 const cancelOrder = async (req, res) => {
   try {
     const orderId = req.params.orderId;
@@ -411,7 +397,8 @@ const cancelOrder = async (req, res) => {
   }
 };
 
-
+//=====================================================================================================================================//
+//function to return order by user
 const returnOrder = async (req, res) => {
   try {
     const userId = req.session.user._id
@@ -424,10 +411,10 @@ const returnOrder = async (req, res) => {
   } catch (error) {
     console.log("Erorr while updating", error);
   }
-}
+};
 
-
-
+//=====================================================================================================================================//
+//function to apply coupon
 async function applyCoup(couponCode, discountedTotal, userId) {
   const coupon = await Coupon.findOne({ code: couponCode })
   if (!coupon) {
@@ -453,14 +440,10 @@ async function applyCoup(couponCode, discountedTotal, userId) {
   coupon.usersUsed.push(userId);
   await coupon.save();
   return discountedTotal;
-}
+};
 
-
-
-
-
-//razorpay gateway
-
+//=====================================================================================================================================//
+//function to place order uisng razorpay gateway
 const razorpayOrder = async (req, res) => {
   try {
     const userId = req.session.user_id;
@@ -544,8 +527,8 @@ const razorpayOrder = async (req, res) => {
   }
 };
 
-
-//cashondelivery
+//=====================================================================================================================================//
+//function to place order using cashondelivery
 const cashOnDelivery = async (req, res) => {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -578,10 +561,18 @@ const cashOnDelivery = async (req, res) => {
         throw new Error('Not enough quantity in stock.');
       }
 
+    
+
+      const isDiscounted = product.discountStatus &&
+          new Date(product.startDate) <= new Date() &&
+          new Date(product.endDate) >= new Date();
+
+      const priceToConsider = isDiscounted ? product.discountPrice : product.price;
+
       product.quantity -= cartItem.quantity;
 
       const shippingCost = 100;
-      const itemTotal = product.discountPrice * cartItem.quantity + shippingCost;
+      const itemTotal = priceToConsider * cartItem.quantity + shippingCost;
       totalAmount += itemTotal;
 
       await product.save();
@@ -599,12 +590,21 @@ const cashOnDelivery = async (req, res) => {
       paymentMethod: 'Cash on delivery',
       paymentStatus: 'Payment Pending',
       totalAmount: totalAmount,
-      items: cartItems.map(cartItem => ({
-        product: cartItem.product._id,
-        quantity: cartItem.quantity,
-        price: cartItem.product.discountPrice,
-      })),
+      items: cartItems.map(cartItem => {
+        const product = cartItem.product;
+        const isDiscounted = product.discountStatus &&
+          new Date(product.startDate) <= new Date() &&
+          new Date(product.endDate) >= new Date();
+        const priceToConsider = isDiscounted ? product.discountPrice : product.price;
+    
+        return {
+          product: product._id,
+          quantity: cartItem.quantity,
+          price: priceToConsider,
+        };
+      }),
     });
+    
 
     await order.save();
 
@@ -616,29 +616,28 @@ const cashOnDelivery = async (req, res) => {
       price: cartItem.product.discountPrice,
     }));
 
-    const userEmail = user.email;
-    const userName = user.username;
-    const orderId = order._id;
-    const ordertotalAmount = totalAmount;
-
+   
     await session.commitTransaction();
     session.endSession();
 
-    res.status(200).json({ success: true, message: "Order placed successfully." });
+    res.status(200).json({ success: true, message: 'Order placed successfully.' });
   } catch (error) {
     console.error('Error placing the order:', error);
-    
-    if (error.message === 'Not enough quantity in stock.') {
-      res.status(400).json({ success: false, message: "Not enough quantity in stock. Please adjust your cart." });
-    } else {
-      res.status(500).json({ success: false, message: "Error occurred while placing order." });
+
+    await session.abortTransaction();
+    session.endSession();
+
+    let errorMessage = 'Error occurred while placing order.';
+    if (error.message) {
+      errorMessage = error.message;
     }
+
+    res.status(500).json({ success: false, message: errorMessage, error: error.message });
   }
 };
 
-
-
-//walletpayment
+//=====================================================================================================================================//
+//function to place order using walletpayment
 const walletPayment = async (req, res) => {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -661,6 +660,15 @@ const walletPayment = async (req, res) => {
     const cartItems = cart.items || [];
     let totalAmount = 0;
 
+
+
+    if (couponCode) {
+      totalAmount = await applyCoup(couponCode, totalAmount, userId);
+    }
+
+    if (user.walletBalance < totalAmount) {
+      throw new Error('Insufficient funds in the wallet.');
+    }
     for (const cartItem of cartItems) {
       const product = cartItem.product;
 
@@ -679,14 +687,6 @@ const walletPayment = async (req, res) => {
       totalAmount += itemTotal;
 
       await product.save();
-    }
-
-    if (couponCode) {
-      totalAmount = await applyCoup(couponCode, totalAmount, userId);
-    }
-
-    if (user.walletBalance < totalAmount) {
-      throw new Error('Insufficient funds in the wallet.');
     }
 
     user.walletBalance -= totalAmount;
@@ -743,11 +743,17 @@ const walletPayment = async (req, res) => {
     await session.abortTransaction();
     session.endSession();
 
-    res.status(500).json({ success: false, message: 'Error occurred while placing order.' });
-  }
+    let errorMessage = 'Error occurred while placing order.';
+    if (error.message) {
+        errorMessage = error.message; 
+    }
+
+    res.status(500).json({ success: false, message: errorMessage, error: error.message });
+}
 };
 
-
+//=====================================================================================================================================//
+//uppdate payemnt status after online payment 
 const updatePaymentStatus = async (req, res) => {
   try {
     const { paymentId, status } = req.body;
@@ -780,6 +786,7 @@ const updatePaymentStatus = async (req, res) => {
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
+//=====================================================================================================================================//
 
 
 module.exports = {
@@ -798,7 +805,7 @@ module.exports = {
   cashOnDelivery,
   walletPayment,
   updatePaymentStatus
-
-
-
 }
+
+//=====================================================================================================================================//
+//=====================================================================================================================================//

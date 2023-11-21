@@ -28,95 +28,216 @@
     <%- include('../partials/ecomAdminAside') %>
     <main class="main-wrap">
         <%- include('../partials/ecomAdminHeader') %>
+
+
         <section class="content-main">
             <div class="content-header">
+          
                 <div>
-                    <h2 class="content-title card-title">Orders </h2>
-                    <p>Add, edit Orders</p>
+                    <a href="/admin/sales-report?status=Daily" class="btn btn-sm rounded <%= req.query.status === 'Daily' ? 'btn-dark' : 'btn-light' %>">Daily</a>
+                    <a href="/admin/sales-report?status=Weekly" class="btn btn-sm rounded <%= req.query.status === 'Weekly' ? 'btn-dark' : 'btn-light' %>">Weekly</a>
+                    <a href="/admin/sales-report?status=Yearly" class="btn btn-sm rounded <%= req.query.status === 'Yearly' ? 'btn-dark' : 'btn-light' %>">Yearly</a>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12 text-right">
+                            <button id="pdfButton" class="btn btn-secondary print ms-2"><i class="icon material-icons md-print"></i> Download </button>
+                 </div>
                 </div>
+                  
+               
+            </div>
+            
+            <div class="card mb-4">
+                <header class="card-header">
+                    <div class="row align-items-center" >
+                        
+                <form action="" method="get">
 
+                    <div style="display: flex;  align-items: center;">
+                      <input type="text" id="searchInput" class="form-control" placeholder="Search for products...">
+
+                    
+                      <div class="col-md-3 col-12 me-auto mb-md-0 mb-3" style="display: flex;">
+
+                        <label for="paymentMethod" class="form-control">Select Status:</label>
+                        <select name="paymentMethod" class="form-select" id="paymentMethod">
+                            <option value="" selected>All</option>
+                            <option value="Online Payment">RazorPay</option>
+                            <option value="Walle Paymentt">Wallet</option>
+                            <option value="Cash On Delivery">Cash On Delivery</option>
+                           
+
+
+                        </select>
+                      </div>
+     
+                        <input type="submit" class="btn btn-smlight " value="Filter">
+
+                  </div>
+                </form>
+           
+
+
+
+                  </div>
+                </header>
+            
+        <div class="card-body">
+            <div class="d-flex" style="justify-content: center;">
+                <h2 class="content-title card-title">Sales Report</h2>
+                
+            </div>
+
+            <p>Total Revenue: <%= totalRevenue.toFixed(2) %></p>
+
+<!-- Display Number of Orders with Status "Returned" -->
+<p>Number of Returned Orders: <%= returnedOrders.length %></p>
+
+<!-- Display Total Number of Sales -->
+<p>Total Sales: <%= totalSales %></p>
+
+<!-- Display Number of Products Sold -->
+<p>Total Products Sold: <%= totalProductsSold %></p>
+
+<!-- Display Product that is Mostly Sold -->
+
+
+
+        <table id="products" class="table">
+            <thead>
+              <tr>
+                <th scope="col">Order Id</th>
+                <th scope="col">Billing Name</th>
+                <th scope="col">Ordered Date</th>
+               
+                <th scope="col">Total</th>
+                <th scope="col">Status</th>
+                <th scope="col">Payment Status</th>
+                <th scope="col">Payment Method</th>
+              </tr>
+            </thead>
+            <tbody>
+                
+                <% orders.forEach((order) => { %>
+                    <tr>                    
+                      <td><%= order._id %></td>
+                      <td><%= order.user.name %></td>
+                      <td><%= new Date(order.orderDate).toLocaleDateString() %></td>
+                 
+                      <td><%= order.totalAmount %></td>
+                      <td>  <% if (order.status == 'Pending') { %>
+                        <span class="badge badge-pill badge-soft-warning"><%= order.status %></span>
+                    <% } else if (order.status == 'Order Confirmed') { %>
+                        <span class="badge badge-pill badge-soft-warning"><%= order.status %></span>
+                    <% } else if (order.status == 'Shipped') { %>
+                        <span class="badge badge-pill badge-soft-dark"><%= order.status %></span>
+                    <% } else if (order.status == 'Out For Delivery') { %>
+                        <span class="badge badge-pill badge-soft-dark"><%= order.status %></span>
+                    <% } else if (order.status == 'Delivered') { %>
+                        <span class="badge badge-pill badge-soft-success"><%= order.status %></span>
+                        <% } else if (order.status == 'Return Successfull') { %>
+                            <span class="badge badge-pill badge-soft-success"><%= order.status %></span>
+                    <% } else { %>
+                        <span class="badge badge-pill badge-soft-danger"><%= order.status %></span>
+                    <% } %>
+                </td>
+                <td>
+                    <%  if (order.paymentStatus == 'Pending') { %>
+                        <span class="badge badge-pill badge-soft-warning"><%= order.paymentStatus %></span>
+                    <% } else if (order.paymentStatus == 'Payment Successful') { %>
+                        <span class="badge badge-pill badge-soft-success"><%= order.paymentStatus %></span>
+                    <% } else if (order.paymentStatus == 'Refund') { %>
+                        <span class="badge badge-pill badge-soft-primary"><%= order.paymentStatus %></span>
+                        <% } else  { %>
+                            <span class="badge badge-pill badge-soft-danger"><%= order.paymentStatus %></span>
+                        <% } %></td>
+
+                      <td><%= order.paymentMethod %></td>
+
+                      
+                    </tr>
+                    <% }); %>
 
             
-
-
-            </div>
-
-            <div class="card">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <div class="table-responsive">
-                        <table class="table align-middle table-nowrap mb-0">
-                            <thead class="table-light">
-                                <tr>
-                             
-                                    <th class="align-middle" scope="col">Order ID</th>
-                                    <th class="align-middle" scope="col">Billing Name</th>
-                                    <th class="align-middle" scope="col">Date</th>
-                                    <th class="align-middle" scope="col">Total</th>
-                                    <th style="width: 150px;" class="align-middle" scope="col">Order Status</th>
-                                    <th class="align-middle" scope="col">Payment Method</th>
-                                    <th class="align-middle" scope="col">View Details</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                <% orders.forEach(function(order) { %>
-                                  
-                                <tr>
-                                
-                                    <td><a href="#" class="fw-bold"><%= order._id %></a> </td>
-                                    <td><%= order.user.name %></td>
-                                    <td>
-                                        <%= order.orderDate.toDateString() %>
-                                    </td>
-                                    <td>
-                                        ₹ <%= order.totalAmount %>
-                                    </td>
-                                    <td>
-                                        <% if (order.status === 'Pending') { %>
-                                            <span class="badge badge-pill badge-soft-warning"><%= order.status %></span>
-                                        <% } else if (order.status === 'Order Confirmed') { %>
-                                            <span class="badge badge-pill badge-soft-warning"><%= order.status %></span>
-                                        <% } else if (order.status === 'Shipped') { %>
-                                            <span class="badge badge-pill badge-soft-dark"><%= order.status %></span>
-                                        <% } else if (order.status === 'Out For Delivery') { %>
-                                            <span class="badge badge-pill badge-soft-dark"><%= order.status %></span>
-                                        <% } else if (order.status === 'Delivered') { %>
-                                            <span class="badge badge-pill badge-soft-success"><%= order.status %></span>
-                                        <% } else { %>
-                                            <span class="badge badge-pill badge-soft-danger"><%= order.status %></span>
-                                        <% } %>
-                                        
-                                        
-                                        
-                                    </td>
-                                    <td>
-                                        <i class="material-icons md-payment font-xxl text-muted mr-5"></i><%= order.paymentMethod %>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-pill badge-soft-success"><%= order.paymentStatus %></span>
-                                       
-                                        
-                                        
-                                        
-                                    </td>
-                                    
-                                        
-                                    
-                                    
-                                </tr>
-                                <% }); %>
-                            
-                    
-                          
-                            </tbody>
-                        </table>
-                    </div>
-                </div> <!-- table-responsive end// -->
-            </div>
-        </div>
-       
+            </tbody>
+          </table>
+          
+                </div> <!-- card-body end// -->
+            </div> <!-- card end// -->
+         
+            
         </section> <!-- content-main end// -->
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<script>
+    document.getElementById("pdfButton").addEventListener("click", function () {
+        const salesContainer = document.querySelector(".card-body");
+        const pdfOptions = {
+            filename: 'SalesReport.pdf',
+            image: { type: 'jpeg', quality: 1.0 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+        html2pdf().from(salesContainer).set(pdfOptions).save();
+});
+</script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("searchInput");
+    const table = document.getElementById("products");
+    const rows = table.getElementsByTagName("tr");
+
+    searchInput.addEventListener("keyup", function () {
+        const searchText = searchInput.value.toLowerCase();
+
+        for (let i = 1; i < rows.length; i++) {
+            const rowData = rows[i].textContent.toLowerCase();
+            if (rowData.includes(searchText)) {
+                rows[i].style.display = "";
+            } else {
+                rows[i].style.display = "none";
+            }
+        }
+    });
+});
+
+
+
+
+    $(document).ready(function () {
+        $('#products').DataTable({
+            "paging": false,  
+        });
+    });
+
+    function updateProductList(categoryId) {
+        $.ajax({
+            type: "GET",
+            url: "/products", 
+            data: { categoryId: categoryId },
+            success: function (data) {
+                $("#product-list").html(data);
+            },
+            error: function (error) {
+                console.error("Error:", error);
+            }
+        });
+    }
+
+    document.getElementById('category-filter').addEventListener('change', function () {
+        const categoryId = this.value;
+        updateProductList(categoryId);
+    });
+
+    $(document).ready(function () {
+        updateProductList('');
+    });
+
+</script>
 
         <footer class="main-footer font-xs">
             <div class="row pb-30 pt-15">
@@ -134,14 +255,7 @@
         </footer>
     </main>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-                      <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-                    <script>
-                      $(document).ready(function () {
-                   new DataTable('#products');
-
-                    })
-                     </script>
+                 
     <script src="assetsB/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="assetsB/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="assetsB/js/vendors/select2.min.js"></script>

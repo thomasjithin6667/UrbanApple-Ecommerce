@@ -82,7 +82,23 @@
                                         </div><!-- End .rating-container -->
 
                                         <div class="product-price">
-                                            ₹ <%= product.price%>
+                                            <% if (product.quantity !== 0) { %>
+                                                <% if (product.discountStatus && new Date(product.startDate) <= new Date() && new Date(product.endDate) >= new Date()) { %>
+                                                    ₹ <%= product.discountPrice %>
+                                                    <% if (product.price > product.discountPrice) { %>
+                                                        <span class="old-price ml-3" style="text-decoration: line-through;"> ₹ <%= product.price %> </span>
+                                                        <% const percentageOff = ((product.price - product.discountPrice) / product.price) * 100; %>
+                                                        <span style="font-size: 16px; background-color: rgb(0, 140, 255); border-radius: 2px; padding: 5px 10px 5px 10px;" class="old-price ml-3 text-white">- <%= percentageOff.toFixed(2) %>% OFF</span>
+                                                    <% } %>
+                                                <% } else { %>
+                                                    ₹ <%= product.price %>
+                                                <% } %>
+                                            <% } else { %>
+                                                <!-- Out of stock message -->
+                                                <div class="my-5" style="display: flex; align-items: center; color: red;">
+                                                    <p style="color: red; font-size: 14px;">Product out of stock</p>
+                                                </div>
+                                            <% } %>
                                         </div><!-- End .product-price -->
 
                                         <div class="product-content">

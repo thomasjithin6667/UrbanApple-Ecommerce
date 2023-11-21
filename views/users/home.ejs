@@ -20,22 +20,29 @@
                             }
                         }
                     }'>
-                    <div class="intro-slide" style="background-image: url(assets/images/demos/demo-4/slider/slide-1.png);">
+                    <% banner.forEach(banners => { %>
+                    
+                    <div class="intro-slide" style="background-image: url(assets/images/bannerImages/<%=banners.image%> )">
                         <div class="container intro-content">
                             <div class="row justify-content-end">
                                 <div class="col-auto col-sm-7 col-md-6 col-lg-5">
-                                    <h3 class="intro-subtitle text-third">Deals and Promotions</h3><!-- End .h3 intro-subtitle -->
-                                    <h1 style="font-weight: 200;" class="intro-title">Apple Watch Pro</h1>
-                                    <h1 style="font-weight: 400;" class="intro-title">12.9 Inch, 64GB</h1><!-- End .intro-title -->
+                                    <h3 class="intro-subtitle text-third"><%= banners.bannerType%></h3><!-- End .h3 intro-subtitle -->
+                                    <h1 style="font-weight: 200;" class="intro-title"> <% 
+                                        let fullName = banners.product.name;
+                                        let words = fullName.split(' ');
+                                        let firstThreeWords = words.slice(0, 3).join(' ');
+                                        %>
+                                      <%= firstThreeWords %></h1>
+                                    <h1 style="font-weight: 400;" class="intro-title"><%= banners.subtitle %></h1><!-- End .intro-title -->
 
                                     <div class="intro-price">
-                                        <sup class="intro-old-price">$349,95</sup>
+                                        <sup class="intro-old-price">₹<%= banners.product.price %></sup>
                                         <span  style="font-weight: 200;" class="text-third">
-                                            $279<sup>.99</sup>
+                                            ₹<%= banners.product.discountPrice %>
                                         </span>
                                     </div><!-- End .intro-price -->
 
-                                    <a href="/productlist" class="btn btn-primary btn-round">
+                                    <a href="<%= banners.link %>" class="btn btn-primary btn-round">
                                         <span>Shop More</span>
                                         <i class="icon-long-arrow-right"></i>
                                     </a>
@@ -43,31 +50,9 @@
                             </div><!-- End .row -->
                         </div><!-- End .intro-content -->
                     </div><!-- End .intro-slide -->
+                    <% }); %>
                     
 
-                    <div class="intro-slide" style="background-image: url(assets/images/demos/demo-4/slider/slide-2.png);">
-                        <div class="container intro-content">
-                            <div class="row justify-content-end">
-                                <div class="col-auto col-sm-7 col-md-6 col-lg-5">
-                                    <h3  class="intro-subtitle text-primary">New Arrival</h3>
-                                    <h1 style="font-weight: 200;" class="intro-title">Apple iPad Pro</h1>
-                                    <h1 style="font-weight: 400;" class="intro-title">12.9 Inch, 64GB</h1><!-- End .intro-title -->
-
-                                    <div class="intro-price">
-                                        <sup class="intro-old-price">$349,95</sup>
-                                        <span  style="font-weight: 200;" class="text-third">
-                                            $279<sup>.99</sup>
-                                        </span>
-                                    </div><!-- End .intro-price -->
-
-                                    <a href="/productlist" class="btn btn-primary btn-round">
-                                        <span>Shop More</span>
-                                        <i class="icon-long-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div><!-- End .row -->
-                        </div><!-- End .intro-content -->
-                    </div><!-- End .intro-slide -->
                 </div><!-- End .intro-slider owl-carousel owl-simple -->
 
                 <span class="slider-loader"></span><!-- End .slider-loader -->

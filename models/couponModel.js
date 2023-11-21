@@ -24,6 +24,14 @@ const couponSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  minCartAmt: {
+    type: Number,
+    required: true,
+  },
+  maxRedeemableAmt: {
+    type: Number,
+    required: true,
+  },
 
   usersUsed: [
     {

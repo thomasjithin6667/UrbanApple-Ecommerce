@@ -1,12 +1,13 @@
-
+//=====================================================================================================================================//
+//WISHLIST CONTROLLER
+//=====================================================================================================================================//
 //import statements
+
 const Cart = require('../models/cartModel'); 
-const User=require('../models/userModel');
-const Product = require('../models/productModel')
 const Wishlist=require('../models/wishlistModel')
 
-
-
+//=====================================================================================================================================//
+//funtion to add item to wishlist
 const addToWishlist = async (req, res) => {
     const userId = req.session.user._id;
     const productId = req.params.productId;
@@ -37,12 +38,8 @@ const addToWishlist = async (req, res) => {
     }
 };
 
-
-
-
-
-
-
+//=====================================================================================================================================//
+//functon to load wishliat page
 const getWishlist = async (req, res) => {
     const userId = req.session.user._id;
 
@@ -58,8 +55,8 @@ const getWishlist = async (req, res) => {
     }
 };
 
-
-
+//=====================================================================================================================================//
+//function to add item from wishlsit to cart
 const addToCartFromWishlist = async (req, res) => {
     const userId = req.session.user._id;
     const productId = req.params.productId;
@@ -97,10 +94,8 @@ const addToCartFromWishlist = async (req, res) => {
     }
 };
 
-
-
-
-
+//=====================================================================================================================================//
+//Function to remove item from wishlist
 const removeFromWishlist= async (req, res) => {
     const userId = req.session.user_id;
     console.log(userId);
@@ -133,7 +128,7 @@ const removeFromWishlist= async (req, res) => {
     }
   };
 
-
+//=====================================================================================================================================//
 
 module.exports = {
     addToWishlist,
@@ -142,3 +137,6 @@ module.exports = {
     removeFromWishlist
  
 }
+
+//=====================================================================================================================================//
+//=====================================================================================================================================//

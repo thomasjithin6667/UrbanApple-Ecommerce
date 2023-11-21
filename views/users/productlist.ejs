@@ -115,6 +115,14 @@
                                                         <% products.filter(product=> product.list ===
                                                             true).forEach((product) => { %>
                                                             <div class="col-6 col-md-4 col-xl-3">
+                                                             
+                                                                <% if (product.discountStatus && new Date(product.startDate) <= new Date() && new Date(product.endDate) >= new Date()) { %>
+                                                                    
+                                                                    <% if (product.price > product.discountPrice) { %>
+                                                                        <span class="product-label label-top">Sale</span>
+                                                                    <% } %>
+                                                                <% } %>
+                                                                
                                                                 <div class="product ">
                                                                     <figure class="product-media"  style="background-color: white;">
                                                                         <a href="/viewproduct/<%=product._id%>">
@@ -154,40 +162,45 @@
 
                                                                     <div class="product-body">
                                                                         <div class="product-cat">
-                                                                            <a href="#">
-                                                                                <%= product.category %>
-                                                                            </a>
+                                                                            <a href="#"><%= product.category %></a>
                                                                         </div><!-- End .product-cat -->
-                                                                        <h3 class="product-title"><a
-                                                                                href="product.html">
-                                                                                <% if (product.name.length> 50) { %>
-                                                                                    <%= product.name.slice(0, 60)
-                                                                                        + '...' %>
-                                                                                        <% } else { %>
-                                                                                            <%= product.name %>
-                                                                                                <% } %>
-                                                                            </a></h3><!-- End .product-title -->
-                                                                            <% if(product.quantity !== 0){ %>       
-
-                                                                        <div class="product-price">
-                                                                            ₹  <%= product.price %>
-                                                                        </div><!-- End .product-price -->
-                                                                        <%} else { %>
+                                                                        <h3 class="product-title">
+                                                                            <a href="product.html">
+                                                                                <% if (product.name.length > 50) { %>
+                                                                                    <%= product.name.slice(0, 60) + '...' %>
+                                                                                <% } else { %>
+                                                                                    <%= product.name %>
+                                                                                <% } %>
+                                                                            </a>
+                                                                        </h3><!-- End .product-title -->
+                                                                        
+                                                                        <% if (product.quantity !== 0) { %>       
+                                                                            <div class="product-price">
+                                                                                <% if (product.discountStatus && new Date(product.startDate) <= new Date() && new Date(product.endDate) >= new Date()) { %>
+                                                                                    ₹ <%= product.discountPrice %>
+                                                                                    <% if (product.price > product.discountPrice) { %>  
+                                                                                        <span class="old-price ml-3" style="text-decoration: line-through;"> ₹ <%= product.price %> </span>
+                                                                                
+                                                                                    <% } %>
+                                                                                <% } else { %>
+                                                                                    ₹ <%= product.price %>
+                                                                                <% } %>
+                                                                            </div><!-- End .product-price -->
+                                                                        <% } else { %>
                                                                             <div class="my-3" style="display: flex; align-items: center; color: red;">
                                                                                 <p style="color: red; font-size: 12px;">Product out of stock</p>
                                                                             </div>
-
-                                                                            <% } %>
+                                                                        <% } %>
+                                                                        
                                                                         <div class="ratings-container">
                                                                             <div class="ratings">
-                                                                                <div class="ratings-val"
-                                                                                    style="width: 100%;"></div>
+                                                                                <div class="ratings-val" style="width: 100%;"></div>
                                                                                 <!-- End .ratings-val -->
                                                                             </div><!-- End .ratings -->
-                                                                            <span class="ratings-text">(4
-                                                                                Reviews)</span>
+                                                                            <span class="ratings-text">(4 Reviews)</span>
                                                                         </div><!-- End .ratings-container -->
-                                                                    </div><!-- End .product-body -->
+                                                                    </div>
+                                                                    <!-- End .product-body -->
                                                                 </div><!-- End .product -->
                                                             </div><!-- End .col-sm-6 col-md-4 col-xl-3 -->
                                                             <% }); %>

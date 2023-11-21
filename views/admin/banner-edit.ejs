@@ -1,9 +1,9 @@
-
 <!DOCTYPE HTML>
 <html lang="en">
 
 
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:32:35 GMT -->
+
 <head>
     <meta charset="utf-8">
     <title>Admin Dashboard</title>
@@ -16,9 +16,9 @@
     <meta property="og:image" content="">
     <!-- Favicon -->
     <link rel="shortcut icon" href="assets/images/icons/apple-touch-icon.png" type="image/x-icon">
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/images/icons/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/icons/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="assets/images/icons/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/icons/favicon-16x16.png">
     <!-- Template CSS -->
     <link href="assetsB/css/main.css" rel="stylesheet" type="text/css" />
 </head>
@@ -26,156 +26,263 @@
 <body>
     <div class="screen-overlay"></div>
     <%- include('../partials/ecomAdminAside') %>
-    <main class="main-wrap">
-        <%- include('../partials/ecomAdminHeader') %>
-        <section class="content-main">
-                    
-         
-            <div class="content-header">
-               
-                <div>
-                    <h2 class="content-title card-title">Edit Banner  -<%=banner.category %> </h2>
-                    <p>Add, edit or delete a banner</p>
-                </div>
-             
-            </div>
-            <% if(typeof message !=='undefined' ){ %>
-                <p style="color: rgb(18, 91, 194);">
-                    <%=message%>
-                </p>
-                <% } %>
+        <main class="main-wrap">
+            <%- include('../partials/ecomAdminHeader') %>
+   
 
-           <div class="row">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5>Media</h5>
-                </div>
-                <div class="card-body d-flex">
-                    
 
-                    <div class="m-4">
-                      
-                        <img id="imgView<%= 0 %>" src="public/assets/images/bannerImages/<%= banner.image %>" alt=""><br>
-                    
+                <section class="content-main">
+                    <div class="content-header">
+                        <div>
+                            <h2 class="content-title card-title">Edit Banner-<%=banner.title %>
+                            </h2>
+                            <p>Add, edit or delete a banners</p>
+                            <div style="height: 15px;" class="div">
+                                <% if (typeof message !=='undefined' ){ %>
+                                    <% if (typeof error==='undefined' ) { %>
+                                        <p style="color: rgb(0, 95, 219);">
+                                            <%= message %>
+                                        </p>
+                                        <% } else { %>
+                                            <p style="color: red;">
+                                                <%= error %>
+                                            </p>
+                                            <% } %>
+                                                <% } %>
+
+                            </div>
+                        </div>
+
+
                     </div>
 
-            
-                </div>
-                
-                
-            </div>
-
-           </div>
-
-            <div class="div d-flex">
-
-            
-            <div class="card  "  >
-                
-                <div class="card-body ">
                     <div class="row">
-                        <div class="col-md-6">
-                            <form enctype="multipart/form-data" action="/admin/banner-edit?id=<%=banner._id %>" method="post">
-                                <div class="form-group">
-                                    <label for="title" class="form-label">Title</label>
-                                    <input type="text" name="title" id="title" class="form-control" required>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5>Media</h5>
+                            </div>
+                            <div class="card-body d-flex">
 
 
-                                </div> <br>
-                                <div class="form-group">
+                                <div class="m-4">
+                                    <img class="border rounded" id="uploadedImage" src="public/assets/images/bannerImages/<%= banner.image %>" alt=""><br>
+                                    
+                                    <button class="btn btn-sm btn-light font-xs rounded mt-3" id="removeImageButton" style="display: none;"><i class="fa fa-close"></i> Remove Uploaded image</button>
+                                </div>
+                                
 
-                                    <label for="link" class="form-label">Link</label>
-                                    <input type="text" name="link" id="link" class="form-control" required>
 
-                                </div> <br>
-                                <div class="form-group">
+                            </div>
 
-                                    <label for="subtitle" class="form-label">Subtitle</label>
-                                    <input type="text" name="subtitle" id="subtitle" class="form-control"
-                                        required>
-
-                                </div> <br>
-                
 
                         </div>
-                        <div class="col-md-6">
-                       
-                                <div class="form-group">
-                                    <label for="position" class="form-label">Position</label>
-                                    <input type="text" name="position" id="position" class="form-control"
-                                        required>
 
-
-                                </div> <br>
-                                <div class="form-group">
-
-                                
-                                <label class="form-label">Product</label>
-               
-
-                                <select name="product" class="form-select">
-                                    <option value="" selected disabled>Select a product</option>
-                                    <% if (product && product.length > 0) { %>
-                                        <% for (let i = 0; i < product.length; i++) { %>
-                                            <option value="<%= product[i]._id %>"><%= product[i].name %></option>
-                                        <% } %>
-                                    <% } else { %>
-                                        <option value="" disabled>No products available</option>
-                                    <% } %>
-                                </select>
-                                
-                            </div> <br>
-                          
-                                <div class="form-group">
-
-
-                                    <label for="image">Banner Image:</label>
-                                    <input type="file" name="image" id="image" class="form-control" >
-
-                                </div> <br> <br>
-                               
-
-                        </div>
-                      
-                    </div> 
-                    
-                </div> 
-               
-                
-            </div> <!-- card .// -->
-            <button type="submit" class="btn btn-primary">Update Banner</button>
-         
-        </div>
-    
-    </form>
-        </section> <!-- content-main end// -->
-    
-        <footer class="main-footer font-xs">
-            <div class="row pb-30 pt-15">
-                <div class="col-sm-6">
-                    <script>
-                    document.write(new Date().getFullYear())
-                    </script> ©, Evara - HTML Ecommerce Template .
-                </div>
-                <div class="col-sm-6">
-                    <div class="text-sm-end">
-                        All rights reserved
                     </div>
-                </div>
-            </div>
-        </footer>
-    </main>
-    <script src="assetsB/js/vendors/jquery-3.6.0.min.js"></script>
-    <script src="assetsB/js/vendors/bootstrap.bundle.min.js"></script>
-    <script src="assetsB/js/vendors/select2.min.js"></script>
-    <script src="assetsB/js/vendors/perfect-scrollbar.js"></script>
-    <script src="assetsB/js/vendors/jquery.fullscreen.min.js"></script>
-    <script src="assetsB/js/vendors/chart.js"></script>
-    <!-- Main Script -->
-    <script src="assetsB/js/main.js" type="text/javascript"></script>
-    <script src="assetsB/js/custom-chart.js" type="text/javascript"></script>
+
+                    <form enctype="multipart/form-data" action="/admin/banner-edit?id=<%=banner._id %>" method="post">
+
+                        <div class="card col">
+                            <div class="card-body ">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+
+
+                                            <label for="bannerType" class="form-label">Select Banner Type:</label>
+                                            <select id="bannerType" class="form-select" name="bannerType">
+                                                <option value="Category Banner" <% if (banner.bannerType === 'Category Banner') { %> selected <% } %>>Category Offer</option>
+                                                <option value="Product Banner" <% if (banner.bannerType === 'Product Banner') { %> selected <% } %>>Product Offer</option>
+                                                <option value="New Arrival" <% if (banner.bannerType === 'New Arrival') { %> selected <% } %>>New Arrival</option>
+                                                <option value="Deals and Promotions" <% if (banner.bannerType === 'Deals and Promotions') { %> selected <% } %>>Deals and Promotions</option>
+                                                <option value="Seasonal Sales" <% if (banner.bannerType === 'Seasonal Sales') { %> selected <% } %>>Seasonal Sales</option>
+                                            </select>
+                                            
+                                        </div><br>
+
+
+
+
+                                        <div class="form-group">
+                                            <label for="title" class="form-label">Title</label>
+                                            <input type="text" name="title" value="<%=banner.title %>" id="title"
+                                                class="form-control" required>
+
+
+                                        </div> <br>
+                                        <div class="form-group">
+
+                                            <label for="link" class="form-label">Link</label>
+                                            <input type="text" value="<%=banner.link %>" name="link" id="link"
+                                                class="form-control" required>
+
+                                        </div> <br>
+                                        <div class="form-group">
+
+                                            <label for="subtitle" class="form-label">Subtitle</label>
+                                            <input type="text" value="<%=banner.subtitle%>" name="subtitle"
+                                                id="subtitle" class="form-control" required>
+
+                                        </div> <br>
+                                        <div class="form-group">
+
+                                            <label for="subtitle" class="form-label">Offer</label>
+                                            <input type="text" value="<%=banner.offer%>" name="offer" id="offer"
+                                                class="form-control" required>
+
+                                        </div> <br>
+
+
+
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+
+
+                                            <label class="form-label">Category</label>
+                                            <select name="category" class="form-select">
+                                                <option value="" selected disabled>Select a category</option>
+                                                <% if (category && category.length> 0) { %>
+                                                    <% for (let i=0; i < category.length; i++) { %>
+                                                        <% if (category[i].category===banner.category) { %>
+                                                            <option value="<%= category[i].category %>" selected>
+                                                                <%= category[i].category %>
+                                                            </option>
+                                                            <% } else { %>
+                                                                <option value="<%= category[i].category %>">
+                                                                    <%= category[i].category %>
+                                                                </option>
+                                                                <% } %>
+                                                                    <% } %>
+                                                                        <% } else { %>
+                                                                            <option value="" disabled>No products
+                                                                                available</option>
+                                                                            <% } %>
+                                            </select>
+
+                                        </div> <br>
+                                        <div class="form-group">
+
+
+                                            <label class="form-label">Product</label>
+
+
+                                            <select name="product" class="form-select">
+                                                <option value="" selected disabled>Select a product</option>
+                                                <% if (product && product.length> 0) { %>
+                                                    <% for (let i=0; i < product.length; i++) { %>
+                                                        <% if (banner.product.name===product[i].name) { %>
+                                                            <option value="<%= product[i]._id %>" selected>
+                                                                <%= product[i].name %>
+                                                            </option>
+                                                            <% } else { %>
+                                                                <option value="<%= product[i]._id %>">
+                                                                    <%= product[i].name %>
+                                                                </option>
+                                                                <% } %>
+                                                                    <% } %>
+                                                                        <% } else { %>
+                                                                            <option value="" disabled>No products
+                                                                                available</option>
+                                                                            <% } %>
+                                            </select>
+                                        </div> <br>
+
+                                        <div class="form-group">
+
+
+                                       
+                                            <label for="image" class="form-label">Banner Image:</label>
+                                            <input value="<%=banner.image%>"  type="file" name="image" id="image" class="form-control">
+
+                                        </div> <br>
+                                        <div class="form-group">
+                                            <label class="form-label " for="startDate">Start Date</label>
+                                            <input type="date" value="<%= startDate %>" class="form-control"
+                                                id="expiryDate" name="startDate" required>
+                                        </div><br>
+                                        <div class="form-group">
+                                            <label class="form-label" for="endDate">End Date</label>
+                                            <input type="date" value="<%= endDate %>" class="form-control"
+                                                id="expiryDate" name="endDate" required>
+                                        </div><br> <br>
+
+
+
+
+
+
+
+
+                                    </div>
+
+
+
+
+
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Update Banner</button>
+
+
+                            </div>
+                        </div> <!-- card body .// -->
+                        </div> <!-- card .// -->
+                    </form>
+                    
+                </section> <!-- content-main end// -->
+
+
+
+
+
+                <footer class="main-footer font-xs">
+                    <div class="row pb-30 pt-15">
+                        <div class="col-sm-6">
+                            <script>
+                                document.write(new Date().getFullYear())
+                            </script> ©, Evara - HTML Ecommerce Template .
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-sm-end">
+                                All rights reserved
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+        </main>
+        <script src="assetsB/js/vendors/jquery-3.6.0.min.js"></script>
+        <script src="assetsB/js/vendors/bootstrap.bundle.min.js"></script>
+        <script src="assetsB/js/vendors/select2.min.js"></script>
+        <script src="assetsB/js/vendors/perfect-scrollbar.js"></script>
+        <script src="assetsB/js/vendors/jquery.fullscreen.min.js"></script>
+        <script src="assetsB/js/vendors/chart.js"></script>
+        <!-- Main Script -->
+        <script src="assetsB/js/main.js" type="text/javascript"></script>
+        <script src="assetsB/js/custom-chart.js" type="text/javascript"></script>
 </body>
 
 
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:32:57 GMT -->
+
 </html>
+<script>
+    document.getElementById('image').addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            document.getElementById('uploadedImage').src = event.target.result;
+            document.getElementById('removeImageButton').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+document.getElementById('removeImageButton').addEventListener('click', function() {
+    document.getElementById('uploadedImage').src = '';
+    this.style.display = 'none';
+    document.getElementById('image').value = '';
+});
+
+</script>

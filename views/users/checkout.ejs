@@ -272,14 +272,14 @@
 
 
                                                     <div class="input-radio">
-                                                        <% if (user.walletBalance>= subtotalWithShipping) { %>
-                                                            <input type="radio" name="payment" value="Wallet Payment"
-                                                                id="WalletPayment">
-                                                            <label for="WalletPayment">
-                                                                <span></span>
-                                                                Pay via Wallet
-                                                            </label>
-                                                            <% } %>
+
+                                                        <input type="radio" name="payment" value="Wallet Payment"
+                                                            id="WalletPayment">
+                                                        <label for="WalletPayment">
+                                                            <span></span>
+                                                            Pay via Wallet
+                                                        </label>
+
                                                     </div>
 
                                                 </div> <br>
@@ -300,11 +300,11 @@
                                                     PAYMENT</button>
 
 
-                                                <% if (user.walletBalance>= subtotalWithShipping) { %>
-                                                    <button id="walletButton"
-                                                        class="btn btn-primary btn-order btn-block mt-5">WALLET
-                                                        PAY</button>
-                                                    <% } %>
+
+                                                <button id="walletButton"
+                                                    class="btn btn-primary btn-order btn-block mt-5">WALLET
+                                                    PAY</button>
+
 
 
 
@@ -720,14 +720,15 @@
                         if (data.success) {
                             window.location.href = '/orderPlaced';
                         } else {
-                            alert('Error occurred while placing order');
+                            alert('Error occurred while placing order: ' + data.message);
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        alert('Error occurred while placing order');
+                        alert('Error occurred while placing order: ' + error.message);
                     });
             }
+
 
 
 
@@ -785,11 +786,11 @@
                                 image: "",
                                 order_id: orderId,
                                 handler: function (response) {
-                                   
+
                                     if (response.razorpay_payment_id) {
                                         alert('Payment successful!');
 
-                                        const updatePaymentStatusEndpoint = '/updatePaymentStatus'; 
+                                        const updatePaymentStatusEndpoint = '/updatePaymentStatus';
                                         const updatePaymentStatusData = {
                                             orderId: orderId,
                                             paymentId: response.razorpay_payment_id,
@@ -839,10 +840,10 @@
 
                             var rzp1 = new Razorpay(options);
 
-                           
-                                rzp1.open();
-                                e.preventDefault();
-                            
+
+                            rzp1.open();
+                            e.preventDefault();
+
                         }
                     })
 
@@ -859,7 +860,6 @@
             const couponCode = couponCodeInput.value;
             placeOrderWallet('wallet', couponCode);
         });
-
 
         function placeOrderWallet(paymentMethod, couponCode) {
             const selectedAddress = document.querySelector('input[name="address"]:checked');
@@ -889,15 +889,14 @@
                     if (data.success) {
                         window.location.href = '/orderPlaced';
                     } else {
-                        alert('Error occurred while placing order');
+                        alert('Error occurred while placing order: ' + data.message);
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('Error occurred while placing order');
+                    alert('Error occurred while placing order: ' + error.message);
                 });
         }
-
 
 
 

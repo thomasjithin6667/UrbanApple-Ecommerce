@@ -1,14 +1,12 @@
-
+//=====================================================================================================================================//
+//CART CONTROLLER
+//=====================================================================================================================================//
 //import statements
 const Cart = require('../models/cartModel'); 
-const User=require('../models/userModel');
-const Product = require('../models/productModel')
 const Wishlist=require('../models/wishlistModel')
 
-
-
-
-
+//=====================================================================================================================================//
+//function to add items to cart
 const addtocart = async (req, res) => {
     try {
         const userId = req.session.user._id;
@@ -57,26 +55,42 @@ const addtocart = async (req, res) => {
     }
 };
 
-
+//=====================================================================================================================================//
 //function to calculate total price
 const calculateSubtotal = (cart) => {
     let subtotal = 0;
     for (const cartItem of cart) {
-      subtotal += cartItem.product.discountPrice * cartItem.quantity;
+
+        const isDiscounted = cartItem.product.discountStatus &&
+            new Date(cartItem.product.startDate) <= new Date() &&
+            new Date(cartItem.product.endDate) >= new Date();
+
+        const priceToConsider = isDiscounted ? cartItem.product.discountPrice : cartItem.product.price;
+
+        subtotal += priceToConsider * cartItem.quantity;
     }
     return subtotal;
-  };
+};
 
-  const calculateProductTotal = (cart) => {
+//=====================================================================================================================================//
+//fucntion to calcualte product price
+const calculateProductTotal = (cart) => {
     const productTotals = [];
     for (const cartItem of cart) {
-        const total = cartItem.product.discountPrice * cartItem.quantity;
+
+        const isDiscounted = cartItem.product.discountStatus &&
+            new Date(cartItem.product.startDate) <= new Date() &&
+            new Date(cartItem.product.endDate) >= new Date();
+
+        const priceToConsider = isDiscounted ? cartItem.product.discountPrice : cartItem.product.price;
+
+        const total = priceToConsider * cartItem.quantity;
         productTotals.push(total);
     }
     return productTotals;
 };
 
-
+//=====================================================================================================================================//
 //To load the cart
 const getcart = async (req, res) => {
     const userId = req.session.user_id;
@@ -122,9 +136,8 @@ const getcart = async (req, res) => {
     }
 };
 
-
+//=====================================================================================================================================//
 //to delete item in cart
-
  const deleteCart = async (req, res) => {
     const userId = req.session.user._id;
     const productId = req.params.productId;
@@ -162,8 +175,8 @@ const getcart = async (req, res) => {
     }
   };
 
-
-  //update cart quantity
+  //=====================================================================================================================================//
+//update cart quantity
    const updateQuantity = async (req, res) => {
     const userId = req.session.user._id;
     const productId = req.params.productId;
@@ -201,7 +214,8 @@ const getcart = async (req, res) => {
     }
   };
 
-
+//=====================================================================================================================================//
+//update cartcount
   const updateCartCount = async (req, res) => {
     try {
       const userId = req.session.user_id;
@@ -233,6 +247,7 @@ const getcart = async (req, res) => {
       res.json({ success: false, error: "Internal server error" });
     }
   };
+//=====================================================================================================================================//  
 
 module.exports = {
     addtocart,
@@ -242,6 +257,8 @@ module.exports = {
     updateCartCount
  
 }
+//=====================================================================================================================================//
+//=====================================================================================================================================//
 
 
 

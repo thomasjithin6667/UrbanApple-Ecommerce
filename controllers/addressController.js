@@ -1,8 +1,13 @@
+//=====================================================================================================================================//
+//ADDRESS CONTROLLER
+//=====================================================================================================================================//
+
 const User=require('../models/userModel');
 const userHelper = require('../helpers/userHelper')
 const Address = require('../models/addressesModel')
 
-
+//=====================================================================================================================================//
+//function to load add address page
 const loadAddAddress = async(req, res)=>{
   try{
     const userId = req.query.userId;
@@ -12,9 +17,10 @@ const loadAddAddress = async(req, res)=>{
     }catch(error){
         console.log(error.message);
     }
-  }
+  };
 
-
+//=====================================================================================================================================//
+//function to load addlist page
  const loadAddress = async(req, res)=>{
     try{
       const userId = req.query.userId;
@@ -25,10 +31,10 @@ const loadAddAddress = async(req, res)=>{
       }catch(error){
           console.log(error);
       }
-    }
-  
+    };
 
-  
+//=====================================================================================================================================//
+//function to add address db
  const postAddAddress = async (req, res) => {
       const userId = req.query.userId;
       const { type, phone, houseName, name, street, city, state, pinCode } = req.body;
@@ -45,9 +51,10 @@ const loadAddAddress = async(req, res)=>{
      
   
       
-  }
-  
+  };
 
+//=====================================================================================================================================//  
+//function to delete address
 const deleteAddress= async(req,res)=>{
 
   try {
@@ -67,9 +74,10 @@ const deleteAddress= async(req,res)=>{
   }
 
 
-}
+};
 
-
+//=====================================================================================================================================//
+//function to load edit address page
   const loadEditAddress = async (req, res) => {
     try {
 
@@ -84,6 +92,8 @@ const deleteAddress= async(req,res)=>{
     }
   };
 
+//=====================================================================================================================================//
+//function to edit address
 const editAddress = async (req, res) => {
   const addressId = req.query.addressId;
   const userId = req.query.userId; 
@@ -106,10 +116,9 @@ const editAddress = async (req, res) => {
         
         
     }
-  }
-  
-
-
+  };
+ 
+//=====================================================================================================================================//  
   
 
 module.exports = {
@@ -122,3 +131,5 @@ module.exports = {
 
 }
 
+//=====================================================================================================================================//
+//=====================================================================================================================================//

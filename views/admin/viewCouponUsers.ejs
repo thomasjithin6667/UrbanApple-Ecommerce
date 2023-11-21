@@ -76,7 +76,7 @@
                     </div>
                 </header> <!-- card-header end// -->
                 <div class="card-body">
-                    <div class="row mb-50 mt-20 order-info-wrap">
+                    <div class="row mb-50 mt-20 order-info-wrap text-center">
                         <div class="col-md-4">
                             <article class="icontext align-items-start">
                                 <span class="icon icon-sm rounded-circle bg-primary-light">
@@ -136,6 +136,48 @@
                                 
                             </article>
                         </div> <!-- col// -->
+                        <div class="col-md-4 mt-50">
+                            <article class="icontext align-items-start">
+                                <span class="icon icon-sm rounded-circle bg-primary-light">
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                </span>
+                                <div class="text">
+                                    <h6 class="mb-1">Min Cart Amount</h6>
+                                    <p class="mb-1"> <%= coupon.minCartAmt %>
+                                    </p>
+                                    
+                                </div>
+                                
+                            </article>
+                        </div> <!-- col// -->
+                        <div class="col-md-4 mt-50" >
+                            <article class="icontext align-items-start">
+                                <span class="icon icon-sm rounded-circle bg-primary-light">
+                                    <i class="fa-brands fa-buffer"></i>
+                                </span>
+                                <div class="text">
+                                    <h6 class="mb-1">Max Amount</h6>
+                                    <p class="mb-1"> <%= coupon.maxRedeemableAmt %>
+                                    </p>
+                                    
+                                </div>
+                                
+                            </article>
+                        </div> <!-- col// -->
+                        <div class="col-md-4 mt-50">
+                            <article class="icontext align-items-start">
+                                <span class="icon icon-sm rounded-circle bg-primary-light">
+                                    <i class="fa-solid fa-chart-line"></i>
+                                </span>
+                                <div class="text">
+                                    <h6 class="mb-1">Active Status</h6>
+                                    <p class="mb-1"> <%= coupon.isListed %>
+                                    </p>
+                                    
+                                </div>
+                                
+                            </article>
+                        </div> <!-- col// -->
                     </div> <!-- row // -->
                     <div class="row">
                         <div class="col-lg">
@@ -154,7 +196,7 @@
                                         <!-- Replace the following rows with actual user data -->
                                         <% users.forEach(user =>{ %>
                                         <tr>
-                                            <td><%= user.username %></td>
+                                            <td><%= user.name %></td>
                                             <td><%= user.email %></td>
                                             <td><%= coupon.code %></td>
                                             <td><%= coupon.discount %></td>

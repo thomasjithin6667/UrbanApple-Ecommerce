@@ -1,17 +1,17 @@
+//=====================================================================================================================================//
+//PRODUCT CONTROLLER
+//=====================================================================================================================================//
+//module imports
+
 const User = require('../models/userModel');
 const Category = require('../models/categoryModel');
 const Product = require('../models/productModel')
-const bcrypt = require('bcrypt');
-const UserOTPVerification = require('../models/userOTPModel')
-const nodemailer = require('nodemailer')
 const sharp = require('sharp')
-const path = require("path")
+const path = require("path");
+const { log } = require('console');
 
-
-
-
-//list and unlist products
-
+//=====================================================================================================================================//
+//toggle function to list and unlist product from admin side
 const unlistProduct = async (req, res) => {
   try {
     const admin = req.session.adminData
@@ -33,9 +33,10 @@ const unlistProduct = async (req, res) => {
 
 
   }
-}
+};
 
-//load add product
+//=====================================================================================================================================//
+//function to load add product page in admin side
 const loadaddProduct = async (req, res) => {
   try {
     const admin = req.session.adminData
@@ -45,12 +46,10 @@ const loadaddProduct = async (req, res) => {
   } catch (error) {
     console.log(error.message)
   }
-}
+};
 
-
-
-
-
+//=====================================================================================================================================//
+//function to insert product from admin side
 const insertProduct = async (req, res) => {
   try {
     const categoriesData = await Category.find({});
@@ -133,52 +132,51 @@ const insertProduct = async (req, res) => {
   }
 };
 
-
-//load product list
+//=====================================================================================================================================//
+//function to load productlist in admin side
 const loadProductList = async (req, res) => {
   const admin = req.session.adminData;
   try {
-      const search = req.query.search || '';
-      const page = parseInt(req.query.page) || 1;
-      const perPage = 3;
-      const status = req.query.status;
-     
+    const search = req.query.search || '';
+    const page = parseInt(req.query.page) || 1;
+    const perPage = 3;
+    const status = req.query.status;
 
-      const filter = {
-          $or: [
-              { name: { $regex: new RegExp(search, 'i') } },
-              { category: { $regex: new RegExp(search, 'i') } },
-          ],
-      };
 
-      if (status === "blocked") {
-          filter.list = false;
-      } else if (status === "unblocked") {
-          filter.list = true;
-      } else if (status === "instock") {
-          filter.quantity = { $gt: 0 };
-        } else if (status === "outofstock") {
-          filter.quantity = 0;
-      }else {
-          
-      }
+    const filter = {
+      $or: [
+        { name: { $regex: new RegExp(search, 'i') } },
+        { category: { $regex: new RegExp(search, 'i') } },
+      ],
+    };
 
-      const totalProducts = await Product.countDocuments(filter);
-      const totalPages = Math.ceil(totalProducts / perPage);
+    if (status === "blocked") {
+      filter.list = false;
+    } else if (status === "unblocked") {
+      filter.list = true;
+    } else if (status === "instock") {
+      filter.quantity = { $gt: 0 };
+    } else if (status === "outofstock") {
+      filter.quantity = 0;
+    } else {
 
-      const productsData = await Product.find(filter)
-          .skip((page - 1) * perPage)
-          .limit(perPage);
+    }
 
-      res.render('productlist', { products: productsData, admin: admin, totalPages, currentPage: page });
+    const totalProducts = await Product.countDocuments(filter);
+    const totalPages = Math.ceil(totalProducts / perPage);
+
+    const productsData = await Product.find(filter)
+      .skip((page - 1) * perPage)
+      .limit(perPage);
+
+    res.render('productlist', { products: productsData, admin: admin, totalPages, currentPage: page });
   } catch (error) {
-      console.log(error.message);
+    console.log(error.message);
   }
 }
 
-//edit product
-
-
+//=====================================================================================================================================//
+//function to edit product in admin side
 const editProduct = async (req, res) => {
   try {
     const categoriesData = await Category.find({});
@@ -276,10 +274,8 @@ const editProduct = async (req, res) => {
   }
 };
 
-
-
-//load show product page
-
+//=====================================================================================================================================//
+//function to load  product detail page in adminside
 const loadShowProduct = async (req, res) => {
   try {
     const admin = req.session.adminData
@@ -298,13 +294,10 @@ const loadShowProduct = async (req, res) => {
     console.log(error.message);
 
   }
-}
+};
 
-
-
-
-
-//load edit  page
+//=====================================================================================================================================//
+//function to load product edit page in admin side
 const loadEditProduct = async (req, res) => {
   try {
     const categoriesData = await Category.find({})
@@ -324,95 +317,18 @@ const loadEditProduct = async (req, res) => {
     console.log(error.message);
 
   }
-}
+};
 
-
-
-
-
-
-
-
-
+//=====================================================================================================================================//
+//function to load product list page in user side
 const productList = async (req, res) => {
   try {
- 
+
     if (req.session.user_id) {
 
 
       const userData = await User.findById({ _id: req.session.user_id });
 
-  const categoriesData = await Category.find({});
-
-  try {
-    const search = req.query.search || '';
-    const categories = Array.isArray(req.query.category) ? req.query.category : [req.query.category];
-    const priceRange = req.query.price || 'all';
-    const colors = Array.isArray(req.query.color) ? req.query.color : [req.query.color];
-    const sortBy = req.query.sortBy || 'priceLowToHigh';
-
-    // Define price range filters
-    let minPrice = 0;
-    let maxPrice = Number.MAX_VALUE;
-
-    switch (priceRange) {
-      case 'under25':
-        maxPrice = 20000;
-        break;
-      case '25to50':
-        minPrice = 20000;
-        maxPrice = 40000;
-        break;
-      case '50to100':
-        minPrice = 40000;
-        maxPrice = 60000;
-        break;
-      case '100to200':
-        minPrice = 60000;
-        maxPrice = 80000;
-        break;
-      case '200above':
-        minPrice = 80000;
-        break;
-      default:
-     
-    }
-
-    let sortQuery = {};
-
-    if (sortBy === 'priceLowToHigh') {
-      sortQuery = { price: 1 };
-    } else if (sortBy === 'priceHighToLow') {
-      sortQuery = { price: -1 };
-    }
-    
-
-  
-
-    const filter = {
-      $or: [
-
-        { category: { $in: categories.map(c => new RegExp(c, 'i')) } }, 
-      ],
-      price: { $gte: minPrice, $lte: maxPrice },
-      productColor: { $in: colors.map(c => new RegExp(c, 'i')) },
-    };
-
-    const productsData = await Product.find(filter).sort(sortQuery);
-    const selectedCategories = categories; 
-    const selectedPriceRange = priceRange;
-    const selectedColors = colors;
-  console.log(userData);
-
-    res.render('productlist', { user:userData ,products: productsData, category: categoriesData, sortBy,selectedCategories, selectedPriceRange,
-selectedColors, });
-  } catch (error) {
-    console.log(error.message);
-  }
-
-      
-  
-    } else {
       const categoriesData = await Category.find({});
 
       try {
@@ -421,11 +337,13 @@ selectedColors, });
         const priceRange = req.query.price || 'all';
         const colors = Array.isArray(req.query.color) ? req.query.color : [req.query.color];
         const sortBy = req.query.sortBy || 'priceLowToHigh';
-    
+
+        console.log(search);
+
         // Define price range filters
         let minPrice = 0;
         let maxPrice = Number.MAX_VALUE;
-    
+
         switch (priceRange) {
           case 'under25':
             maxPrice = 20000;
@@ -446,81 +364,140 @@ selectedColors, });
             minPrice = 80000;
             break;
           default:
-         
+
         }
-    
+
         let sortQuery = {};
-    
+
         if (sortBy === 'priceLowToHigh') {
           sortQuery = { price: 1 };
         } else if (sortBy === 'priceHighToLow') {
           sortQuery = { price: -1 };
         }
 
-    
+
+
+
         const filter = {
           $or: [
-    
-            { category: { $in: categories.map(c => new RegExp(c, 'i')) } }, 
+
+            { category: { $in: categories.map(c => new RegExp(c, 'i')) } },
           ],
           price: { $gte: minPrice, $lte: maxPrice },
           productColor: { $in: colors.map(c => new RegExp(c, 'i')) },
         };
-    
+        // const filter = {
+        //   $or: [
+        //     { category: { $in: categories.map(c => new RegExp(c, 'i')) } },
+        //   ],
+        //   price: { $gte: minPrice, $lte: maxPrice },
+        //   productColor: { $in: colors.map(c => new RegExp(c, 'i')) },
+        //   $or: [
+        //     { name: { $regex: search, $options: 'i' } }, 
+        //     { category: { $regex: search, $options: 'i' } }, 
+        //   ],
+        // };
+       
+
         const productsData = await Product.find(filter).sort(sortQuery);
-        const selectedCategories = categories; 
+        const selectedCategories = categories;
         const selectedPriceRange = priceRange;
         const selectedColors = colors;
-      
-    
-        res.render('productlist', { products: productsData, user: null, category: categoriesData, sortBy,selectedCategories, selectedPriceRange,
-    selectedColors, });
+     
+
+        res.render('productlist', {
+          user: userData, products: productsData, category: categoriesData, sortBy, selectedCategories, selectedPriceRange,
+          selectedColors,
+        });
       } catch (error) {
         console.log(error.message);
       }
 
-  
+
+
+    } else {
+      const categoriesData = await Category.find({});
+
+      try {
+        const search = req.query.search || '';
+        const categories = Array.isArray(req.query.category) ? req.query.category : [req.query.category];
+        const priceRange = req.query.price || 'all';
+        const colors = Array.isArray(req.query.color) ? req.query.color : [req.query.color];
+        const sortBy = req.query.sortBy || 'priceLowToHigh';
+        
+        // Define price range filters
+        let minPrice = 0;
+        let maxPrice = Number.MAX_VALUE;
+
+        switch (priceRange) {
+          case 'under25':
+            maxPrice = 20000;
+            break;
+          case '25to50':
+            minPrice = 20000;
+            maxPrice = 40000;
+            break;
+          case '50to100':
+            minPrice = 40000;
+            maxPrice = 60000;
+            break;
+          case '100to200':
+            minPrice = 60000;
+            maxPrice = 80000;
+            break;
+          case '200above':
+            minPrice = 80000;
+            break;
+          default:
+
+        }
+
+        let sortQuery = {};
+
+        if (sortBy === 'priceLowToHigh') {
+          sortQuery = { price: 1 };
+        } else if (sortBy === 'priceHighToLow') {
+          sortQuery = { price: -1 };
+        }
+
+        
+        const filter = {
+          $or: [
+
+            { category: { $in: categories.map(c => new RegExp(c, 'i')) } },
+          ],
+          price: { $gte: minPrice, $lte: maxPrice },
+          productColor: { $in: colors.map(c => new RegExp(c, 'i')) },
+        };
+
+
+        const productsData = await Product.find(filter).sort(sortQuery);
+        const selectedCategories = categories;
+        const selectedPriceRange = priceRange;
+        const selectedColors = colors;
+
+
+        res.render('productlist', {
+          products: productsData, user: null, category: categoriesData, sortBy, selectedCategories, selectedPriceRange,
+          selectedColors,
+        });
+      } catch (error) {
+        console.log(error.message);
+      }
+
+
     }
   } catch (error) {
     console.log(error.message);
   }
 };
 
-
-
-
-
-
-
-
-
-
-// const userProductList = async (req, res) => {
-//   try {
-//     const userData = await User.findById({ _id: req.session.user_id });
-//     const categoriesData = await Category.find({});
-
-//     const search = req.query.search || '';
-
-//     const productsData = await Product.find({
-//       $or: [
-//         { name: { $regex: new RegExp(search, 'i') } },
-//         { category: { $regex: new RegExp(search, 'i') } },
-//       ]
-//     });
-
-//     res.render('productlist', { products: productsData, user: userData, category: categoriesData });
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// }
-
-
-//view product
+//=====================================================================================================================================//
+//function to view product detail page in user side
 const productView = async (req, res) => {
 
   try {
-   
+
     const userData = await User.findById({ _id: req.session.user_id })
     const productId = req.params.productId;
     const productData = await Product.findById(productId);
@@ -530,7 +507,7 @@ const productView = async (req, res) => {
       _id: { $ne: productId },
 
     }).limit(7)
-    res.render('productView', { user: userData, product: productData,sameProducts :sameProducts  })
+    res.render('productView', { user: userData, product: productData, sameProducts: sameProducts })
 
 
   } catch (error) {
@@ -541,7 +518,7 @@ const productView = async (req, res) => {
 
 }
 
-
+//=====================================================================================================================================//
 //delete the productImages individually
 const deleteProductImage = async (req, res) => {
   try {
@@ -559,21 +536,14 @@ const deleteProductImage = async (req, res) => {
 
     await product.save();
 
- 
-    res.render('edit-product',{products:product,admin:admin,category:categoriesData})
+
+    res.render('edit-product', { products: product, admin: admin, category: categoriesData })
   } catch (error) {
     return res.status(500).json({ message: 'Error deleting image', error: error.message });
   }
 };
 
-
-
-
-
-
-
-
-
+//=====================================================================================================================================//
 module.exports = {
 
   loadaddProduct,
@@ -587,8 +557,9 @@ module.exports = {
   productList,
   deleteProductImage
 
-
 }
+//=====================================================================================================================================//
+//=====================================================================================================================================//
 
 
 

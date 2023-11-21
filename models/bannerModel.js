@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { Stream } = require('nodemailer/lib/xoauth2');
+
 
 const bannerSchema = new mongoose.Schema({
   bannerType:String,

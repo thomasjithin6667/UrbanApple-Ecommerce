@@ -42,27 +42,34 @@
 
                                               <div class="row">
                                                 <% availableCoupons.forEach((coupon, index) => { %>
-                                                  <div class="col-md-6">
-                                                    <div class="card card-dashboard">
-                                                      <div class="card-body">
-                                                        <div class="text-center text-uppercase text-white off">
-                                                          <span>Flat</span>
-                                                          <% if (coupon.type === 'percentage') { %>
-                                                            <h1 class="mt-0"><%= coupon.discount %>% OFF</h1>
-                                                          <% } else { %>
-                                                            <h1 class="mt-0"><%= coupon.discount %> OFF</h1>
-                                                          <% } %>
-                                                        </div>
-                                                        <div class="px-5 mb-3">
-                                                          <div class="d-flex justify-content-center align-items-middle> 
-                                                            <p class="textToCopy" id="textToCopy<%= index %>"><%= coupon.code %></p>
-                                                            <button style=" border: none; background-color: rgba(255, 255, 255, 0);" class="copyButton" data-target="textToCopy<%= index %>"><i class="fa-solid fa-copy"></i></button>
+                                                    <div class="col-md-6">
+                                                      <div class="card card-dashboard">
+                                                        <div class="card-body">
+                                                          <div class="text-center text-uppercase text-white off">
+                                                            <span>Flat</span>
+                                                            <% if (coupon.type === 'percentage') { %>
+                                                              <h1 class="mt-0"><%= coupon.discount %>% OFF</h1>
+                                                            <% } else { %>
+                                                              <h1 class="mt-0"><%= coupon.discount %> OFF</h1>
+                                                            <% } %>
+                                                          </div>
+                                                          <div class="px-5 mb-3">
+                                                            <div class="d-flex justify-content-center align-items-middle">
+                                                          
+                                                                
+                                                              <% if (coupon.usersUsed.includes(user._id)) { %>
+                                                                <p>Coupon Redeemed</p>
+                                                              <% } else { %>
+                                                                <p class="textToCopy" id="textToCopy<%= index %>"><%= coupon.code %></p>
+                                                                <button style="border: none; background-color: rgba(255, 255, 255, 0);" class="copyButton" data-target="textToCopy<%= index %>"><i class="fa-solid fa-copy"></i></button>
+                                                              <% } %>
+                                                            </div>
                                                           </div>
                                                         </div>
                                                       </div>
                                                     </div>
-                                                  </div>
-                                                <% }) %>
+                                                  <% }) %>
+                                                  
                                               </div>
                                               
                                               

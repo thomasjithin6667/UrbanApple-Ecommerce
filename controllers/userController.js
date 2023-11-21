@@ -1,12 +1,17 @@
+//=====================================================================================================================================//
+//USER CONTROLLER
+//=====================================================================================================================================//
+//module imports
+
 const User = require('../models/userModel');
 const UserOTPVerification = require('../models/userOTPModel')
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer')
 const Product = require('../models/productModel')
 const Category = require('../models/categoryModel');
-const Coupon = require('../models/couponModel')
 const Transaction = require('../models/transactionModel')
-
+const Banner = require('../models/bannerModel')
+//function to hash password
 const securePassword = async (password) => {
     try {
 
@@ -18,7 +23,7 @@ const securePassword = async (password) => {
     }
 }
 
-
+//=====================================================================================================================================//
 //create transport object
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
@@ -32,6 +37,8 @@ const transporter = nodemailer.createTransport({
 
 });
 
+//=====================================================================================================================================//
+//load register page 
 const loadRegister = async (req, res) => {
 
     try {
@@ -45,14 +52,13 @@ const loadRegister = async (req, res) => {
 
 
 
-}
-
-
-
+};
+//=====================================================================================================================================//
+//load insert user
 const insertUser = async (req, res) => {
     try {
         const userExist = await User.findOne({ email: req.body.email });
-        req.session.referralCode = req.body.referralCode || null; 
+        req.session.referralCode = req.body.referralCode || null;
         const referralCode = req.session.referralCode;
 
         if (userExist) {
@@ -64,13 +70,13 @@ const insertUser = async (req, res) => {
                 referrer = await User.findOne({ referralCode });
 
                 if (!referrer) {
-                   
+
                     res.render('registration', { message: 'Invalid referral code.' });
                 }
 
                 if (referrer.referredUsers.includes(req.body.email)) {
-                  
-                    res.render('registration', { message:  'Referral code has already been used by this email.'  });
+
+                    res.render('registration', { message: 'Referral code has already been used by this email.' });
                 }
             }
 
@@ -87,6 +93,7 @@ const insertUser = async (req, res) => {
             req.session.id2 = userData._id;
 
             sentOTPVerificationEmail(req, res, req.body.email, userData._id);
+        
 
             if (userData) {
                 res.render('otp-page', { user: userData });
@@ -98,12 +105,8 @@ const insertUser = async (req, res) => {
         console.log(error.message);
     }
 };
-
-
-
-
-
-
+//=====================================================================================================================================//
+//load blog page 
 const loadBlog = async (req, res) => {
 
     try {
@@ -119,9 +122,9 @@ const loadBlog = async (req, res) => {
 
 
 
-}
-
-
+};
+//=====================================================================================================================================//
+//load contact page
 const loadContact = async (req, res) => {
 
     try {
@@ -137,24 +140,40 @@ const loadContact = async (req, res) => {
 
 
 
-}
+};
 
-
-
+//=====================================================================================================================================//
+//function to laod homepage
 const loadHome = async (req, res) => {
     try {
 
 
         if (req.session.user_id) {
+            const currentDate = new Date();
             const productsData = await Product.find({ list: true });
             const userData = await User.findById({ _id: req.session.user_id })
             const categoriesData = await Category.find({})
-            res.render('home', { user: userData, categories: categoriesData ,products: productsData})
+
+
+            const banner = await Banner.find({
+                startDate: { $lt: currentDate },
+                endDate: { $gt: currentDate },
+                isListed: true,
+            }).populate('product');
+
+            res.render('home', { user: userData, categories: categoriesData, products: productsData, banner: banner })
 
         } else {
+            const currentDate = new Date();
             const categoriesData = await Category.find({})
             const productsData = await Product.find({ list: true });
-            res.render('home', { user: null, categories: categoriesData ,products: productsData})
+
+            const banner = await Banner.find({
+                startDate: { $lt: currentDate },
+                endDate: { $gt: currentDate },
+                isListed: true,
+            }).populate('product');
+            res.render('home', { user: null, categories: categoriesData, products: productsData, banner: banner })
 
 
         }
@@ -163,12 +182,8 @@ const loadHome = async (req, res) => {
     }
 };
 
-
-
-
-
-
-
+//=====================================================================================================================================//
+//function to load otp page
 const loadOTPpage = async (req, res) => {
     const errorMessage = req.query.error;
     const user = req.user;
@@ -181,12 +196,13 @@ const loadOTPpage = async (req, res) => {
     }
 };
 
-
+//=====================================================================================================================================//
+//function to sent otp verification mail
 const sentOTPVerificationEmail = async (req, res, email, _id) => {
     try {
         const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
         req.session.otp = otp;
-    
+
         console.log("the otp is  " + req.session.otp);
         console.log("for the email " + email);
 
@@ -225,11 +241,10 @@ const sentOTPVerificationEmail = async (req, res, email, _id) => {
     } catch (error) {
         console.log(error.message);
     }
-}
+};
 
-
-
-
+//=====================================================================================================================================//
+//function to verify otp
 const OTPVerification = async (req, res) => {
     try {
         const userId = req.session.id2;
@@ -271,23 +286,25 @@ const OTPVerification = async (req, res) => {
                             await referrer.save();
 
                             const referredUserTransaction = new Transaction({
-                                user: referrer._id,  
+                                user: referrer._id,
                                 amount: 100,
-                                type: 'credit',  
+                                type: 'credit',
                                 date: Date.now(),
+                                paymentMethod: "Wallet Payment" ,
                                 description: 'Referral Bonus',
                             });
                             const referrerTransaction = new Transaction({
                                 user: userId,
-                                amount:50,
-                                type: 'credit',  
+                                amount: 50,
+                                type: 'credit',
                                 date: Date.now(),
+                                paymentMethod: "Wallet Payment" ,
                                 description: 'Referral Bonus',
                             });
                             await referredUserTransaction.save();
                             await referrerTransaction.save();
 
-                    
+
 
                         } else {
                             await User.updateOne({ _id: userId }, { is_verified: 1 });
@@ -309,10 +326,8 @@ const OTPVerification = async (req, res) => {
     }
 };
 
-
-
-//login user methods
-
+//=====================================================================================================================================//
+//function to load user login page
 const loginLoad = async (req, res) => {
     try {
         if (req.session.user) {
@@ -329,8 +344,10 @@ const loginLoad = async (req, res) => {
     } catch (error) {
         console.log(error.message);
     }
-}
+};
 
+//=====================================================================================================================================//
+//function to verify login details
 const verifyLogin = async (req, res) => {
     try {
         const email = req.body.email;
@@ -365,7 +382,8 @@ const verifyLogin = async (req, res) => {
     }
 };
 
-
+//=====================================================================================================================================//
+//function to load user profile page
 const loadUserProfile = async (req, res) => {
 
     const userData = await User.findById({ _id: req.session.user_id })
@@ -375,10 +393,10 @@ const loadUserProfile = async (req, res) => {
         console.log(error.message)
 
     }
-}
+};
 
-
-
+//=====================================================================================================================================//
+//function to logout user
 const userLogout = async (req, res) => {
     try {
         req.session.destroy();
@@ -388,14 +406,10 @@ const userLogout = async (req, res) => {
     } catch (error) {
         console.log(error.message);
     }
-}
+};
 
-
-
-
-
-
-
+//=====================================================================================================================================//
+// function to load forgot password page
 const forgotPassword = async (req, res) => {
 
     try {
@@ -413,7 +427,7 @@ const forgotPassword = async (req, res) => {
 
 }
 
-
+//=====================================================================================================================================//
 const forgotOTPVerification = async (req, res) => {
     try {
         const userId = req.session.id2;
@@ -458,12 +472,13 @@ const forgotOTPVerification = async (req, res) => {
     }
 };
 
+//=====================================================================================================================================//
 //function for senting otp verification mail
-
-const sentPasswordOTPVerificationEmail = async (req, res) => {
+const sentPasswordOTPVerificationEmail = async (req, res, email, _id) => {
     try {
         const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
         req.session.otp2 = otp;
+        console.log("forgot password");
 
         console.log(req.session.otp2);
 
@@ -479,7 +494,7 @@ const sentPasswordOTPVerificationEmail = async (req, res) => {
         // Hash password
         const hashedOTP = await bcrypt.hash(otp, 10);
 
-        const newOTPVerification = new forgotOTPVerification({
+        const newOTPVerification = new UserOTPVerification({
             userId: _id,
             otp: hashedOTP,
             createdAt: Date.now(),
@@ -502,9 +517,9 @@ const sentPasswordOTPVerificationEmail = async (req, res) => {
     } catch (error) {
         console.log(error.message);
     }
-}
+};
 
-
+//=====================================================================================================================================//
 //to load the otp page
 const userforgotPasswordOTP = async (req, res) => {
     try {
@@ -514,7 +529,7 @@ const userforgotPasswordOTP = async (req, res) => {
             req.session.id3 = userExist._id
             console.log(req.session.id3);
 
-            sentOTPVerificationEmail(req, res, req.body.email, userExist._id);
+           (req, res, req.body.email, userExist._id);
             res.render('forgetpassword-otp', { message: "Otp sent to your mail" });
         } else {
 
@@ -526,9 +541,9 @@ const userforgotPasswordOTP = async (req, res) => {
     } catch (error) {
         console.log(error.message);
     }
-}
+};
 
-
+//=====================================================================================================================================//
 //to load the otp page
 const forgotPasswordOTP = async (req, res) => {
     try {
@@ -536,9 +551,10 @@ const forgotPasswordOTP = async (req, res) => {
 
         if (userExist) {
             req.session.id3 = userExist._id
-            console.log(req.session.id3);
+            console.log("forgot"+req.session.id3);
+         
 
-            sentOTPVerificationEmail(req, res, req.body.email, userExist._id);
+            sentPasswordOTPVerificationEmail(req, res, req.body.email, userExist._id);
             res.render('forgetpassword-otp', { message: "Otp sent to your mail" });
         } else {
 
@@ -550,12 +566,10 @@ const forgotPasswordOTP = async (req, res) => {
     } catch (error) {
         console.log(error.message);
     }
-}
+};
 
-
-
+//=====================================================================================================================================//
 //forgot password otp verification 
-
 const passwordOTPVerification = async (req, res) => {
     try {
         const userId = req.session.id3;
@@ -601,7 +615,8 @@ const passwordOTPVerification = async (req, res) => {
     }
 };
 
-
+//=====================================================================================================================================//
+//function to reset password for logfedin user
 const resetPassword = async (req, res) => {
     try {
 
@@ -615,8 +630,9 @@ const resetPassword = async (req, res) => {
     } catch (error) {
 
     }
-}
+};
 
+//=====================================================================================================================================//
 //load user reset password page
 const loadUserPasswordReset = async (req, res) => {
 
@@ -635,10 +651,10 @@ const loadUserPasswordReset = async (req, res) => {
 
 
 
-}
+};
 
+//=====================================================================================================================================//
 //change password
-
 const userResetPassword = async (req, res) => {
     try {
 
@@ -653,9 +669,9 @@ const userResetPassword = async (req, res) => {
     } catch (error) {
 
     }
-}
+};
 
-
+//=====================================================================================================================================//
 //load user edit page
 const loadEditUser = async (req, res) => {
 
@@ -675,19 +691,18 @@ const loadEditUser = async (req, res) => {
 
 
 
-}
+};
 
-
-
+//=====================================================================================================================================//
 //load wallet page
 const loadWallet = async (req, res) => {
 
     try {
 
         const userData = await User.findById({ _id: req.session.user_id })
-        const transaction = await Transaction.find({user : req.session.user_id,paymentMethod:"Wallet Payment"}).sort({date : -1});
+        const transaction = await Transaction.find({ user: req.session.user_id, paymentMethod: "Wallet Payment" }).sort({ date: -1 });
 
-        res.render('userWallet', { user: userData,transaction:transaction});
+        res.render('userWallet', { user: userData, transaction: transaction });
 
 
 
@@ -699,13 +714,10 @@ const loadWallet = async (req, res) => {
 
 
 
-}
+};
 
-
-
-
-
-
+//=====================================================================================================================================//
+//function to update profile
 const updateProfile = async (req, res) => {
 
     try {
@@ -727,9 +739,9 @@ const updateProfile = async (req, res) => {
 
     }
 
-}
+};
 
-
+//=====================================================================================================================================//
 //delete account
 const deleteUser = async (req, res) => {
 
@@ -745,10 +757,10 @@ const deleteUser = async (req, res) => {
     }
 
 
-}
+};
 
-
-
+//=====================================================================================================================================//
+//function to resend otp
 const resendOTP = async (req, res) => {
     try {
         const userId = req.session.id2;
@@ -769,6 +781,8 @@ const resendOTP = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error", User: null });
     }
 };
+
+//=====================================================================================================================================//
 
 module.exports = {
     loadRegister,
@@ -793,7 +807,9 @@ module.exports = {
     userforgotPasswordOTP,
     loadBlog,
     loadContact,
-     resendOTP,
-     loadWallet
+    resendOTP,
+    loadWallet
 
 }
+//=====================================================================================================================================//
+//=====================================================================================================================================//

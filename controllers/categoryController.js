@@ -1,19 +1,12 @@
-const User = require('../models/userModel');
-const Product = require('../models/productModel')
+//=====================================================================================================================================//
+//CATEGORY CONTROLLER
+//=====================================================================================================================================//
+//module imports
 const Category = require('../models/categoryModel');
-const Cart = require('../models/cartModel');
-const Order = require('../models/orderModel')
-const Address = require('../models/addressesModel')
 
 
-
-
-
-
-
-
+//=====================================================================================================================================//
 //list and unlist category
-
 const unlistCategory = async (req, res) => {
     try {
         const id = req.query.id;
@@ -34,12 +27,9 @@ const unlistCategory = async (req, res) => {
 
 
     }
-}
+};
 
-
-
-
-
+//=====================================================================================================================================//
 //insert category
 const insertCategory = async (req, res) => {
     try {
@@ -71,8 +61,9 @@ const insertCategory = async (req, res) => {
         console.error(error.message);
          res.render('addcategory', { admin:admin,message: "An error occurred while creating the category" });
     }
-}
+};
 
+//=====================================================================================================================================//
 //load catergory list
 const loadCategorylist = async (req, res) => {
     try {
@@ -108,10 +99,9 @@ const loadCategorylist = async (req, res) => {
     } catch (error) {
         console.log(error.message);
     }
-}
+};
 
-
-
+//=====================================================================================================================================//
 //load insert category page
 const loadaddCategory = async (req, res) => {
     try {
@@ -123,10 +113,9 @@ const loadaddCategory = async (req, res) => {
     } catch (error) {
         console.log(error.message)
     }
-}
+};
 
-
-
+//=====================================================================================================================================//
 //delete category
 const deleteCategory = async (req, res) => {
 
@@ -141,11 +130,9 @@ const deleteCategory = async (req, res) => {
     }
 
 
-}
+};
 
-
-
-
+//=====================================================================================================================================//
 //load edit category page
 const loadEditCategory = async (req, res) => {
     try {
@@ -166,9 +153,9 @@ const loadEditCategory = async (req, res) => {
         console.log(error.message);
 
     }
-}
+};
 
-
+//=====================================================================================================================================//
 //edit category
 const editCategory = async (req, res) => {
     try {
@@ -214,7 +201,9 @@ const editCategory = async (req, res) => {
     } catch (error) {
         console.log(error.message);
     }
-}
+};
+
+//=====================================================================================================================================//
 
 
 

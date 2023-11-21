@@ -60,8 +60,8 @@
                                     <th class="align-middle" scope="col">Sl No</th>
                                     <th class="align-middle" scope="col">Coupon Code</th>
                                     <th class="align-middle" scope="col">Limit</th>
+                                    <th class="align-middle" scope="col">Expiry Date </th>
                                     <th class="align-middle" scope="col">Discount</th>
-                                    <th class="align-middle" scope="col">Expiry Date</th>
                                     <th style="width: 150px;" class="align-middle" scope="col">Coupon Status</th>
                                     <th class="align-middle" scope="col">Type</th>
                                     <th class="align-middle" scope="col">View Details</th>
@@ -97,7 +97,7 @@
                                         <i class="material-icons md-more_horiz"></i>
                                       </a>
                                       <div class="dropdown-menu">
-                                        <a class="dropdown-item font-xs" href="/admin/editCoupon/<%= coupon._id %>">Edit</a>
+                                        <a class="dropdown-item font-xs" href="/admin/editCoupon?couponId=<%= coupon._id %>">Edit</a>
                                         <% if (coupon.isListed) { %>
                                           <a href="/admin/couponstatus?id=<%= coupon._id.toString() %>">
                                             <p class="text-danger ms-4 font-xs">Unlist</p>
