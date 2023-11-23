@@ -1,12 +1,6 @@
 const mongoose = require('mongoose');
 
-const ratingSchema = new mongoose.Schema({
-    userId: String,
-    rating: Number,
-    review: String,
-    date: Date,
-    image: String,
-});
+
 
 const productSchema = new mongoose.Schema({
     name: String,
@@ -16,7 +10,7 @@ const productSchema = new mongoose.Schema({
     productImages: [String], 
     battery: String,
     productColor: String,
-    ratings: [ratingSchema],
+    ratings: [Number],
     ram: String,
     rom: String,
     expandable: String,

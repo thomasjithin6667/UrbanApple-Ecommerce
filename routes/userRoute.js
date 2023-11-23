@@ -15,6 +15,7 @@ const productController = require('../controllers/productController')
 const wishlistController = require('../controllers/wishlistController')
 const couponController = require('../controllers/couponController')
 const pdfController = require('../controllers/pdfController')
+const reviewController =require('../controllers/reviewController')
 
 //session setup
 user_route.use(session({
@@ -111,9 +112,10 @@ user_route.get('/generate-invoice/:orderId',pdfController.generateInvoice)
 //wallet
 user_route.get('/wallet',userController.loadWallet)
 
-
-
-
+//REVIEW
+user_route.post('/postReview',auth.isLogin,reviewController.postReview)
+user_route.get('/deleteReview/:reviewId', auth.isLogin, reviewController.deleteReview)
+user_route.get('/viewratings', auth.isLogin,reviewController.viewrating)
 
 
 

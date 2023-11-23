@@ -606,27 +606,23 @@
         const razorPayButton = document.getElementById('razorPayButton');
         const walletButton = document.getElementById('walletButton');
 
-        // Function to show/hide buttons based on the selected radio button
+
         function updateButtonsVisibility() {
             placeOrderButton.style.display = codRadio.checked ? 'block' : 'none';
             razorPayButton.style.display = onlinePaymentRadio.checked ? 'block' : 'none';
 
-            // Check if the walletPaymentRadio exists before accessing its properties
             if (walletPaymentRadio) {
                 walletButton.style.display = walletPaymentRadio.checked ? 'block' : 'none';
             }
         }
 
-        // Attach the update function to the change event of the radio buttons
         codRadio.addEventListener('change', updateButtonsVisibility);
         onlinePaymentRadio.addEventListener('change', updateButtonsVisibility);
 
-        // Check if walletPaymentRadio exists before adding the event listener
         if (walletPaymentRadio) {
             walletPaymentRadio.addEventListener('change', updateButtonsVisibility);
         }
 
-        // Call the function initially to set the initial state
         updateButtonsVisibility();
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -639,6 +635,14 @@
 
             razorPayButton.addEventListener('click', function () {
                 const couponCode = couponCodeInput.value;
+                const couponApplied = couponInfo.innerText.includes('Coupon Discount Applied');
+
+                if (couponCode.trim() !== '' && !couponApplied) {
+
+                    alert('Please apply the coupon before placing the order.');
+                    couponCodeInput.value = '';
+                    return;
+                }
                 placeOnline('Pay online', couponCode);
             });
 
@@ -669,6 +673,7 @@
 
                     if (data.errorMessage) {
                         alert('Coupon error: ' + data.errorMessage);
+                        couponCodeInput.value = ''
                     } else {
 
                         const discountedTotal = data.discountedTotal;
@@ -681,13 +686,22 @@
                     }
                 } catch (error) {
                     console.error('Error applying coupon:', error);
-                    alert('Error applying coupon');
+                    alert('Invalid coupon');
+                    couponCodeInput.value = ''
                 }
             });
 
 
             placeOrderButton.addEventListener('click', function () {
                 const couponCode = couponCodeInput.value;
+                const couponApplied = couponInfo.innerText.includes('Coupon Discount Applied');
+
+                if (couponCode.trim() !== '' && !couponApplied) {
+
+                    alert('Please apply the coupon before placing the order.');
+                    couponCodeInput.value = '';
+                    return;
+                }
                 placeOrder('Cash on delivery', couponCode);
             });
 
@@ -737,6 +751,7 @@
 
 
             function placeOnline(paymentMethod, couponCode) {
+
 
 
 
@@ -858,6 +873,14 @@
 
         walletButton.addEventListener('click', function () {
             const couponCode = couponCodeInput.value;
+            const couponApplied = couponInfo.innerText.includes('Coupon Discount Applied');
+
+            if (couponCode.trim() !== '' && !couponApplied) {
+
+                alert('Please apply the coupon before placing the order.');
+                couponCodeInput.value = '';
+                return;
+            }
             placeOrderWallet('wallet', couponCode);
         });
 

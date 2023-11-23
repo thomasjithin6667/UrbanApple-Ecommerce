@@ -307,16 +307,17 @@ const applyCoupon = async (req, res) => {
     const userId = req.session.user_id;
     const coupon = await Coupon.findOne({ code: couponCode });
     let errorMessage;
+    
     if (!coupon) {
-      return errorMessage = "Coupon not found"
+       errorMessage = "Coupon not found"
     }
     const currentDate = new Date();
-    if (coupon.expiryDate && currentDate > coupon.expiryDate) {
-      return errorMessage = "Coupon Expired"
+    if ( currentDate > coupon.expiry) {
+      errorMessage = "Coupon Expired"
     }
 
     if (coupon.usersUsed.length >= coupon.limit) {
-      return errorMessage = "Coupon limit Reached"
+      errorMessage = "Coupon limit Reached"
     }
 
     if (coupon.usersUsed.includes(userId)) {
@@ -338,10 +339,10 @@ const applyCoupon = async (req, res) => {
     } else if (coupon.type === 'fixed') {
       discountedTotal = orderTotal - coupon.discount;
     }
-    return res.json({ discountedTotal, errorMessage });
+     res.json({ discountedTotal, errorMessage });
   } catch (error) {
     console.error('Error applying coupon: server', error);
-    return res.status(500).json({ error: 'An error occurred while applying the coupon.' });
+    res.status(500).json({ error: 'An error occurred while applying the coupon.' });
   }
 };
 
@@ -418,18 +419,18 @@ const returnOrder = async (req, res) => {
 async function applyCoup(couponCode, discountedTotal, userId) {
   const coupon = await Coupon.findOne({ code: couponCode })
   if (!coupon) {
-    return res.status(404).json({ error: 'Coupon not found.' });
+    return { error: 'Coupon not found.' }
   }
   const currentDate = new Date();
-  if (coupon.expiryDate && currentDate > coupon.expiryDate) {
-    return res.status(400).json({ error: 'Coupon has expired.' });
+  if (currentDate > coupon.expiry) {
+    return { error: 'Coupon has expired.' }
   }
   if (coupon.usersUsed.length >= coupon.limit) {
-    return res.status(400).json({ error: 'Coupon limit reached.' });
+    return { error: 'Coupon limit reached.' };
   }
 
   if (coupon.usersUsed.includes(userId)) {
-    return res.status(400).json({ error: 'You have already used this coupon.' });
+    return { error: 'You have already used this coupon.' }
   }
   if (coupon.type === 'percentage') {
     discountedTotal = calculateDiscountedTotal(discountedTotal, coupon.discount);
@@ -441,6 +442,8 @@ async function applyCoup(couponCode, discountedTotal, userId) {
   await coupon.save();
   return discountedTotal;
 };
+
+
 
 //=====================================================================================================================================//
 //function to place order uisng razorpay gateway
@@ -560,6 +563,14 @@ const cashOnDelivery = async (req, res) => {
       if (product.quantity < cartItem.quantity) {
         throw new Error('Not enough quantity in stock.');
       }
+      let couponResult = { error: '', discountedTotal: totalAmount };
+
+      if (couponCode) {
+        totalAmount = await applyCoup(couponCode, totalAmount, userId);
+        if (couponResult.error) {
+          return res.status(400).json({ error: couponResult.error });
+        }
+      }
 
     
 
@@ -578,9 +589,7 @@ const cashOnDelivery = async (req, res) => {
       await product.save();
     }
 
-    if (couponCode) {
-      totalAmount = await applyCoup(couponCode, totalAmount, userId);
-    }
+ 
 
     const order = new Order({
       user: userId,
