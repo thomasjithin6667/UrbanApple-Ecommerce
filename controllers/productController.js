@@ -338,9 +338,7 @@ const productList = async (req, res) => {
         const colors = Array.isArray(req.query.color) ? req.query.color : [req.query.color];
         const sortBy = req.query.sortBy || 'priceLowToHigh';
 
-        console.log(search);
 
-        // Define price range filters
         let minPrice = 0;
         let maxPrice = Number.MAX_VALUE;
 
@@ -386,20 +384,23 @@ const productList = async (req, res) => {
           price: { $gte: minPrice, $lte: maxPrice },
           productColor: { $in: colors.map(c => new RegExp(c, 'i')) },
         };
-        // const filter = {
-        //   $or: [
-        //     { category: { $in: categories.map(c => new RegExp(c, 'i')) } },
-        //   ],
-        //   price: { $gte: minPrice, $lte: maxPrice },
-        //   productColor: { $in: colors.map(c => new RegExp(c, 'i')) },
-        //   $or: [
-        //     { name: { $regex: search, $options: 'i' } }, 
-        //     { category: { $regex: search, $options: 'i' } }, 
-        //   ],
-        // };
+
+        const searchFilter = {
+          $or: [
+              { name: { $regex: '.' + search + '.', $options: 'i' } },
+              { category: { $regex: '.' + search + '.', $options: 'i' } },
+              { discountPrize: { $regex: '.' + search + '.', $options: 'i' } },
+          ],
+      };
+      const productsData = await Product.find({
+          $and: [
+              filter,
+              searchFilter,
+          ],
+      }).sort(sortQuery);
        
 
-        const productsData = await Product.find(filter).sort(sortQuery);
+    
         const selectedCategories = categories;
         const selectedPriceRange = priceRange;
         const selectedColors = colors;

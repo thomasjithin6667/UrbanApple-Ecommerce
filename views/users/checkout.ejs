@@ -248,11 +248,11 @@
                                                     </tbody>
                                             </table><!-- End .table table-summary -->
                                             <% } %>
-                                                <div>
-                                                    <p id="couponInfo" style="color: #7dc49d;"></p>
+                                                <div style="height: 20px;">
+                                                    <p class="text-center" id="couponInfo" style="color: #188bff;"></p>
                                                 </div>
 
-                                                <div class="payment-method">
+                                                <div class="payment-method mt-2">
                                                     <div class="input-radio">
                                                         <input type="radio" name="payment" id="cod"
                                                             value="Cash on delivery" required>
@@ -283,7 +283,7 @@
                                                     </div>
 
                                                 </div> <br>
-                                                <div class="caption">
+                                                <div class="caption" id="couponApply">
                                                     <div>
                                                         <input class="form-control" type="text" name="couponCode"
                                                             placeholder="Enter your coupon code" id="couponCodeInput">
@@ -292,6 +292,17 @@
                                                     </div>
                                                     <a href="/availableCoupons">View Available Coupons</a>
                                                 </div>
+                                                <div class="coupon applied" id="couponApplied" style="display: none;">
+                                                    <div>
+                                                        <input class="form-control" type="text" name="couponCode"
+                                                            placeholder="Enter your coupon code" id="couponCodeInput"
+                                                            style="visibility: hidden;">
+                                                        <button class="btn btn-primary  btn-block" disabled> Coupon Applied
+                                                            successfully</button>
+                                                    </div>
+                                                    <a href="/checkout">Remove applied Coupied</a>
+                                                </div>
+
                                                 <button id="placeOrderButton"
                                                     class="btn btn-primary btn-order btn-block mt-5">PLACE
                                                     ORDER</button>
@@ -632,6 +643,8 @@
             const orderTotalElement = document.getElementById('order-total');
             const couponInfo = document.getElementById('couponInfo');
             const codButton = document.getElementById('cod');
+            const captionDiv = document.getElementById('couponApply');
+            const couponAppliedDiv = document.getElementById('couponApplied');
 
             razorPayButton.addEventListener('click', function () {
                 const couponCode = couponCodeInput.value;
@@ -678,12 +691,17 @@
 
                         const discountedTotal = data.discountedTotal;
                         const normalPrice = parseFloat(orderTotalElement.innerHTML.replace("₹", ""));
-                        const difference = (normalPrice - discountedTotal).toFixed(0);
+                        const difference = (normalPrice - discountedTotal-100).toFixed(0);
+
 
                         couponInfo.innerText = `Coupon Discount Applied ₹${difference} off`;
                         orderTotalElement.innerText = `₹${discountedTotal}`;
                         alert("Coupon applied successfully");
+
+                        captionDiv.style.display = 'none';
+                        couponAppliedDiv.style.display = 'block';
                     }
+
                 } catch (error) {
                     console.error('Error applying coupon:', error);
                     alert('Invalid coupon');
