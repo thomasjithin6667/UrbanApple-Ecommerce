@@ -118,69 +118,7 @@
                                         <button type="button" class="btn btn-primary mt-50" onclick="validateForm()">Add Coupon</button>
                                     </form>
                                     
-                                    <script>
-                                        function validateForm() {
-                                            let isValid = true;
-                                    
-                                            const errorFields = document.querySelectorAll('.error-message');
-                                            errorFields.forEach(field => {
-                                                field.textContent = '';
-                                            });
-                                    
-                                            const couponCode = document.getElementById('couponCode').value.trim();
-                                            const discount = parseFloat(document.getElementById('discount').value);
-                                            const limit = parseInt(document.getElementById('limit').value);
-                                            const minCartAmt = parseInt(document.getElementById('minCartAmt').value);
-                                            const maxRedeemableAmt = parseInt(document.getElementById('maxRedeemableAmt').value);
-                                            const discountType = document.getElementById('DiscountType').value;
-                                            const startDate = document.getElementById('startDate').value;
-                                            const expiryDate = document.getElementById('expiryDate').value;
-                                    
-                                            if (couponCode === '') {
-                                                showError('couponCode', 'Coupon code is required.');
-                                                isValid = false;
-                                            }
-                                    
-                                            if (isNaN(discount) || discount <= 0 ) {
-                                                showError('discount','Discount should be a positive number.');
-                                                isValid = false;
-                                            }
-                                    
-                                            if (isNaN(limit) || limit <= 0) {
-                                                showError('limit', 'Limit should be a positive number.');
-                                                isValid = false;
-                                            }
-                                    
-                                            if (isNaN(minCartAmt) || minCartAmt <= 0) {
-                                                showError('minCartAmt', 'Minimum cart amount should be a positive number.');
-                                                isValid = false;
-                                            }
-                                    
-                                            if (isNaN(maxRedeemableAmt) || maxRedeemableAmt <= 0) {
-                                                showError('maxRedeemableAmt', 'Maximum redeemable amount should be a positive number.');
-                                                isValid = false;
-                                            }
-                                    
-                                            if (startDate === '') {
-                                                showError('startDate', 'Start date is required.');
-                                                isValid = false;
-                                            }
-                                    
-                                            if (expiryDate === '') {
-                                                showError('expiryDate', 'Expiry date is required.');
-                                                isValid = false;
-                                            }
-                                    
-                                            if (isValid) {
-                                                document.getElementById('couponForm').submit();
-                                            }
-                                        }
-                                    
-                                        function showError(inputId, errorMessage) {
-                                            const errorField = document.getElementById(`error${inputId.charAt(0).toUpperCase() + inputId.slice(1)}`);
-                                            errorField.textContent = errorMessage;
-                                        }
-                                    </script>
+
                                     
                                     </body>
                                     </html>
@@ -200,7 +138,7 @@
                         <div class="col-sm-6">
                             <script>
                                 document.write(new Date().getFullYear())
-                            </script> ©, Evara - HTML Ecommerce Template .
+                            </script> ©, UrbanApple.com 
                         </div>
                         <div class="col-sm-6">
                             <div class="text-sm-end">
@@ -231,5 +169,68 @@
 
 
 </html>
+<script>
+    function validateForm() {
+        let isValid = true;
+
+        const errorFields = document.querySelectorAll('.error-message');
+        errorFields.forEach(field => {
+            field.textContent = '';
+        });
+
+        const couponCode = document.getElementById('couponCode').value.trim();
+        const discount = parseFloat(document.getElementById('discount').value);
+        const limit = parseInt(document.getElementById('limit').value);
+        const minCartAmt = parseInt(document.getElementById('minCartAmt').value);
+        const maxRedeemableAmt = parseInt(document.getElementById('maxRedeemableAmt').value);
+        const discountType = document.getElementById('DiscountType').value;
+        const startDate = document.getElementById('startDate').value;
+        const expiryDate = document.getElementById('expiryDate').value;
+
+        if (couponCode === '') {
+            showError('couponCode', 'Coupon code is required.');
+            isValid = false;
+        }
+
+        if (isNaN(discount) || discount <= 0 ) {
+            showError('discount','Discount should be a positive number.');
+            isValid = false;
+        }
+
+        if (isNaN(limit) || limit <= 0) {
+            showError('limit', 'Limit should be a positive number.');
+            isValid = false;
+        }
+
+        if (isNaN(minCartAmt) || minCartAmt <= 0) {
+            showError('minCartAmt', 'Minimum cart amount should be a positive number.');
+            isValid = false;
+        }
+
+        if (isNaN(maxRedeemableAmt) || maxRedeemableAmt <= 0) {
+            showError('maxRedeemableAmt', 'Maximum redeemable amount should be a positive number.');
+            isValid = false;
+        }
+
+        if (startDate === '') {
+            showError('startDate', 'Start date is required.');
+            isValid = false;
+        }
+
+        if (expiryDate === '') {
+            showError('expiryDate', 'Expiry date is required.');
+            isValid = false;
+        }
+
+        if (isValid) {
+            document.getElementById('couponForm').submit();
+        }
+    }
+
+    function showError(inputId, errorMessage) {
+        const errorField = document.getElementById(`error${inputId.charAt(0).toUpperCase() + inputId.slice(1)}`);
+        errorField.textContent = errorMessage;
+    }
+</script>
 
 

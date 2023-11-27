@@ -4,12 +4,14 @@ const userRoute= require("./routes/userRoute")
 const express= require("express");
 const nocache= require("nocache")
 const flash = require('express-flash');
+require("dotenv").config()
 
 
 
 
 
-mongoose.connect("mongodb://127.0.0.1:27017/apple_store");
+mongoose.connect(process.env.MONGO_URL)
+.then((e)=>console.log('Mongo connected sucessfully'));
 
 const app = express();
 app.use(nocache())
@@ -36,8 +38,8 @@ app.use((req, res, next) => {
     res.status(404).render("404-error");
   })
 
-port=3000
-app.listen(port,()=>{
+const PORT=process.env.PORT
+app.listen(PORT,()=>{
     console.log("server running at http://localhost:3000/");
 
 })

@@ -11,14 +11,13 @@ const mongoose = require('mongoose')
 const Coupon = require('../models/couponModel')
 const Transaction = require('../models/transactionModel')
 const Razorpay = require('razorpay');
-
 require("dotenv").config()
 const { RAZORPAY_ID_KEY, RAZORPAY_SECRET_KEY } = process.env;
 
 
 const razorpay = new Razorpay({
-  key_id: 'rzp_test_gwxVdrdkgotQGE',
-  key_secret: '43YWiWwqPSvjiajhW7sjSItZ',
+  key_id:RAZORPAY_ID_KEY,
+  key_secret:  RAZORPAY_SECRET_KEY,
 });
 
 //=====================================================================================================================================//
