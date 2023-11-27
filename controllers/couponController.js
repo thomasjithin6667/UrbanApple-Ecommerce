@@ -15,15 +15,27 @@ const getCoupon = (req, res)=>{
 
 //=====================================================================================================================================//
 //function to get coupon list in adminside
- const viewCoupon =async (req, res)=>{
-    try{
-      const admin=  req.session.adminData
-      const coupons = await Coupon.find()
-      res.render('coupon-list',{coupons,admin:admin})
-    }catch(err){
-      console.log("Error occoured while fetching coupons", err);
-    }
-  };
+const viewCoupon = async (req, res) => {
+  try {
+    const admin = req.session.adminData;
+    const page = parseInt(req.query.page) || 1;
+    const limit = 5;
+
+    const totalCouponsCount = await Coupon.countDocuments();
+    const totalPages = Math.ceil(totalCouponsCount / limit);
+    const skip = (page - 1) * limit;
+
+    const coupons = await Coupon.find()
+      .skip(skip)
+      .limit(limit);
+
+    res.render('coupon-list', { coupons, admin, totalPages, currentPage: page });
+  } catch (err) {
+    console.log("Error occurred while fetching coupons", err);
+  
+    res.status(500).send('Internal Server Error');
+  }
+};
 
 //=====================================================================================================================================//
 //function to add coupon on the admin side

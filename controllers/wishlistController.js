@@ -9,7 +9,7 @@ const Wishlist=require('../models/wishlistModel')
 //=====================================================================================================================================//
 //funtion to add item to wishlist
 const addToWishlist = async (req, res) => {
-    const userId = req.session.user._id;
+    const userId = req.session.user_id;
     const productId = req.params.productId;
 
     try {
@@ -31,8 +31,9 @@ const addToWishlist = async (req, res) => {
         }
 
         await userWishlist.save();
+        console.log( req.session.lastGetRequest);
 
-        res.redirect('/productlist');
+        res.redirect( req.session.lastGetRequest);
     } catch (error) {
         console.error('Error adding product to wishlist:', error);
     }
@@ -41,6 +42,7 @@ const addToWishlist = async (req, res) => {
 //=====================================================================================================================================//
 //functon to load wishliat page
 const getWishlist = async (req, res) => {
+    req.session.lastGetRequest = req.originalUrl;
     const userId = req.session.user._id;
 
     try {
@@ -87,7 +89,7 @@ const addToCartFromWishlist = async (req, res) => {
             await userWishlist.save();
         }
 
-        res.redirect('/wishlist');
+        res.redirect(req.session.lastGetRequest);
     } catch (err) {
         console.error('Error adding item to cart from wishlist:', err);
      

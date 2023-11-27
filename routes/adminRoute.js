@@ -16,6 +16,7 @@ const config = require("../config/config")
 const auth = require("../middleware/adminAuth")
 const fs = require('fs');
 const discountController= require('../controllers/discountController')
+const reviewController =require('../controllers/reviewController')
 
 
 //session setup
@@ -153,6 +154,10 @@ admin_route.get('/offer-list',auth.isLogin,discountController.loadOfferList)
 admin_route.get('/offer-add',auth.isLogin,discountController.loadAddOffer)
 admin_route.get('/offer-edit',auth.isLogin,discountController.loadEditOffer)
 admin_route.get('/unlist-offer',auth.isLogin,discountController.unlistOffer)
+
+//reviews
+admin_route.get('/reviews-list', auth.isLogin,reviewController.loadReviewlist )
+admin_route.get('/reviews-delete',auth.isLogin, reviewController.adminDeleteReview)
 
 
 

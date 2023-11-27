@@ -137,9 +137,25 @@ const loadEditBanner = async (req, res) => {
 //=====================================================================================================================================//
 //function to load banner list in admin side
 const loadBannerList = async (req, res) => {
-  const admin = req.session.adminData
-  const banner = await Banner.find().populate('product')
-  res.render('banner-list', { banner, admin: admin })
+  try {
+    const admin = req.session.adminData;
+    const page = parseInt(req.query.page) || 1;
+    const perPage = 5;
+
+    const totalBannersCount = await Banner.countDocuments();
+    const totalPages = Math.ceil(totalBannersCount / perPage);
+    const skip = (page - 1) * perPage;
+
+    const banner = await Banner.find()
+      .populate('product')
+      .skip(skip)
+      .limit(perPage);
+
+    res.render('banner-list', { banner, admin, totalPages, currentPage: page });
+  } catch (error) {
+    console.error('Error fetching banner list:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 };
 
 //=====================================================================================================================================//

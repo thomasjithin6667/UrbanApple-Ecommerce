@@ -56,12 +56,13 @@ const upload = multer({ storage: storage });
 //GET REQUESTS
 user_route.get('/register', userController.loadRegister);
 
-user_route.get('/', auth.isHome, userController.loadHome)
+user_route.get('/',auth.isLogout, userController.loadHome)
 user_route.get('/home', auth.isLogin, userController.loadHome)
 
 user_route.get('/otp-page', userController.loadOTPpage)
-user_route.get('/login', userController.loginLoad)
+user_route.get('/login',auth.isLogout, userController.loginLoad)
 user_route.get('/userProfile', auth.isLogin, userController.loadUserProfile)
+user_route.get('/userDashboard', auth.isLogin, userController.loadUserDashboard)
 user_route.get('/logout', auth.isLogin, userController.userLogout)
 user_route.get('/forgotpassword', userController.forgotPassword)
 user_route.get('/edituser', auth.isLogin, userController.loadEditUser)
@@ -73,9 +74,9 @@ user_route.get('/addaddress', auth.isLogin, addressController.loadAddAddress)
 user_route.get('/editaddress', auth.isLogin, addressController.loadEditAddress)
 user_route.get('/deleteaddress', auth.isLogin, addressController.deleteAddress)
 //product
-user_route.get('/productlist',auth.isLogoutStore, productController.productList)
-user_route.get('/viewproduct/:productId', auth.isAuthenticated, productController.productView)
-user_route.get('/userproductlist', productController.productList)
+user_route.get('/productlist', productController.productList)
+user_route.get('/viewproduct/:productId', productController.productView)
+
 
 
 //cart
@@ -92,8 +93,8 @@ user_route.get('/removeItemFromWishlist/:productId', auth.isLogin,wishlistContro
 //checkout
 user_route.get('/checkout', auth.isLogin, checkoutController.getCheckout)
 user_route.get('/orderPlaced', auth.isLogin, checkoutController.orderPlaced)
-user_route.get('/cancelOrder/:orderId',checkoutController.cancelOrder)
-user_route.get('/returnOrder/:orderId',checkoutController.returnOrder)
+user_route.get('/cancelOrder/:orderId',auth.isLogin,checkoutController.cancelOrder)
+user_route.get('/returnOrder/:orderId',auth.isLogin,checkoutController.returnOrder)
 
 //blogpage
 user_route.get('/blog', userController.loadBlog)
@@ -104,18 +105,18 @@ user_route.get('/contact', userController.loadContact)
 
 
 //coupon
-user_route.get('/availableCoupons', couponController.getAvailableCoupons)
+user_route.get('/availableCoupons',auth.isLogin, couponController.getAvailableCoupons)
 
 //Invoice
-user_route.get('/generate-invoice/:orderId',pdfController.generateInvoice)
+user_route.get('/generate-invoice/:orderId',auth.isLogin,pdfController.generateInvoice)
 
 //wallet
-user_route.get('/wallet',userController.loadWallet)
+user_route.get('/wallet',auth.isLogin,userController.loadWallet)
 
 //REVIEW
 user_route.post('/postReview',auth.isLogin,reviewController.postReview)
-user_route.get('/deleteReview/:reviewId', auth.isLogin, reviewController.deleteReview)
 user_route.get('/viewratings', auth.isLogin,reviewController.viewrating)
+user_route.get('/deleteReview',auth.isLogin, reviewController.deleteReview)
 
 
 
@@ -136,21 +137,21 @@ user_route.get('/resendOtp', userController.resendOTP);
 user_route.post('/addAddress', auth.isLogin, addressController.postAddAddress);
 user_route.post('/editaddress', auth.isLogin, addressController.editAddress);
 //cart
-user_route.post('/add-to-cart/:productId', auth.isAuthenticated, cartController.addtocart);
+user_route.post('/add-to-cart/:productId',auth.isAuthenticated, cartController.addtocart);
 user_route.post('/removeItemFromCart/:productId', auth.isLogin, cartController.deleteCart)
 user_route.put('/updateCart',cartController.updateCartCount)
 user_route.put('/updateQuantity/:productId',cartController.updateQuantity)
 
 //checkout
-user_route.post('/razorpayOrder',checkoutController.razorpayOrder)
-user_route.post('/cashondelivery',checkoutController.cashOnDelivery)
-user_route.post('/walletpayment',checkoutController.walletPayment)
-user_route.post('/updatePaymentStatus',checkoutController.updatePaymentStatus)
+user_route.post('/razorpayOrder',auth.isLogin,checkoutController.razorpayOrder)
+user_route.post('/cashondelivery',auth.isLogin,checkoutController.cashOnDelivery)
+user_route.post('/walletpayment',auth.isLogin,checkoutController.walletPayment)
+user_route.post('/updatePaymentStatus',auth.isLogin,checkoutController.updatePaymentStatus)
 //orders
 user_route.get('/userorderlist', auth.isLogin, checkoutController.userOrderlist)
 user_route.get('/userorderdetails', auth.isLogin, checkoutController.userOrderDetails)
 //coupon
-user_route.post('/applyCoupon',checkoutController.applyCoupon)
+user_route.post('/applyCoupon',auth.isLogin,checkoutController.applyCoupon)
 
 
 

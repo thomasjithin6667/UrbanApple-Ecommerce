@@ -73,134 +73,201 @@
 
            </div>
 
-                    <form enctype="multipart/form-data" action="" method="post">
-
-                    <div class="card col">
-                        <div class="card-body ">
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="form-group">
-                
-                                  
-                                        <label for="bannerType"  class="form-label">Select Banner Type:</label>
-                                        <select id="bannerType" class="form-select" name="bannerType">
-                                          <option value="Category Banner">Category Offer</option>
-                                          <option value="Category Banner">Product Offer</option>
-                                          <option value="New Arrival">New Arrival</option>
-                                          <option value="Deals and Promotions">Deals and Promotions</option>
-                                          <option value="Seasonal Sales">Seasonal Sales</option>
-                                        </select>
-                                    <br>
-                                    </div>
-                                      
-
-
-                                  
-                                        <div class="form-group">
-                                            <label for="title" class="form-label">Title</label>
-                                            <input type="text" name="title" id="title" class="form-control" required>
-
-
-                                        </div> <br>
-                                        <div class="form-group">
-
-                                            <label for="link" class="form-label">Link</label>
-                                            <input type="text" name="link" id="link" class="form-control" required>
-
-                                        </div> <br>
-                                        <div class="form-group">
-
-                                            <label for="subtitle" class="form-label">Subtitle</label>
-                                            <input type="text" name="subtitle" id="subtitle" class="form-control"
-                                                required>
-
-                                        </div> <br>
-                                        <div class="form-group">
-
-                                            <label for="subtitle" class="form-label">Offer</label>
-                                            <input type="text" name="offer" id="offer" class="form-control"
-                                                required>
-
-                                        </div> <br>
-                                        
-
-
-
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-
-                                        
-                                        <label class="form-label">Category</label>
-                       
-    
-                                        <select name="category" class="form-select">
-                                            <option value="" selected disabled>Select a category</option>
-                                            <% if (category && category.length > 0) { %>
-                                                <% for (let i = 0; i < category.length; i++) { %>
-                                                    <option value="<%= category[i].category%>"><%=category[i].category %></option>
-                                                <% } %>
-                                            <% } else { %>
-                                                <option value="" disabled>No products available</option>
-                                            <% } %>
-                                        </select>
-                                        
-                                    </div> <br>
-                                        <div class="form-group">
-
-                                        
-                                        <label class="form-label">Product</label>
-                       
-    
-                                        <select name="product" class="form-select">
-                                            <option value="" selected disabled>Select a product</option>
-                                            <% if (product && product.length > 0) { %>
-                                                <% for (let i = 0; i < product.length; i++) { %>
-                                                    <option value="<%= product[i]._id %>"><%= product[i].name %></option>
-                                                <% } %>
-                                            <% } else { %>
-                                                <option value="" disabled>No products available</option>
-                                            <% } %>
-                                        </select>
-                                        
-                                    </div> <br>
-                                    <div class="form-group">
-                                        <label for="image" class="form-label">Banner Image:</label>
-                                        <input type="file" name="image" id="image" class="form-control">
-                                    </div>
-                                  
-                                        <br> 
-                                        <div class="form-group">
-                                            <label  class="form-label "  for="startDate">Start Date</label>
-                                            <input type="date" class="form-control" id="expiryDate" name="startDate" required>
-                                        </div><br>
-                                        <div class="form-group">
-                                            <label  class="form-label"  for="endDate">End Date</label>
-                                            <input type="date" class="form-control" id="expiryDate" name="endDate" required>
-                                        </div><br> <br> 
-                                 
-
-
-
-
-
-
-
-                                </div>
-
-
-
-
-
-                            </div>
-                            
-                            <button type="submit" class="btn btn-primary">Add Banner</button>
-
-
+           <form enctype="multipart/form-data" action="" method="post" id="bannerForm">
+            <div class="card col">
+                <div class="card-body ">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="bannerType" class="form-label">Select Banner Type:</label>
+                                <select id="bannerType" class="form-select" name="bannerType">
+                                    <option value="Category Banner">Category Offer</option>
+                                    <option value="Product Banner">Product Offer</option>
+                                    <option value="New Arrival">New Arrival</option>
+                                    <option value="Deals and Promotions">Deals and Promotions</option>
+                                    <option value="Seasonal Sales">Seasonal Sales</option>
+                                </select>
+                                <div  class="error-message"></div>
+                            </div><br>
+                            <div class="form-group">
+                                <label for="title" class="form-label">Title</label>
+                                <input type="text" name="title" id="title" class="form-control" >
+                             
+                                <div  id="titleError" class="error-message"></div>
+                            </div><br>
+                            <div class="form-group">
+                                <label for="link" class="form-label">Link</label>
+                                <input type="text" name="link" id="link" class="form-control" >
+                                <div id="linkError" class="error-message"></div> <!-- Error placeholder -->
+                            </div><br>
+                            <div class="form-group">
+                                <label for="subtitle" class="form-label">Subtitle</label>
+                                <input type="text" name="subtitle" id="subtitle" class="form-control" >
+                                <div id="subtitleError" class="error-message"></div> <!-- Error placeholder -->
+                            </div><br>
+                            <div class="form-group">
+                                <label for="offer" class="form-label">Offer</label>
+                                <input type="text" name="offer" id="offer" class="form-control" >
+                                <div id="offerError" class="error-message"></div> <!-- Error placeholder -->
+                            </div><br>
                         </div>
-                    </div> <!-- card body .// -->
-                    </div> <!-- card .// -->
-                </form>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="image" class="form-label">Banner Image:</label>
+                                <input type="file" name="image" id="image" class="form-control">
+                                <div id="imageError" class="error-message"></div> <!-- Error placeholder -->
+                            </div><br>
+                            <div class="form-group">
+                                <label class="form-label">Category</label>
+                                <select name="category" class="form-select">
+                                    <option value="" selected disabled>Select a category</option>
+                               
+                   
+                                        <% if (category && category.length > 0) { %>
+                                            <% for (let i = 0; i < category.length; i++) { %>
+                                                <option value="<%= category[i].category%>"><%=category[i].category %></option>
+                                            <% } %>
+                                        <% } else { %>
+                                            <option value="" disabled>No products available</option>
+                                        <% } %>
+                                  
+                                </select>
+                                <div id="categoryError" class="error-message"></div> <!-- Error placeholder -->
+                            </div><br>
+                            <div class="form-group">
+                                <label class="form-label">Product</label>
+                                <select name="product" class="form-select">
+                                
+                                        <option value="" selected disabled>Select a product</option>
+                                        <% if (product && product.length > 0) { %>
+                                            <% for (let i = 0; i < product.length; i++) { %>
+                                                <option value="<%= product[i]._id %>"><%= product[i].name %></option>
+                                            <% } %>
+                                        <% } else { %>
+                                            <option value="" disabled>No products available</option>
+                                        <% } %>
+                                  
+                                </select>
+                                <div id="productError" class="error-message"></div> <!-- Error placeholder -->
+                            </div><br>
+                       
+                            <div class="form-group">
+                                <label class="form-label" for="startDate">Start Date</label>
+                                <input type="date" class="form-control" id="startDate" name="startDate" >
+                                <div class="error-message" id="errorStartDate"></div>
+                            </div><br>
+                            <div class="form-group">
+                                <label class="form-label" for="endDate">End Date</label>
+                                <input type="date" class="form-control" id="endDate" name="endDate" >
+                                <div id="dateError" class="error-message"></div> <!-- Error placeholder -->
+                            </div><br><br>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Banner</button>
+                </div>
+            </div> <!-- card body .// -->
+        </form>
+        
+        <!-- JavaScript for form validation -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const form = document.getElementById('bannerForm');
+        
+                form.addEventListener('submit', function (event) {
+                    event.preventDefault(); // Prevent the form from submitting by default
+        
+                    let isValid = true;
+        
+                    // Validation for Title
+                    const titleInput = document.getElementById('title');
+                    const titleValue = titleInput.value.trim();
+                    const titleError = document.getElementById('titleError');
+                    if (titleValue === '') {
+                        isValid = false;
+                        titleError.textContent = 'Title is required';
+                    } else {
+                        titleError.textContent = '';
+                    }
+        
+                    // Validation for Link
+                    const linkInput = document.getElementById('link');
+                    const linkValue = linkInput.value.trim();
+                    const linkError = document.getElementById('linkError');
+                    if (linkValue === '') {
+                        isValid = false;
+                        linkError.textContent = 'Link is required';
+                    } else {
+                        linkError.textContent = '';
+                    }
+        
+                    // Validation for Subtitle
+                    const subtitleInput = document.getElementById('subtitle');
+                    const subtitleValue = subtitleInput.value.trim();
+                    const subtitleError = document.getElementById('subtitleError');
+                    if (subtitleValue === '') {
+                        isValid = false;
+                        subtitleError.textContent = 'Subtitle is required';
+                    } else {
+                        subtitleError.textContent = '';
+                    }
+        
+                    // Validation for Offer
+                    const offerInput = document.getElementById('offer');
+                    const offerValue = offerInput.value.trim();
+                    const offerError = document.getElementById('offerError');
+                    if (offerValue === '') {
+                        isValid = false;
+                        offerError.textContent = 'Offer is required';
+                    } else {
+                        offerError.textContent = '';
+                    }
+        
+                    // Validation for Category
+                    const categorySelect = document.getElementsByName('category')[0];
+                    const categoryValue = categorySelect.value;
+                    const categoryError = document.getElementById('categoryError');
+                    if (categoryValue === '') {
+                        isValid = false;
+                        categoryError.textContent = 'Category is required';
+                    } else {
+                        categoryError.textContent = '';
+                    }
+        
+                    // Validation for Product
+                    const productSelect = document.getElementsByName('product')[0];
+                    const productValue = productSelect.value;
+                    const productError = document.getElementById('productError');
+                    if (productValue === '') {
+                        isValid = false;
+                        productError.textContent = 'Product is required';
+                    } else {
+                        productError.textContent = '';
+                    }
+        
+                    // Validation for Image (Optional: Check if an image is uploaded)
+        
+                    // Validation for Start Date and End Date
+                    const startDateInput = document.getElementById('startDate');
+                    const endDateInput = document.getElementById('endDate');
+                    const startDateValue = startDateInput.value;
+                    const endDateValue = endDateInput.value;
+        
+                    if (startDateValue === '' || endDateValue === '' || startDateValue >= endDateValue) {
+                        isValid = false;
+                        document.getElementById('dateError').textContent = 'Invalid date range';
+                    } else {
+                        document.getElementById('dateError').textContent = '';
+                    }
+                    
+                   
+                    // If everything is valid, submit the form
+                    if (isValid) {
+                        form.submit();
+                    }
+                });
+            });
+        </script>
+        
                 </section> <!-- content-main end// -->
 
                 <footer class="main-footer font-xs">
@@ -265,3 +332,10 @@
         imageInput.value = '';
     });
 </script>
+<style>
+    .error-message{
+        color: red;
+        font-size: 12px;
+        height: 14px;
+    }
+</style>

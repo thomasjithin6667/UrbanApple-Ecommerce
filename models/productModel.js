@@ -13,6 +13,7 @@ const productSchema = new mongoose.Schema({
     ratings: [Number],
     ram: String,
     rom: String,
+    discription:String,
     expandable: String,
     frontCam: String,
     rearCam: String,

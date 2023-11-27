@@ -93,7 +93,7 @@ const insertUser = async (req, res) => {
             req.session.id2 = userData._id;
 
             sentOTPVerificationEmail(req, res, req.body.email, userData._id);
-        
+
 
             if (userData) {
                 res.render('otp-page', { user: userData });
@@ -112,7 +112,29 @@ const loadBlog = async (req, res) => {
     try {
 
 
-        res.render('bloglist', { user: null })
+
+        if (req.session.user_id) {
+
+            const userData = await User.findById({ _id: req.session.user_id })
+            res.render('bloglist', { user: userData})
+
+
+
+
+        } else {
+            res.render('bloglist', { user: null })
+
+
+
+
+
+
+        }
+
+
+
+
+
 
     } catch (error) {
 
@@ -129,8 +151,28 @@ const loadContact = async (req, res) => {
 
     try {
 
+        
+        if (req.session.user_id) {
 
-        res.render('contact', { user: null })
+            const userData = await User.findById({ _id: req.session.user_id })
+            res.render('contact', { user: userData})
+
+
+
+
+        } else {
+            res.render('contact', { user: null })
+
+
+
+
+
+
+        }
+
+
+
+
 
     } catch (error) {
 
@@ -290,7 +332,7 @@ const OTPVerification = async (req, res) => {
                                 amount: 100,
                                 type: 'credit',
                                 date: Date.now(),
-                                paymentMethod: "Wallet Payment" ,
+                                paymentMethod: "Wallet Payment",
                                 description: 'Referral Bonus',
                             });
                             const referrerTransaction = new Transaction({
@@ -298,7 +340,7 @@ const OTPVerification = async (req, res) => {
                                 amount: 50,
                                 type: 'credit',
                                 date: Date.now(),
-                                paymentMethod: "Wallet Payment" ,
+                                paymentMethod: "Wallet Payment",
                                 description: 'Referral Bonus',
                             });
                             await referredUserTransaction.save();
@@ -330,14 +372,9 @@ const OTPVerification = async (req, res) => {
 //function to load user login page
 const loginLoad = async (req, res) => {
     try {
-        if (req.session.user) {
-            const userData = await User.findById({ _id: req.session.user._id });
-            res.render('userProfile', { user: userData });
 
+        res.render('login');
 
-        } else {
-            res.render('login');
-        }
 
 
 
@@ -396,6 +433,20 @@ const loadUserProfile = async (req, res) => {
 };
 
 //=====================================================================================================================================//
+//function to load user profile Dashboard
+const loadUserDashboard = async (req, res) => {
+
+    const userData = await User.findById({ _id: req.session.user_id })
+    try {
+        res.render('userDashboard', { user: userData })
+    } catch (error) {
+        console.log(error.message)
+
+    }
+};
+
+//=====================================================================================================================================//
+
 //function to logout user
 const userLogout = async (req, res) => {
     try {
@@ -529,7 +580,7 @@ const userforgotPasswordOTP = async (req, res) => {
             req.session.id3 = userExist._id
             console.log(req.session.id3);
 
-           (req, res, req.body.email, userExist._id);
+            (req, res, req.body.email, userExist._id);
             res.render('forgetpassword-otp', { message: "Otp sent to your mail" });
         } else {
 
@@ -551,8 +602,8 @@ const forgotPasswordOTP = async (req, res) => {
 
         if (userExist) {
             req.session.id3 = userExist._id
-            console.log("forgot"+req.session.id3);
-         
+            console.log("forgot" + req.session.id3);
+
 
             sentPasswordOTPVerificationEmail(req, res, req.body.email, userExist._id);
             res.render('forgetpassword-otp', { message: "Otp sent to your mail" });
@@ -808,7 +859,8 @@ module.exports = {
     loadBlog,
     loadContact,
     resendOTP,
-    loadWallet
+    loadWallet,
+    loadUserDashboard
 
 }
 //=====================================================================================================================================//

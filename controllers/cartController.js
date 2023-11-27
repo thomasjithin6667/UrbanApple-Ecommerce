@@ -49,7 +49,7 @@ const addtocart = async (req, res) => {
 
         req.session.cartLength = (existingCart || newCart).items.length;
 
-        res.redirect('/productlist');
+        res.redirect( req.session.lastGetRequest);
     } catch (error) {
         console.error('Error adding product to cart:', error);
     }

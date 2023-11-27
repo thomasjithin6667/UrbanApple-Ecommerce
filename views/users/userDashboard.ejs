@@ -1,0 +1,90 @@
+<%- include('../layouts/header') %>
+    <div class="page-wrapper">
+        <%- include('../partials/ecomHeader1') %>
+
+
+            <main class="main">
+
+                <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+                    <div class="container">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/">Home</a></li>
+
+                            <li class="breadcrumb-item active" aria-current="page">My Account</li>
+                        </ol>
+                    </div><!-- End .container -->
+                </nav><!-- End .breadcrumb-nav -->
+
+                <div class="page-content">
+                    <div class="dashboard">
+                        <div class="container">
+                            <div class="row">
+                                <%- include('../partials/ecomUserProfileAside') %>
+                           
+
+                                <div class="col-md-8 col-lg-10">
+                                    <div class="tab-content">
+
+                                        <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel"
+                                            aria-labelledby="tab-dashboard-link">
+                                            <p>Hello, <strong><%=user.name%></strong>! Welcome back</p> 
+                                            <div class="row" >
+                                                <div class="col-md">
+                                                    <article class="box mb-3 bg-light p-4 text-center">
+                                                        <i style="font-size: 40px;"   class="fa-solid fa-cart-shopping mt-3 text-primary"></i>
+                                                        <h6 class="mt-2">Orders</h6>
+                                                        <small class="text-muted " style="width:70%">You can reset or change </small>
+                                                    </article>
+                                                </div> <!-- col.// -->
+                                                <div class="col-md">
+                                                    <article class="box mb-3 bg-light p-4 text-center">
+                                                        <i style="font-size: 40px;" class="fa-solid fa-gift  mt-3  text-primary"></i>
+                                                        <h6 class="mt-2">Products</h6>
+                                                        <small class="text-muted" style="width:70%">You can change your account .</small>
+                                                    </article>
+                                                </div> <!-- col.// -->
+                                                <div class="col-md">
+                                                    <article class="box mb-3 bg-light p-4 text-center">
+                                                        <i style="font-size: 40px;"   class="fa-solid fa-money-bill  mt-3  text-primary"></i>
+                                                        <h6 class="mt-2">Total spent</h6>
+                                                        <small class="text-muted" style="width:70%">Once you  there is no going back.  or change </small>
+                                                    </article>
+                                                </div> <!-- col.// -->
+                                            </div> <!-- row.// -->
+                                            <hr>
+                                            <div class="div">
+                                            <div class="box mb-3 bg-light p-4">
+                                                <div class="card-body">
+                                                    <h3 class="card-title">Referral code</h3><!-- End .card-title --> <br>
+                                                    <p><strong><%=user.referralCode%></strong> Share your code by clicking here.</p><br>
+                                                </div>
+                                            </div>
+                                           
+
+
+                                           
+                                                
+                                            </div>
+
+                                        </div><!-- .End .tab-pane -->
+
+
+                                    </div>
+                                </div><!-- End .col-lg-9 -->
+                            </div>
+                        </div><!-- End .container -->
+                    </div><!-- End .dashboard -->
+                </div><!-- End .page-content -->
+            </main><!-- End .main -->
+
+            <%- include('../partials/ecomFooter') %>
+    </div><!-- End .page-wrapper -->
+    <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->
+
+    <%- include('../partials/ecomMobileMenu') %><!-- End .mobile-menu-container -->
+
+    <%- include('../layouts/footer.ejs') %>
+    

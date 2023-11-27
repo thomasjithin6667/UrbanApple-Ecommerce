@@ -127,7 +127,13 @@ const orderPlaced = async (req, res) => {
 //function to get orderlist in adminside
 const orderList = async (req, res) => {
   try {
-    const admin = req.session.adminData
+    const admin = req.session.adminData;
+    const page = parseInt(req.query.page) || 1;
+    const limit = 10; 
+
+    const totalOrdersCount = await Order.countDocuments();
+    const totalPages = Math.ceil(totalOrdersCount / limit);
+    const skip = (page - 1) * limit;
 
     const orders = await Order.find({})
       .populate('user')
@@ -139,14 +145,17 @@ const orderList = async (req, res) => {
         path: 'items.product',
         model: 'Product',
       })
-      .sort({ orderDate: -1 });
-    res.render('orderlist', { orders, admin: admin });
+      .sort({ orderDate: -1 })
+      .skip(skip)
+      .limit(limit);
 
+    res.render('orderlist', { orders, admin, totalPages, currentPage: page });
   } catch (error) {
     console.error('Error fetching order details:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 //=====================================================================================================================================//
 //get order details in the adminside  
@@ -182,9 +191,14 @@ const orderDetails = async (req, res) => {
 const userOrderlist = async (req, res) => {
   try {
     const userId = req.session.user._id;
-    const userData = req.session.user
+    const userData = req.session.user;
 
+    const page = parseInt(req.query.page) || 1;
+    const limit = 5; 
 
+    const totalOrdersCount = await Order.countDocuments({ user: userId });
+    const totalPages = Math.ceil(totalOrdersCount / limit);
+    const skip = (page - 1) * limit;
 
     const orderData = await Order.find({ user: userId })
       .populate('user')
@@ -195,17 +209,18 @@ const userOrderlist = async (req, res) => {
       .populate({
         path: 'items.product',
         model: 'Product',
-      }).sort({ orderDate: -1 })
+      })
+      .sort({ orderDate: -1 })
+      .skip(skip)
+      .limit(limit);
 
-
-
-    res.render('userorderlist', { orders: orderData, user: userData });
-
+    res.render('userorderlist', { orders: orderData, user: userData, totalPages, currentPage: page });
   } catch (error) {
     console.error('Error fetching order details:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 //=====================================================================================================================================//
 //change status in  the admin side

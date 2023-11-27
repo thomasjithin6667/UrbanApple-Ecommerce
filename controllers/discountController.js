@@ -10,10 +10,26 @@ const Discount = require('../models/discountModel');
 //=====================================================================================================================================//
 //function to load the offer list page in the admin side
 const loadOfferList = async (req, res) => {
-    const admin = req.session.adminData
+  try {
+    const admin = req.session.adminData;
+    const page = parseInt(req.query.page) || 1;
+    const limit = 5; 
+
+    const totalOffersCount = await Discount.countDocuments();
+    const totalPages = Math.ceil(totalOffersCount / limit);
+    const skip = (page - 1) * limit;
+
     const offer = await Discount.find()
-    res.render('offer-list', { offer, admin: admin })
-  };
+      .skip(skip)
+      .limit(limit);
+
+    res.render('offer-list', { offer, admin, totalPages, currentPage: page });
+  } catch (error) {
+    console.error('Error fetching offer list:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 
 //=====================================================================================================================================//
 //function to load page to add offer

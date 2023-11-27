@@ -1,15 +1,16 @@
 <aside class="col-md-4 col-lg-2">
     <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
         <li class="nav-item">
-            <a class="nav-link  " id="tab-dashboard-link" data-toggle="tab"
-                href="#tab-dashboard" role="tab" aria-controls="tab-dashboard"
-                aria-selected="true">Dashboard</a>
+         
+                <li class="nav-item">
+                    <a class="nav-link" href="/userDashboard">Dashboard</a>
+                </li>
         </li>
   
         <li class="nav-item">
-            <a class="nav-link  " id="tab-account-link" data-toggle="tab"
-                href="#tab-account" role="tab" aria-controls="tab-account"
-                aria-selected="false">Account Details</a>
+            <li class="nav-item">
+                <a class="nav-link" href="/userProfile">Profile</a>
+            </li>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="/wallet">Wallet</a>
@@ -32,18 +33,6 @@
                 href="/address?userId=<%= user._id.toString() %>" 
                >Addresses</a>
 
-        </li>
-        
-        <li class="nav-item">
-            <a class="nav-link" id="tab-cart-link" data-toggle="tab"
-                href="#tab-cart" role="tab" aria-controls="tab-cart"
-                aria-selected="false">Shopping Cart</a>
-                
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="tab-whishlist-link" data-toggle="tab"
-                href="#tab-wishlist" role="tab" aria-controls="tab-wishlist"
-                aria-selected="false">Whislist</a>
         </li>
     
 

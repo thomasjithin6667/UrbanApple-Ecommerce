@@ -8,7 +8,7 @@ const Category = require('../models/categoryModel');
 const Product = require('../models/productModel')
 const sharp = require('sharp')
 const path = require("path");
-const { log } = require('console');
+const Review=require('../models/reviewModel')
 
 //=====================================================================================================================================//
 //toggle function to list and unlist product from admin side
@@ -79,6 +79,7 @@ const insertProduct = async (req, res) => {
       frontCam: req.body.frontCam,
       rearCam: req.body.rearCam,
       processor: req.body.processor,
+      discription:req.body.discription
     };
 
     if (req.files) {
@@ -206,6 +207,10 @@ const editProduct = async (req, res) => {
         existingProduct.quantity = req.body.quantity;
       }
 
+      if(req.body.discription){
+        existingProduct.discription=req.body.discription
+      }
+
       if (req.files) {
         for (let i = 1; i <= 4; i++) {
           const fieldName = `image${i}`;
@@ -221,14 +226,14 @@ const editProduct = async (req, res) => {
 
             const targetSize = { width: 679, height: 679 };
 
-            // Crop if the image is larger, resize if it's smaller
+
             if (width > targetSize.width || height > targetSize.height) {
               image.resize({ width: targetSize.width, height: targetSize.height, fit: 'cover' });
             } else {
               image.resize(targetSize.width, targetSize.height);
             }
 
-            // Save the edited image to a temporary file
+
             const tempFilename = `${file.filename.replace(/\.\w+$/, '')}_${Date.now()}.jpg`;
             const editedImagePath = path.join(__dirname, '../public/assets/images/productImages', tempFilename);
             await image.toFile(editedImagePath);
@@ -323,184 +328,155 @@ const loadEditProduct = async (req, res) => {
 //function to load product list page in user side
 const productList = async (req, res) => {
   try {
-
-    if (req.session.user_id) {
-
-
-      const userData = await User.findById({ _id: req.session.user_id });
-
-      const categoriesData = await Category.find({});
-
-      try {
-        const search = req.query.search || '';
-        const categories = Array.isArray(req.query.category) ? req.query.category : [req.query.category];
-        const priceRange = req.query.price || 'all';
-        const colors = Array.isArray(req.query.color) ? req.query.color : [req.query.color];
-        const sortBy = req.query.sortBy || 'priceLowToHigh';
-
-
-        let minPrice = 0;
-        let maxPrice = Number.MAX_VALUE;
-
-        switch (priceRange) {
-          case 'under25':
-            maxPrice = 20000;
-            break;
-          case '25to50':
-            minPrice = 20000;
-            maxPrice = 40000;
-            break;
-          case '50to100':
-            minPrice = 40000;
-            maxPrice = 60000;
-            break;
-          case '100to200':
-            minPrice = 60000;
-            maxPrice = 80000;
-            break;
-          case '200above':
-            minPrice = 80000;
-            break;
-          default:
-
-        }
-
-        let sortQuery = {};
-
-        if (sortBy === 'priceLowToHigh') {
-          sortQuery = { price: 1 };
-        } else if (sortBy === 'priceHighToLow') {
-          sortQuery = { price: -1 };
-        }
-
-
-
-
-        const filter = {
-          $or: [
-
-            { category: { $in: categories.map(c => new RegExp(c, 'i')) } },
-          ],
-          price: { $gte: minPrice, $lte: maxPrice },
-          productColor: { $in: colors.map(c => new RegExp(c, 'i')) },
-        };
-
-        const searchFilter = {
-          $or: [
-              { name: { $regex: '.' + search + '.', $options: 'i' } },
-              { category: { $regex: '.' + search + '.', $options: 'i' } },
-              { discountPrize: { $regex: '.' + search + '.', $options: 'i' } },
-          ],
-      };
-      const productsData = await Product.find({
-          $and: [
-              filter,
-              searchFilter,
-          ],
-      }).sort(sortQuery);
-       
+    req.session.lastGetRequest = req.originalUrl;
 
     
-        const selectedCategories = categories;
-        const selectedPriceRange = priceRange;
-        const selectedColors = colors;
-     
+    const categoriesData = await Category.find({});
+    const search = req.query.search || '';
+    const categories = Array.isArray(req.query.category) ? req.query.category : [req.query.category];
+    const priceRange = req.query.price || 'all';
+    const colors = Array.isArray(req.query.color) ? req.query.color : [req.query.color];
+    const sortBy = req.query.sortBy || 'priceLowToHigh';
+    const page = parseInt(req.query.page) || 1;
+    const limit = 10;
 
-        res.render('productlist', {
-          user: userData, products: productsData, category: categoriesData, sortBy, selectedCategories, selectedPriceRange,
-          selectedColors,
-        });
-      } catch (error) {
-        console.log(error.message);
-      }
+    let minPrice = 0;
+    let maxPrice = Number.MAX_VALUE;
 
+    switch (priceRange) {
+      case 'under25':
+        maxPrice = 20000;
+        break;
+      case '25to50':
+        minPrice = 20000;
+        maxPrice = 40000;
+        break;
+      case '50to100':
+        minPrice = 40000;
+        maxPrice = 60000;
+        break;
+      case '100to200':
+        minPrice = 60000;
+        maxPrice = 80000;
+        break;
+      case '200above':
+        minPrice = 80000;
+        break;
+      default:
+        // Handle default case
+    }
 
+    let sortQuery = {};
 
-    } else {
-      const categoriesData = await Category.find({});
+    if (sortBy === 'priceLowToHigh') {
+      sortQuery = { price: 1 };
+    } else if (sortBy === 'priceHighToLow') {
+      sortQuery = { price: -1 };
+    }
 
-      try {
-        const search = req.query.search || '';
-        const categories = Array.isArray(req.query.category) ? req.query.category : [req.query.category];
-        const priceRange = req.query.price || 'all';
-        const colors = Array.isArray(req.query.color) ? req.query.color : [req.query.color];
-        const sortBy = req.query.sortBy || 'priceLowToHigh';
-        
-        // Define price range filters
-        let minPrice = 0;
-        let maxPrice = Number.MAX_VALUE;
+    const filter = {
+      $or: [
+        { category: { $in: categories.map(c => new RegExp(c, 'i')) } },
+      ],
+      price: { $gte: minPrice, $lte: maxPrice },
+      productColor: { $in: colors.map(c => new RegExp(c, 'i')) },
+    };
 
-        switch (priceRange) {
-          case 'under25':
-            maxPrice = 20000;
-            break;
-          case '25to50':
-            minPrice = 20000;
-            maxPrice = 40000;
-            break;
-          case '50to100':
-            minPrice = 40000;
-            maxPrice = 60000;
-            break;
-          case '100to200':
-            minPrice = 60000;
-            maxPrice = 80000;
-            break;
-          case '200above':
-            minPrice = 80000;
-            break;
-          default:
+    const searchFilter = {
+      $or: [
+        { name: { $regex: '.' + search + '.', $options: 'i' } },
+        { category: { $regex: '.' + search + '.', $options: 'i' } },
+        { discountPrize: { $regex: '.' + search + '.', $options: 'i' } },
+      ],
+    };
 
-        }
+    const totalProductsCount = await Product.countDocuments({
+      $and: [filter, searchFilter],
+    });
 
-        let sortQuery = {};
-
-        if (sortBy === 'priceLowToHigh') {
-          sortQuery = { price: 1 };
-        } else if (sortBy === 'priceHighToLow') {
-          sortQuery = { price: -1 };
-        }
-
-        
-        const filter = {
-          $or: [
-
-            { category: { $in: categories.map(c => new RegExp(c, 'i')) } },
-          ],
-          price: { $gte: minPrice, $lte: maxPrice },
-          productColor: { $in: colors.map(c => new RegExp(c, 'i')) },
-        };
+    const totalPages = Math.ceil(totalProductsCount / limit);
+    const skip = (page - 1) * limit;
 
 
-        const productsData = await Product.find(filter).sort(sortQuery);
-        const selectedCategories = categories;
-        const selectedPriceRange = priceRange;
-        const selectedColors = colors;
+    if (req.session.user_id) {
+      const userData = await User.findById({ _id: req.session.user_id });
+
+      const productsData = await Product.find({
+        $and: [filter, searchFilter],
+      }).sort(sortQuery).skip(skip).limit(limit);
+
+      const selectedCategories = categories;
+      const selectedPriceRange = priceRange;
+      const selectedColors = colors;
+
+      res.render('productlist', {
+        user: userData,
+        products: productsData,
+        category: categoriesData,
+        sortBy,
+        selectedCategories,
+        selectedPriceRange,
+        selectedColors,
+        totalPages,
+        currentPage: page,
+      });
+    } else { 
 
 
-        res.render('productlist', {
-          products: productsData, user: null, category: categoriesData, sortBy, selectedCategories, selectedPriceRange,
-          selectedColors,
-        });
-      } catch (error) {
-        console.log(error.message);
-      }
+      const productsData = await Product.find({
+        $and: [filter, searchFilter],
+      }).sort(sortQuery).skip(skip).limit(limit);
 
+      const selectedCategories = categories;
+      const selectedPriceRange = priceRange;
+      const selectedColors = colors;
 
+      res.render('productlist', {
+        user: null,
+        products: productsData,
+        category: categoriesData,
+        sortBy,
+        selectedCategories,
+        selectedPriceRange,
+        selectedColors,
+        totalPages,
+        currentPage: page,
+      });
     }
   } catch (error) {
     console.log(error.message);
+    // Handle errors appropriately
   }
 };
+
 
 //=====================================================================================================================================//
 //function to view product detail page in user side
 const productView = async (req, res) => {
-
+ req.session.lastGetRequest=req.originalUrl ;
   try {
+    
+    if (req.session.user_id) {
+      const productId = req.params.productId;
+      const reviewData= await Review.find({productId:productId}).populate('userId')
+      const userReviewData = await Review.findOne({productId:productId,userId:req.session.user_id})
+      const userData = await User.findById({ _id: req.session.user_id })
+      const productData = await Product.findById(productId);
+      const sameProducts = await Product.find({
+        list: true,
+        category: productData.category,
+        _id: { $ne: productId },
+  
+      }).limit(7)
+      res.render('productView', { user: userData, product: productData, sameProducts: sameProducts,reviews:reviewData,userReview:userReviewData})
+  
+      
 
-    const userData = await User.findById({ _id: req.session.user_id })
+  } else {
+
     const productId = req.params.productId;
+    const reviewData= await Review.find({productId:productId}).populate('userId')
+    
     const productData = await Product.findById(productId);
     const sameProducts = await Product.find({
       list: true,
@@ -508,8 +484,17 @@ const productView = async (req, res) => {
       _id: { $ne: productId },
 
     }).limit(7)
-    res.render('productView', { user: userData, product: productData, sameProducts: sameProducts })
+    res.render('productView', { user:null, product: productData, sameProducts: sameProducts ,reviews:reviewData })
 
+
+      
+
+
+  }
+
+
+
+  
 
   } catch (error) {
     console.log(error.message);

@@ -229,6 +229,11 @@ const getSalesReport  = async (req, res) => {
   try {
     const admin = req.session.adminData
 
+    const page = parseInt(req.query.page) || 1;
+    const perPage = 10; 
+
+  
+
     let query = { paymentStatus: "Payment Successful" };
 
     if (req.query.paymentMethod) {
@@ -253,6 +258,10 @@ const getSalesReport  = async (req, res) => {
 
   
 
+    const totalOrdersCount = await Order.countDocuments(query);
+    const totalPages = Math.ceil(totalOrdersCount / perPage);
+    const skip = (page - 1) * perPage;
+
     const orders = await Order.find(query)
       .populate("user")
       .populate({
@@ -263,7 +272,9 @@ const getSalesReport  = async (req, res) => {
         path: "items.product",
         model: "Product",
       })
-      .sort({ orderDate: -1 });
+      .sort({ orderDate: -1 })
+      .skip(skip)
+      .limit(perPage);
 
     // total revenue
     const totalRevenue = orders.reduce(
@@ -292,8 +303,9 @@ const getSalesReport  = async (req, res) => {
       returnedOrders,
       totalSales,
       totalProductsSold,
-      req
-     
+      req,
+      totalPages,
+      currentPage: page,
     });
   } catch (error) {
     console.log(error.message);
