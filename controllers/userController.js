@@ -86,7 +86,11 @@ const insertUser = async (req, res) => {
                 email: req.body.email,
                 mobile: req.body.mno,
                 password: spassword,
-                is_Admin: 0
+                is_Admin: 0,
+                
+               
+                
+
             });
 
             const userData = await user.save();
