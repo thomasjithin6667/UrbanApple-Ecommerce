@@ -304,7 +304,7 @@ const userOrderDetails = async (req, res) => {
         path: 'items.product',
         model: 'Product',
       })
-    res.render('userorderDetails', { order: orderData, user: userData });
+    res.render('userOrderDetails', { order: orderData, user: userData });
 
   } catch (error) {
     console.error('Error fetching order details:', error);
