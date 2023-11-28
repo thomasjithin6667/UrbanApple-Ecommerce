@@ -42,7 +42,7 @@ const loadaddProduct = async (req, res) => {
     const admin = req.session.adminData
     const categoriesData = await Category.find({})
 
-    res.render('addProduct', { admin: admin, category: categoriesData })
+    res.render('product-add', { admin: admin, category: categoriesData })
   } catch (error) {
     console.log(error.message)
   }
@@ -58,7 +58,7 @@ const insertProduct = async (req, res) => {
     const existingProduct = await Product.findOne({ name: req.body.name });
 
     if (existingProduct) {
-      return res.render('addproduct', {
+      return res.render('product-add', {
         message: 'Product already exists',
         admin: admin,
         category: categoriesData,
@@ -120,7 +120,7 @@ const insertProduct = async (req, res) => {
 
     const savedProduct = await new Product(newProduct).save();
 
-    return res.render('addproduct', {
+    return res.render('product-add', {
       message: 'Product added successfully',
       admin: admin,
       category: categoriesData,
@@ -129,7 +129,7 @@ const insertProduct = async (req, res) => {
     const categoriesData = await Category.find({});
     console.error(error.message);
     const admin = req.session.adminData;
-    res.render('addproduct', { error: error.message, category: categoriesData, admin: admin });
+    res.render('product-add', { error: error.message, category: categoriesData, admin: admin });
   }
 };
 
