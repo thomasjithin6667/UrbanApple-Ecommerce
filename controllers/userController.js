@@ -11,6 +11,7 @@ const Product = require('../models/productModel')
 const Category = require('../models/categoryModel');
 const Transaction = require('../models/transactionModel')
 const Banner = require('../models/bannerModel')
+const Order = require('../models/orderModel')
 //function to hash password
 const securePassword = async (password) => {
     try {
@@ -87,9 +88,9 @@ const insertUser = async (req, res) => {
                 mobile: req.body.mno,
                 password: spassword,
                 is_Admin: 0,
-                
-               
-                
+
+
+
 
             });
 
@@ -120,7 +121,7 @@ const loadBlog = async (req, res) => {
         if (req.session.user_id) {
 
             const userData = await User.findById({ _id: req.session.user_id })
-            res.render('bloglist', { user: userData})
+            res.render('bloglist', { user: userData })
 
 
 
@@ -155,11 +156,11 @@ const loadContact = async (req, res) => {
 
     try {
 
-        
+
         if (req.session.user_id) {
 
             const userData = await User.findById({ _id: req.session.user_id })
-            res.render('contact', { user: userData})
+            res.render('contact', { user: userData })
 
 
 
@@ -438,23 +439,45 @@ const loadUserProfile = async (req, res) => {
 
 //=====================================================================================================================================//
 //function to load user profile Dashboard
+// const loadUserDashboard = async (req, res) => {
+
+//     const userData = await User.findById({ _id: req.session.user_id })
+//     try {
+//         res.render('userDashboard', { user: userData })
+//     } catch (error) {
+//         console.log(error.message)
+
+//     }
+// };
+
 const loadUserDashboard = async (req, res) => {
-
-    const userData = await User.findById({ _id: req.session.user_id })
     try {
-        res.render('userDashboard', { user: userData })
+      const id = req.session.user_id;
+      const userData = await User.findById(id);
+      const userOrders = await Order.find({
+        user: id,
+        paymentStatus: "Payment Successful",
+      });
+      const totalOrders = userOrders.length;
+      const totalSpending = userOrders.reduce(
+        (acc, order) => acc + order.totalAmount,
+        0
+      );
+      const uniqueProductIds = new Set(userOrders.flatMap(order => order.items.map(item => item.product)));
+      const totalUniqueProducts = uniqueProductIds.size;
+      res.render('userDashboard', { user: userData, totalOrders, totalSpending,totalUniqueProducts });
     } catch (error) {
-        console.log(error.message)
-
+      console.log(error);
     }
-};
+  };
 
 //=====================================================================================================================================//
 
 //function to logout user
 const userLogout = async (req, res) => {
     try {
-        req.session.destroy();
+        delete req.session.user_id;
+        delete req.session.userData;
 
         res.redirect('/')
 

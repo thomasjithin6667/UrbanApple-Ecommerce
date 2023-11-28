@@ -1,4 +1,8 @@
 <%- include('../layouts/header') %>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<!-- Include a required theme -->
+<!-- <link rel="stylesheet" href="@sweetalert2/themes/dark/dark.css"> -->
+<script src="sweetalert2/dist/sweetalert2.min.js"></script>
 
 <body>
     <div class="page-wrapper">
@@ -31,8 +35,8 @@
                     
                     <% } else { %>
                    
-            	<div class="cart">
-	                <div class="container">
+            	<div class="cart" >
+	                <div class="container ">
 	                	<div class="row">
 	                		<div class="col-lg-9">
 	                			<table class="table table-cart table-mobile">
@@ -82,16 +86,17 @@
 
 
 
-											<td class="remove-col"><button  onsubmit="return confirm('Are you sure you want to Return <%= cart[i].product.name  %>');" class="btn-remove">
-                                                <form action="/removeItemFromCart/<%= cart[i].product._id %>" method="post">
-                                                    <button type="submit"style="background: none;
-                                                                            color: inherit;
-                                                                            border: none;
-                                                                            padding: 0;
-                                                                            font: inherit;
-                                                                            cursor: pointer;
-                                                                            outline: inherit;"><i class="icon-close"></i></button>
-                                                  </form></button></td>
+                      <td class="remove-col  notifications" >
+                        <button class="btn-remove" id="warning" onclick="confirmRemoveCartItem('<%= cart[i].product._id %>');">
+                            <i class="icon-close"></i>
+                        </button>
+                        
+                        <!-- <button class="btn-remove" id="warning" onclick="myFunction()">
+                            <i class="icon-close"></i>
+                        </button>
+                    </td> -->
+
+                </tr>
 										
                                         </tr>
                                         <% } %>
@@ -204,6 +209,7 @@
                 </div><!-- End .cart -->
             </div><!-- End .page-content -->
         </main><!-- End .main -->
+        <div id="snackbar">The item is removed from cart..</div>
 
         <%- include('../partials/ecomFooter') %>
     </div><!-- End .page-wrapper -->
@@ -254,7 +260,157 @@
     });
 }
 </script>
+<script>
+
+
+    function confirmRemoveCartItem(productId) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            background: '#ffffff', 
+            customClass: {
+              popup: 'white-background', 
+            },
+            showCancelButton: true,
+          
+          
+            confirmButtonText: "Yes, delete it!",
+           
+        }).then((result) => {
+            if (result.isConfirmed) {
+            
+                removeCartItem(productId);
+               
+            }
+        });
+    }
     
+        function updateCart(productId, newQuantity) {
+            fetch(`/updateCart?productId=${productId}&quantity=${newQuantity}`, {
+                method: 'PUT',
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+    
+                } else {
+                    console.error('Failed to update cart:', data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error updating cart:', error);
+            });
+        }
+    
+        function removeCartItem(productId) {
+        fetch(`/removeCartItem?productId=${productId}`, {
+            method: 'DELETE',
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                localStorage.setItem('productRemoved', 'true');
+                location.reload();
+                
+            } else {
+                console.error('Failed to remove cart item:', data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error removing cart item:', error);
+        });
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        const productRemoved = localStorage.getItem('productRemoved');
+        if (productRemoved === 'true') {
+            myFunction();
+            localStorage.removeItem('productRemoved'); 
+    
+        }
+    });
+    function myFunction() {
+      var x = document.getElementById("snackbar");
+      x.className = "show";
+      setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+    }
+    
+    document.addEventListener('DOMContentLoaded', function () {
+        const shippingRadios = document.querySelectorAll('input[name="shipping"]');
+        const totalElement = document.querySelector('.summary-total td:last-child');
+        
+        let currentTotal = parseInt(totalElement.textContent, 10);
+    
+        let selectedShippingOption = null;
+    
+        shippingRadios.forEach(function (radio) {
+            radio.addEventListener('change', function () {
+                const selectedShippingCost = parseInt(this.value, 10);
+    
+                console.log('Selected Shipping Cost:', selectedShippingCost);
+    
+                if (selectedShippingOption !== null) {
+                    currentTotal -= selectedShippingOption;
+                }
+    
+                currentTotal += selectedShippingCost;
+    
+                totalElement.textContent = currentTotal;
+    
+                selectedShippingOption = selectedShippingCost;
+            });
+        });
+    });
+    
+        </script>
+    <script src="sweetalert2/dist/sweetalert2.min.js"></script>
+    <style>
+        #snackbar {
+            visibility: hidden;
+      min-width: 250px;
+      margin-left: -125px;
+      background-color:#ff4343;
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      padding: 16px;
+      position: fixed;
+      z-index: 10;
+      left: 50%;
+      bottom: 30px;
+      font-size: 12px;
+    }
+        
+        
+        #snackbar.show {
+          visibility: visible;
+          -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+          animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+        
+        @-webkit-keyframes fadein {
+          from {bottom: 0; opacity: 0;} 
+          to {bottom: 30px; opacity: 1;}
+        }
+        
+        @keyframes fadein {
+          from {bottom: 0; opacity: 0;}
+          to {bottom: 30px; opacity: 1;}
+        }
+        
+        @-webkit-keyframes fadeout {
+          from {bottom: 30px; opacity: 1;} 
+          to {bottom: 0; opacity: 0;}
+        }
+        
+        @keyframes fadeout {
+          from {bottom: 30px; opacity: 1;}
+          to {bottom: 0; opacity: 0;}
+        }
+    
+    
+        </style>
 
   
 

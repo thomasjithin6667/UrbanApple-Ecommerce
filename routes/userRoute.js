@@ -85,9 +85,9 @@ user_route.get('/cart', auth.isLogin, cartController.getcart)
 
 //wishlist
 user_route.get('/wishlist', auth.isLogin,wishlistController.getWishlist)
-user_route.get('/addToWishlist/:productId', auth.isLogin,wishlistController.addToWishlist)
-user_route.get('/addToCartFromWishlist/:productId', auth.isLogin,wishlistController.addToCartFromWishlist)
-user_route.get('/removeItemFromWishlist/:productId', auth.isLogin,wishlistController.removeFromWishlist)
+user_route.get('/addToWishlist/:productId', wishlistController.addToWishlist)
+user_route.get('/addToCartFromWishlist/:productId', wishlistController.addToCartFromWishlist)
+user_route.delete("/removeFromWishlist", wishlistController.removeFromWishlist);
 
 
 //checkout
@@ -137,8 +137,8 @@ user_route.get('/resendOtp', userController.resendOTP);
 user_route.post('/addAddress', auth.isLogin, addressController.postAddAddress);
 user_route.post('/editaddress', auth.isLogin, addressController.editAddress);
 //cart
-user_route.post('/add-to-cart/:productId',auth.isAuthenticated, cartController.addtocart);
-user_route.post('/removeItemFromCart/:productId', auth.isLogin, cartController.deleteCart)
+user_route.post('/add-to-cart/:productId', cartController.addtocart);
+user_route.delete('/removeCartItem', auth.isLogin, cartController.deleteCart)
 user_route.put('/updateCart',cartController.updateCartCount)
 user_route.put('/updateQuantity/:productId',cartController.updateQuantity)
 

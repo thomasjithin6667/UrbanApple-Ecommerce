@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Applestore</title>
+    <title>UrbanApple</title>
     <meta name="keywords" content="HTML5 Template">
     <meta name="description" content="Molla - Bootstrap eCommerce Template">
     <meta name="author" content="p-themes">
@@ -36,6 +36,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+        <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+        <!-- Include a required theme -->
+        <link rel="stylesheet" href="@sweetalert2/themes/dark/dark.css">
+        <script src="sweetalert2/dist/sweetalert2.min.js"></script>
 
 </head>
 
@@ -122,27 +128,17 @@
                                                                                 class="product-image ">
                                                                         </a>
                                                                         <% if(product.quantity !== 0){ %>       
-                                                                         <div class="product-action-vertical">
-                                                                            <a href="/addToWishlist/<%= product._id %>"
-                                                                                class="btn-product-icon btn-wishlist btn-expandable"><span>add
-                                                                                    to wishlist</span></a>
-
-                                                                        </div><!-- End .product-action-vertical -->
-
+                                                                            <div class="product-action-vertical">
+                                                                                <a class="btn-product-icon btn-wishlist btn-expandable" data-product-id="<%= product._id %>">
+                                                                                    <span>add to wishlist</span>
+                                                                                </a>
+                                                                            </div>
+                                                                            
                                                                         <div class="product-action">
-                                                                            <form class="add-to-cart-form"
-                                                                                action="/add-to-cart/<%= product._id %>"
-                                                                                method="post">
-                                                                                <button type="submit"
-                                                                                    class="btn btn-outline-primary-2 "
-                                                                                    data-product-id="<%= product._id %>">
-                                                                                    <i
-                                                                                        class="fa-solid fa-cart-plus"></i>
-                                                                                    Add to cart
-                                                                                </button>
-                                                                                <input  value="1"
-                                                                                    name="qty" style="display: none;">
-                                                                            </form>
+                                                                            <button type="button" class="btn btn-outline-primary-2 addToCartBtn" data-product-id="<%= product._id %>">
+                                                                                <i class="fa-solid fa-cart-plus"></i>
+                                                                                Add to cart
+                                                                            </button>
                                                                         </div>
                                                                         <% } %>
                                                                           
@@ -154,7 +150,7 @@
                                                                             <a href="#"><%= product.category %></a>
                                                                         </div><!-- End .product-cat -->
                                                                         <h3 class="product-title">
-                                                                            <a href="product.html">
+                                                                            <a href="/viewproduct/<%=product._id%>">
                                                                                 <% if (product.name.length > 50) { %>
                                                                                     <%= product.name.slice(0, 60) + '...' %>
                                                                                 <% } else { %>
@@ -399,6 +395,15 @@
                     </div><!-- End .container -->
                 </div><!-- End .cta -->
             </main><!-- End .main -->
+
+              <!-- start.snackbar -->
+              <div id="snackbar"><i class="fa-solid fa-circle-check"></i>  The item is added to Cart..</div>
+
+              <div id="wishlist"><i class="fa-solid fa-circle-check"></i>  The item is added to Wishlist..</div>
+              
+              <div id="alreadyInWishlist"><i class="fa-solid fa-circle-check"></i>  The item already in Wishlist..</div>
+               <!-- end.snackbar -->
+
             <%- include('../partials/ecomFooter') %>
     </div><!-- End .page-wrapper -->
     <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
@@ -413,3 +418,229 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+        
+        <script>
+            function wishlistFunction() {
+        var x = document.getElementById("wishlist");
+        x.className = "show";
+        setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+    }
+    
+    function cartFunction() {
+        var x = document.getElementById("snackbar");
+        x.className = "show";
+        setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+    }
+    
+    function alreadyInWishlist() {
+        var x = document.getElementById("alreadyInWishlist");
+        x.className = "show";
+        setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+    }
+            document.addEventListener('DOMContentLoaded', () => {
+                
+                const addToCartButtons = document.querySelectorAll('.addToCartBtn');
+        
+                addToCartButtons.forEach(button => {
+                    button.addEventListener('click', async () => {
+                        const productId = button.getAttribute('data-product-id');
+        
+                        try {
+                            const response = await fetch(`/add-to-cart/${productId}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ qty: 1 }), 
+                            });
+        
+                            const data = await response.json();
+        
+                            if (response.ok) {
+                           if (data.success) {
+                            cartFunction();
+                           
+                             } else {
+                             alert('Failed to add product to cart');
+                                 }
+                            } else if (response.status === 401) {
+                                Swal.fire({
+                                    title: "Please Login!",
+                                     text: "Please login to add items to Cart",
+                                        icon: "warning",
+                                        background: '#ffffff', 
+                                        customClass: {
+                                        popup: 'white-background', 
+                                        },
+                                        showCancelButton: true,
+                                    
+                                        
+                                            confirmButtonText: "login page",
+                                        
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                            
+                                                window.location.href = '/login';
+                                            
+                                            }
+                                        });
+                                
+                            } else {
+                           alert('Failed to add product to cart');
+                                }
+                        } catch (error) {
+                            console.error('Error adding product to cart:', error);
+                            alert('Error adding product to cart');
+                        }
+                    });
+                });
+            });
+    
+            
+            document.addEventListener('DOMContentLoaded', () => {
+        const wishlistButtons = document.querySelectorAll('.btn-wishlist');
+    
+        wishlistButtons.forEach(button => {
+            button.addEventListener('click', async (event) => {
+                event.preventDefault(); 
+    
+                const productId = button.getAttribute('data-product-id');
+    
+                try {
+                    const response = await fetch(`/addToWishlist/${productId}`, {
+                        method: 'GET', 
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                      
+                    });
+    
+                    const data = await response.json();
+                    if (response.ok) {
+                               if (data.success) {
+                                wishlistFunction();
+                             
+                                 } } else if (response.status === 401) {
+                                  
+                                  Swal.fire({
+                                    title: "Please Login!",
+                                     text: "Please login to add items to wishlist",
+                                        icon: "warning",
+                                        background: '#ffffff', 
+                                        customClass: {
+                                        popup: 'white-background', 
+                                        },
+                                        showCancelButton: true,
+                                    
+                                        
+                                            confirmButtonText: "login page",
+                                        
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                            
+                                                window.location.href = '/login';
+                                            
+                                            }
+                                        });
+                                
+                                     
+                                } else if (response.status === 400) {
+                                    alreadyInWishlist()
+                                  
+                                } else
+                                 {
+                               alert('Failed to add product to wishlist');
+                                    }
+                } catch (error) {
+                    console.error('Error adding product to wishlist:', error);
+                }
+            });
+        });
+    });
+    
+        </script>
+        <style>
+            #wishlist {
+          visibility: hidden;
+          min-width: 250px;
+          margin-left: -125px;
+          background-color: rgb(0, 145, 255);
+          color: #ffffff;
+          text-align: center;
+          border-radius: 2px;
+          padding: 16px;
+          position: fixed;
+          z-index: 10;
+          left: 50%;
+          bottom: 30px;
+          font-size: 12px;
+        }
+        
+        #wishlist.show {
+          visibility: visible;
+          -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+          animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+        #snackbar {
+          visibility: hidden;
+          min-width: 250px;
+          margin-left: -125px;
+          background-color: rgb(0, 145, 255);
+          color: #fff;
+          text-align: center;
+          border-radius: 2px;
+          padding: 16px;
+          position: fixed;
+          z-index: 10;
+          left: 50%;
+          bottom: 30px;
+          font-size: 12px;
+        }
+        
+        #snackbar.show {
+          visibility: visible;
+          -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+          animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+        #alreadyInWishlist {
+          visibility: hidden;
+          min-width: 250px;
+          margin-left: -125px;
+          background-color:#ff4343;
+          color: #fff;
+          text-align: center;
+          border-radius: 2px;
+          padding: 16px;
+          position: fixed;
+          z-index: 10;
+          left: 50%;
+          bottom: 30px;
+          font-size: 12px;
+        }
+        
+        #alreadyInWishlist.show {
+          visibility: visible;
+          -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+          animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+        
+        @-webkit-keyframes fadein {
+          from {bottom: 0; opacity: 0;} 
+          to {bottom: 30px; opacity: 1;}
+        }
+        
+        @keyframes fadein {
+          from {bottom: 0; opacity: 0;}
+          to {bottom: 30px; opacity: 1;}
+        }
+        
+        @-webkit-keyframes fadeout {
+          from {bottom: 30px; opacity: 1;} 
+          to {bottom: 0; opacity: 0;}
+        }
+        
+        @keyframes fadeout {
+          from {bottom: 30px; opacity: 1;}
+          to {bottom: 0; opacity: 0;}
+        }
+        </style>

@@ -33,21 +33,25 @@
                                                     <article class="box mb-3 bg-light p-4 text-center">
                                                         <i style="font-size: 40px;"   class="fa-solid fa-cart-shopping mt-3 text-primary"></i>
                                                         <h6 class="mt-2">Orders</h6>
-                                                        <small class="text-muted " style="width:70%">You can reset or change </small>
+                                                        <h4><%=  totalOrders %></h4>
+                                                        <small class="text-muted " style="width:70%">Total Number of Orders </small>
                                                     </article>
                                                 </div> <!-- col.// -->
                                                 <div class="col-md">
                                                     <article class="box mb-3 bg-light p-4 text-center">
                                                         <i style="font-size: 40px;" class="fa-solid fa-gift  mt-3  text-primary"></i>
                                                         <h6 class="mt-2">Products</h6>
-                                                        <small class="text-muted" style="width:70%">You can change your account .</small>
+                                                        <h4><%= totalUniqueProducts %></h4>
+            
+                                                        <small class="text-muted" style="width:70%">Total number of ordered products.</small>
                                                     </article>
                                                 </div> <!-- col.// -->
                                                 <div class="col-md">
                                                     <article class="box mb-3 bg-light p-4 text-center">
                                                         <i style="font-size: 40px;"   class="fa-solid fa-money-bill  mt-3  text-primary"></i>
                                                         <h6 class="mt-2">Total spent</h6>
-                                                        <small class="text-muted" style="width:70%">Once you  there is no going back.  or change </small>
+                                                        <h4><%= totalSpending %></h4>
+                                                        <small class="text-muted" style="width:70%">Your Total Spendings </small>
                                                     </article>
                                                 </div> <!-- col.// -->
                                             </div> <!-- row.// -->

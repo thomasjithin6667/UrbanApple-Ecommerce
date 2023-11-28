@@ -520,7 +520,7 @@ const razorpayOrder = async (req, res) => {
     });
 
     await order.save();
-    await Cart.deleteOne({ user: userId });
+   
 
     const options = {
 
@@ -802,6 +802,7 @@ const updatePaymentStatus = async (req, res) => {
       description: `Debited from Bank account for order: ${recentOrder._id}`,
     });
     await transactionCredit.save();
+    await Cart.deleteOne({ user: recentOrder.user._id });
 
     return res.status(200).json({ message: 'Payment status updated successfully' });
   } catch (error) {

@@ -336,18 +336,6 @@
     <div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->
     <%- include('../partials/ecomMobileMenu') %><!-- End .mobile-menu-container -->
 
-    <div style="display:inline-block">
-        <img src="https://cdn.pixabay.com/photo/2014/04/03/10/55/t-shirt-311732_960_720.png" alt="" width="100px"
-            height="100px">
-        <p>Shirt</p>
-        <p><b>Amount:- Rs. 500</b></p>
-        <form class="pay-form">
-            <input type="hidden" name="name" value="Shirt">
-            <input type="hidden" name="amount" value="500">
-            <input type="hidden" name="description" value="Shirt Buying">
-            <input type="submit" value="Pay Now">
-        </form>
-    </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -392,6 +380,31 @@
             const codButton = document.getElementById('cod');
             const captionDiv = document.getElementById('couponApply');
             const couponAppliedDiv = document.getElementById('couponApplied');
+            
+        walletButton.addEventListener('click', function () {
+            const couponCode = couponCodeInput.value;
+                const couponApplied = couponInfo.innerText.includes('Coupon Discount Applied');
+
+                if (couponCode.trim() !== '' && !couponApplied) {
+
+                    Swal.fire({
+                                    title: "Apply Coupon!",
+                                     text: "Please apply the coupon before checkout",
+                                        icon: "warning",
+                                        background: '#ffffff', 
+                                        customClass: {
+                                        popup: 'white-background', 
+                                        },
+                                        showOkButton: true,
+                                    
+                                        
+                                        
+                                        })
+                    couponCodeInput.value = '';
+                    return;
+                }
+            placeOrderWallet('wallet', couponCode);
+        });
 
             razorPayButton.addEventListener('click', function () {
                 const couponCode = couponCodeInput.value;
@@ -399,7 +412,19 @@
 
                 if (couponCode.trim() !== '' && !couponApplied) {
 
-                    alert('Please apply the coupon before placing the order.');
+                    Swal.fire({
+                                    title: "Apply Coupon!",
+                                     text: "Please apply the coupon before checkout",
+                                        icon: "warning",
+                                        background: '#ffffff', 
+                                        customClass: {
+                                        popup: 'white-background', 
+                                        },
+                                        showOkButton: true,
+                                    
+                                        
+                                        
+                                        })
                     couponCodeInput.value = '';
                     return;
                 }
@@ -412,7 +437,19 @@
                 const couponCode = couponCodeInput.value;
 
                 if (couponCode.trim() === '') {
-                    alert('Please enter a coupon code');
+                    Swal.fire({
+                                    title: "Enter Coupon!",
+                                     text: "Please Enter a coupon before applying",
+                                        icon: "warning",
+                                        background: '#ffffff', 
+                                        customClass: {
+                                        popup: 'white-background', 
+                                        },
+                                        showOkButton: true,
+                                    
+                                        
+                                        
+                                        })
                     return;
                 }
 
@@ -432,6 +469,7 @@
                     const data = await response.json();
 
                     if (data.errorMessage) {
+                        
                         alert('Coupon error: ' + data.errorMessage);
                         couponCodeInput.value = ''
                     } else {
@@ -451,7 +489,20 @@
 
                 } catch (error) {
                     console.error('Error applying coupon:', error);
-                    alert('Invalid coupon');
+                    Swal.fire({
+                                    title: "Invalid Coupon!",
+                                     text: "Please enter a valid coupon",
+                                        icon: "warning",
+                                        background: '#ffffff', 
+                                        customClass: {
+                                        popup: 'white-background', 
+                                        },
+                                        showOkButton: true,
+                                    
+                                        
+                                        
+                                        })
+                  
                     couponCodeInput.value = ''
                 }
             });
@@ -463,7 +514,19 @@
 
                 if (couponCode.trim() !== '' && !couponApplied) {
 
-                    alert('Please apply the coupon before placing the order.');
+                    Swal.fire({
+                                    title: "Apply Coupon!",
+                                     text: "Please apply the coupon before checkout",
+                                        icon: "warning",
+                                        background: '#ffffff', 
+                                        customClass: {
+                                        popup: 'white-background', 
+                                        },
+                                        showOkButton: true,
+                                    
+                                        
+                                        
+                                        })
                     couponCodeInput.value = '';
                     return;
                 }
@@ -475,7 +538,20 @@
                 const selectedAddress = document.querySelector('input[name="address"]:checked');
 
                 if (!selectedAddress) {
-                    alert('Please select an address.');
+                    
+                    Swal.fire({
+                                    title: "Select Address!",
+                                     text: "Please select an address before checkout",
+                                        icon: "warning",
+                                        background: '#ffffff', 
+                                        customClass: {
+                                        popup: 'white-background', 
+                                        },
+                                        showOkButton: true,
+                                    
+                                        
+                                        
+                                        })
                     return;
                 }
 
@@ -497,7 +573,26 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            window.location.href = '/orderPlaced';
+                            Swal.fire({
+                                    title: "Order Placed",
+                                     text: "Your order has been placed succesfully",
+                                        icon: "success",
+                                        background: '#ffffff', 
+                                        customClass: {
+                                        popup: 'white-background', 
+                                        },
+                                        
+                                    
+                                        
+                                            confirmButtonText: "Order Details",
+                                        
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                            
+                                                window.location.href = '/orderPlaced';
+                                            
+                                            }
+                                        });
                         } else {
                             alert('Error occurred while placing order: ' + data.message);
                         }
@@ -525,7 +620,21 @@
                 const selectedAddress = document.querySelector('input[name="address"]:checked');
 
                 if (!selectedAddress) {
-                    alert('Please select an address.');
+
+                    Swal.fire({
+                                    title: "Select Address!",
+                                     text: "Please select an address before checkout",
+                                        icon: "warning",
+                                        background: '#ffffff', 
+                                        customClass: {
+                                        popup: 'white-background', 
+                                        },
+                                        showOkButton: true,
+                                    
+                                        
+                                        
+                                        })
+               
                     return;
                 }
 
@@ -568,7 +677,7 @@
                                 handler: function (response) {
 
                                     if (response.razorpay_payment_id) {
-                                        alert('Payment successful!');
+                                     
 
                                         const updatePaymentStatusEndpoint = '/updatePaymentStatus';
                                         const updatePaymentStatusData = {
@@ -586,8 +695,27 @@
                                         })
                                             .then((updateResponse) => {
                                                 if (updateResponse.ok) {
-                                                    console.log('Payment status updated successfully.');
-                                                    window.location.href = '/orderPlaced';
+                                                    Swal.fire({
+                                    title: "Order Placed",
+                                     text: "Your order has been placed succesfully",
+                                        icon: "success",
+                                        background: '#ffffff', 
+                                        customClass: {
+                                        popup: 'white-background', 
+                                        },
+                                        
+                                    
+                                        
+                                            confirmButtonText: "Order Details",
+                                        
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                            
+                                                window.location.href = '/orderPlaced';
+                                            
+                                            }
+                                        });
+                                                  
                                                 } else {
                                                     console.error('Failed to update payment status.');
                                                 }
@@ -636,24 +764,25 @@
 
 
 
-        walletButton.addEventListener('click', function () {
-            const couponCode = couponCodeInput.value;
-            const couponApplied = couponInfo.innerText.includes('Coupon Discount Applied');
-
-            if (couponCode.trim() !== '' && !couponApplied) {
-
-                alert('Please apply the coupon before placing the order.');
-                couponCodeInput.value = '';
-                return;
-            }
-            placeOrderWallet('wallet', couponCode);
-        });
 
         function placeOrderWallet(paymentMethod, couponCode) {
             const selectedAddress = document.querySelector('input[name="address"]:checked');
 
             if (!selectedAddress) {
-                alert('Please select an address.');
+                
+                Swal.fire({
+                                    title: "Select Address!",
+                                     text: "Please select an address before checkout",
+                                        icon: "warning",
+                                        background: '#ffffff', 
+                                        customClass: {
+                                        popup: 'white-background', 
+                                        },
+                                        showOkButton: true,
+                                    
+                                        
+                                        
+                                        })
                 return;
             }
 
@@ -675,7 +804,27 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        window.location.href = '/orderPlaced';
+                        Swal.fire({
+                                    title: "Order Placed",
+                                     text: "Your order has been placed succesfully",
+                                        icon: "success",
+                                        background: '#ffffff', 
+                                        customClass: {
+                                        popup: 'white-background', 
+                                        },
+                                        
+                                    
+                                        
+                                            confirmButtonText: "Order Details",
+                                        
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                            
+                                                window.location.href = '/orderPlaced';
+                                            
+                                            }
+                                        });
+                       
                     } else {
                         alert('Error occurred while placing order: ' + data.message);
                     }
