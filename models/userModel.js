@@ -49,10 +49,10 @@ const userSchema = new mongoose.Schema({
         default: generateRandomReferralCode,
         unique: true, 
     },
-    referredUsers: [{
+     referredUsers: [{
         type: String,
-        unique: true,
-    }],
+        sparse: true, 
+    }]
 });
 
 function generateRandomReferralCode() {
