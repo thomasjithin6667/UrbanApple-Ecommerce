@@ -476,8 +476,8 @@ const loadUserDashboard = async (req, res) => {
 //function to logout user
 const userLogout = async (req, res) => {
     try {
-        delete req.session.user_id;
-        delete req.session.userData;
+        req.session.destroy();
+        
 
         res.redirect('/')
 
