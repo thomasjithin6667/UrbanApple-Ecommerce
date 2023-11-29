@@ -481,7 +481,21 @@
 
                         couponInfo.innerText = `Coupon Discount Applied ₹${difference} off`;
                         orderTotalElement.innerText = `₹${discountedTotal}`;
-                        alert("Coupon applied successfully");
+                
+                        Swal.fire({
+                                    title: "Coupon Applied",
+                                     text: "Coupon applied successfully",
+                                        icon: "success",
+                                        background: '#ffffff', 
+                                        customClass: {
+                                        popup: 'white-background', 
+                                        },
+                                        
+                                    
+                                        
+                                         
+                                        
+                                        })
 
                         captionDiv.style.display = 'none';
                         couponAppliedDiv.style.display = 'block';

@@ -36,9 +36,9 @@ const generateInvoice = async (req, res) => {
       doc
           .fillColor("#444444")
           .fontSize(20)
-          .text("applestore.com", 50, 57)
+          .text("urbanApple.com", 50, 57)
           .fontSize(10)
-          .text("appleStore.com", 200, 50, { align: "right" })
+          .text("urbanApple.com", 200, 50, { align: "right" })
           .text("682301", 200, 65, { align: "right" })
           .text("Maradu ", 200, 80, { align: "right" })
           .moveDown();
@@ -104,15 +104,26 @@ const generateInvoice = async (req, res) => {
           
       }
 
-      generateHr(doc, 252);
+      generateHr(doc, position + 20); 
 
-      const totalPricePosition = position + 40;
+      const totalPricePosition = position + 40; 
+      
+      doc
+          .font("Helvetica")
+          .text("Total Amount (Rs) + shipping charges:", 50, totalPricePosition)
+          .text(`Rs ${orders.orginalPrice}`, 250, totalPricePosition)
+          .text("Coupon Code:", 50, totalPricePosition + 15)
+          .text(`${orders.couponCode}`, 250, totalPricePosition + 15)
+          .text("Coupon Discount (Rs):", 50, totalPricePosition + 30)
+          .text(`Rs ${orders.couponDiscount}`, 250, totalPricePosition + 30);
+      
+      const totalWithDiscountPosition = totalPricePosition + 60; 
+      
       doc
           .font("Helvetica-Bold")
-          .text("Total (with coupon discount):", 50, totalPricePosition)
-          .font("Helvetica-Bold")
-          .text(`Rs ${orders.totalAmount}`, 50, totalPricePosition, { align: "right" })
-
+          .text("Total  + shipping charges:", 50, totalWithDiscountPosition)
+          .text(`Rs ${orders.totalAmount}`, 250, totalWithDiscountPosition); 
+      
       doc.end();
   } catch (err) {
       console.error(err);

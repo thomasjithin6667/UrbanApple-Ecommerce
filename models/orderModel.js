@@ -27,6 +27,10 @@ const orderSchema = new mongoose.Schema({
   paymentTransactionId: String, 
   paymentDate: Date, 
   paymentAmount: Number, 
+  couponCode:String,
+  couponDiscount:Number,
+  orginalPrice:Number,
+
   items: [
     {
       product: {

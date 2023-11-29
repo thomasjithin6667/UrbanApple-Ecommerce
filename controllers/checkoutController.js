@@ -479,6 +479,8 @@ const razorpayOrder = async (req, res) => {
 
     const cartItems = cart.items || [];
     let totalAmount = 0;
+    const subtotal = calculateSubtotal(cartItems);
+    const subtotalWithShipping = subtotal + 100;
 
     for (const cartItem of cartItems) {
       const product = cartItem.product;
@@ -512,6 +514,9 @@ const razorpayOrder = async (req, res) => {
       paymentMethod: 'Online Payment',
       paymentStatus: 'Payment Pending',
       totalAmount: totalAmount,
+      couponCode:couponCode,
+      couponDiscount:subtotalWithShipping-totalAmount ,
+      orginalPrice:subtotalWithShipping ,
       items: cartItems.map(cartItem => ({
         product: cartItem.product._id,
         quantity: cartItem.quantity,
@@ -566,6 +571,8 @@ const cashOnDelivery = async (req, res) => {
 
     const cartItems = cart.items || [];
     let totalAmount = 0;
+    const subtotal = calculateSubtotal(cartItems);
+    const subtotalWithShipping = subtotal + 100;
 
     for (const cartItem of cartItems) {
       const product = cartItem.product;
@@ -613,6 +620,9 @@ const cashOnDelivery = async (req, res) => {
       paymentMethod: 'Cash on delivery',
       paymentStatus: 'Payment Pending',
       totalAmount: totalAmount,
+      couponCode:couponCode,
+      couponDiscount:subtotalWithShipping-totalAmount ,
+      orginalPrice:subtotalWithShipping ,
       items: cartItems.map(cartItem => {
         const product = cartItem.product;
         const isDiscounted = product.discountStatus &&
@@ -682,6 +692,8 @@ const walletPayment = async (req, res) => {
 
     const cartItems = cart.items || [];
     let totalAmount = 0;
+    const subtotal = calculateSubtotal(cartItems);
+    const subtotalWithShipping = subtotal + 100;
 
 
 
@@ -723,6 +735,9 @@ const walletPayment = async (req, res) => {
       paymentMethod: 'Wallet Payment',
       paymentStatus:'Payment Successful',
       totalAmount: totalAmount,
+      couponCode:couponCode,
+      couponDiscount:subtotalWithShipping-totalAmount ,
+      orginalPrice:subtotalWithShipping ,
       items: cartItems.map(cartItem => ({
         product: cartItem.product._id,
         quantity: cartItem.quantity,
