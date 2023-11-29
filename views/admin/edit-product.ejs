@@ -71,7 +71,7 @@
 
                                                 </div>
                                                 <input id="fileInput1" class="form-control hidden" name="image1"
-                                                    type="file" onchange="viewImage(event, 0)"
+                                                    type="file" onchange="viewImage(event, 0)" accept="image/*"
                                                     value="<%= products.productImages[0] %>">
                                             </div>
                                             <br>
@@ -93,7 +93,7 @@
                                                 </div>
 
                                                 <input id="fileInput2" class="form-control hidden" name="image2"
-                                                    type="file" onchange="viewImage(event,1)"
+                                                    type="file" onchange="viewImage(event,1)" accept="image/*"
                                                     value="<%= products.productImages[1] %>">
                                             </div>
                                             <br>
@@ -113,7 +113,7 @@
                                                                 aria-hidden="true"></i> Delete</a>
                                                     </label>
                                                 </div>
-                                                <input id="fileInput3" class="form-control hidden" name="image3"
+                                                <input id="fileInput3" accept="image/*"  class="form-control hidden" name="image3"
                                                     type="file" onchange="viewImage(event,2)"
                                                     value="<%= products.productImages[2] %>">
                                             </div>
@@ -136,7 +136,7 @@
 
                                                     </label>
                                                 </div>
-                                                <input id="fileInput4" class="form-control hidden" name="image4"
+                                                <input id="fileInput4" accept="image/*" class="form-control hidden" name="image4"
                                                     type="file" onchange="viewImage(event,3)"
                                                     value="<%= products.productImages[3] %>">
                                             </div>
@@ -159,7 +159,7 @@
 
                                                     <label for="product_title" class="form-label">Product title</label>
                                                     <input type="text" placeholder="Type here" class="form-control"
-                                                        name="name" value="<%= products.name %>" r>
+                                                        name="name" value="<%= products.name %>"  >
 
                                                 </div>
                                                 <div>

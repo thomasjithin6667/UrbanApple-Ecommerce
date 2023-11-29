@@ -27,7 +27,8 @@ const viewCoupon = async (req, res) => {
 
     const coupons = await Coupon.find()
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .sort({ createdDate: -1 })
 
     res.render('coupon-list', { coupons, admin, totalPages, currentPage: page });
   } catch (err) {
@@ -107,7 +108,7 @@ const viewCoupon = async (req, res) => {
       const availableCoupons = await Coupon.find({
         expiry: { $gt: currentDate }, 
         limit: { $gt: 0 }, 
-      });
+      }) .sort({ createdDate: -1 });
   
       res.render('availableCoupons', {availableCoupons,user:userData})
     } catch (error) {

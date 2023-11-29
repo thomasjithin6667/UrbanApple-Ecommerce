@@ -17,6 +17,7 @@ const auth = require("../middleware/adminAuth")
 const fs = require('fs');
 const discountController= require('../controllers/discountController')
 const reviewController =require('../controllers/reviewController')
+const excelController=require('../controllers/excelController')
 
 
 //session setup
@@ -145,6 +146,7 @@ admin_route.get('/unlist-banner',auth.isLogin,bannerController.unlistBanner);
 //salereport
 
 admin_route.get('/sales-report',auth.isLogin,adminController.getSalesReport)
+admin_route.get('/excelsalesreport',auth.isLogin,excelController.getExcelSalesReport)
 
 //transaction
 admin_route.get('/transactions', auth.isLogin,transactionController.loadTransaction)

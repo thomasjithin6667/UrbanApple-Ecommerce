@@ -240,9 +240,9 @@ const getSalesReport  = async (req, res) => {
       if (req.query.paymentMethod === "Online Payment") {
         query.paymentMethod = "Online Payment";
       } else if (req.query.paymentMethod === "Wallet") {
-        query.paymentMethod = "Wallet";
+        query.paymentMethod = "Wallet Payment";
       } else if (req.query.paymentMethod === "Cash On Delivery") {
-        query.paymentMethod = "Cash On Delivery";
+        query.paymentMethod = "Cash on delivery";
       }
 
     }
@@ -255,8 +255,14 @@ const getSalesReport  = async (req, res) => {
         query.orderDate = dateUtils.getYearlyDateRange();
       }
     }
-
-  
+    if (req.query.startDate && req.query.endDate) {
+      query.orderDate = {
+        $gte: new Date(req.query.startDate),
+        $lte: new Date(req.query.endDate),
+      };
+    }
+    
+  console.log(query);
 
     const totalOrdersCount = await Order.countDocuments(query);
     const totalPages = Math.ceil(totalOrdersCount / perPage);

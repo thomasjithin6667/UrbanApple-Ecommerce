@@ -35,7 +35,7 @@
                     <p>Whole data about your business here</p>
                 </div>
                 <div>
-                    <a href="#" class="btn btn-primary"><i class="text-muted material-icons md-post_add"></i>Create report</a>
+                    <a id="pdfButton" class="btn btn-primary"><i class="text-muted material-icons md-post_add"></i>Create report</a>
                 </div>
             </div>
             <div class="row">
@@ -502,4 +502,16 @@ function highlightButton(button) {
 
 
 </script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<script>
+    document.getElementById("pdfButton").addEventListener("click", function () {
+        const salesContainer = document.querySelector(".content-main");
+        const pdfOptions = {
+            filename: 'SalesReport.pdf',
+            image: { type: 'jpeg', quality: 1.0 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+        html2pdf().from(salesContainer).set(pdfOptions).save();
+});
+</script>
