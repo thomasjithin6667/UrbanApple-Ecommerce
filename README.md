@@ -48,7 +48,7 @@ To set up the backend codebase for development, follow these steps:
 
 1. Clone the repository.
     ```bash
-    git clone https://github.com/malik-dinar/eduventure.git
+    https://github.com/thomasjithin6667/applestore-Ecommerce.git
     ```
 
 2. Navigate to the backend directory.
