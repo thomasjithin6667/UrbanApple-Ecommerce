@@ -1,7 +1,13 @@
 
 # UrbanApple - eCommerce website
+## Technologies Used 
 
-
+- Node.js
+- Express
+- MongoDB
+- Mongoose
+- bcrypt.js
+- Multer
 
 ## Technical Highlights
 
@@ -35,6 +41,31 @@
 - Comprehensive Sales Reporting and Analysis
 - Efficient User, Stock, Coupon, Banner, and Offer Management
 - Seamless Handling of Product Reviews and Transaction Reports
+
+## Development Setup
+
+To set up the backend codebase for development, follow these steps:
+
+1. Clone the repository.
+    ```bash
+    git clone https://github.com/malik-dinar/eduventure.git
+    ```
+
+2. Navigate to the backend directory.
+
+3. Install the required dependencies.
+    ```bash
+    npm install
+    ```
+
+4. Set up the necessary environment variables.
+
+5. Start the backend server.
+
+6. Connect the backend to the MongoDB database.
+
+Please note that the above content is a minimal representation of the backend implementation. Customize it as needed to match your project requirements.
+
 
 
 ## Screenshots
