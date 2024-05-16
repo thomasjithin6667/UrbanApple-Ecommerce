@@ -3,7 +3,6 @@ const adminRoute= require("./routes/adminRoute")
 const userRoute= require("./routes/userRoute")
 const express= require("express");
 const nocache= require("nocache")
-const flash = require('express-flash');
 require("dotenv").config()
 
 
@@ -22,7 +21,6 @@ app.set('views','./views/users')
 app.use(express.static('public'))
 app.use('assets/css',express.static(__dirname+'public'))
 app.use("/public", express.static("public", { "extensions": ["js"] }));
-app.use(flash());
 
 
 //for user route
